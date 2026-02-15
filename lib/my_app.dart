@@ -1,0 +1,26 @@
+import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/route/app_routes_file.dart';
+import 'package:coffie/core/theme/app_theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(412, 917),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: GetMaterialApp(
+        title: 'Coffecito',
+        theme: AppTheme.lightTheme,
+        getPages: appRootRoutesFile,
+        initialRoute: AppRoutes.instance.loginScreen,
+      ),
+    );
+  }
+}
