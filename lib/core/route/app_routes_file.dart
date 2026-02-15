@@ -1,6 +1,7 @@
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/route/bindings/auth_binding.dart';
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
+import 'package:coffie/feature/auth/presentation/ui/register_screen.dart';
 import 'package:get/get.dart';
 
 List<GetPage> appRootRoutesFile = <GetPage>[
@@ -16,6 +17,11 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.loginScreen,
     binding: AuthBinding(),
     page: () => const LoginScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.registerScreen,
+    binding: AuthBinding(),
+    page: () => const RegisterScreen(),
   ),
   
 ];

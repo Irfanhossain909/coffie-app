@@ -17,12 +17,12 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: GetMaterialApp(
-        navigatorKey: navigatorKey, 
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Coffecito',
         theme: AppTheme.lightTheme,
         getPages: appRootRoutesFile,
-        initialRoute: AppRoutes.instance.loginScreen,
+        initialRoute: AppRoutes.instance.registerScreen,
       ),
     );
   }

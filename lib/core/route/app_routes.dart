@@ -10,6 +10,7 @@ class AppRoutes {
 
   // Auth Routes
   final String loginScreen = "/login-screen";
+  final String registerScreen = "/register-screen";
 
   
 }
