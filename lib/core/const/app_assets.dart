@@ -6,6 +6,19 @@ class AppAssets {
   static const String google = "assets/icons/google.svg";
   static const String apple = "assets/icons/apple.svg";
 
+  static const String nav1 = "assets/icons/nav1.svg";
+  static const String nav2 = "assets/icons/nav2.svg";
+  static const String nav3 = "assets/icons/nav3.svg";
+  static const String nav4 = "assets/icons/nav4.svg";
+  static const String nav5 = "assets/icons/nav5.svg";
+
+  static const String edit = "assets/icons/edit.svg";
+  static const String favorate = "assets/icons/favorate.svg";
+  static const String setting = "assets/icons/setting.svg";
+  static const String logout = "assets/icons/logout.svg";
+  static const String transection = "assets/icons/tansection.svg";
+  static const String wallet = "assets/icons/wallet.svg";
+
   // ------------------------  Image ------------------------
   static const String branding = "assets/images/branding.svg";
 }

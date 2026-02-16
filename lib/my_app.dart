@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         title: 'Coffecito',
         theme: AppTheme.lightTheme,
         getPages: appRootRoutesFile,
-        initialRoute: AppRoutes.instance.newPasswordScreen,
+        initialRoute: AppRoutes.instance.navigationScreen,
       ),
     );
   }

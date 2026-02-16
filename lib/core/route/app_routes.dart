@@ -13,6 +13,23 @@ class AppRoutes {
   final String registerScreen = "/register-screen";
   final String forgetPasswordScreen = "/forget-password-screen";
   final String newPasswordScreen = "/new-password-screen";
+  final String forgetOtpVerifyScreen = "/forget-otp-verify-screen";
+
+  // Home Routes
+  final String homeScreen = "/home-screen";
+
+  // Reward Routes
+  final String rewardScreen = "/reward-screen";
+
+  // Order Routes
+  final String orderScreen = "/order-screen";
+
+  // Gift Card Routes
+  final String giftCardScreen = "/gift-card-screen";
+
+  // Profile Routes
+  final String profileScreen = "/profile-screen";
+  final String settingScreen = "/setting-screen";
 
   
 }
