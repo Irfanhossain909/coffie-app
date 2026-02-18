@@ -13,11 +13,7 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppbar(
-        text: "Settings",
-        showLeading: false,
-        autoShowLeading: false,
-      ),
+      appBar: CustomAppbar(text: "Settings", autoShowLeading: false),
       body: Column(
         children: [
           Container(

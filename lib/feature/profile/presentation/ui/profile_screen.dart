@@ -93,7 +93,9 @@ class ProfileScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Favorite",
                   icon: AppAssets.favorate,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.favorateScreen);
+                  },
                 ),
                 ProfileRowCard(
                   title: "Transaction History",

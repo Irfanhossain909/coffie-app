@@ -40,7 +40,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Icon(Icons.arrow_back_ios),
+                child: Icon(Icons.arrow_back_ios, size: 18.r),
               ),
             )
           : null,

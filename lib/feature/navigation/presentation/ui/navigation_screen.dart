@@ -69,7 +69,7 @@ class NavigationScreen extends StatelessWidget {
                       return InkWell(
                         onTap: () => controller.changeIndex(index),
                         child: Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(10.r),
                           decoration: isSelected
                               ? BoxDecoration(
                                   color: AppColors.blue, // Purple circle
@@ -78,8 +78,8 @@ class NavigationScreen extends StatelessWidget {
                               : null,
                           child: SvgPicture.asset(
                             iconPaths[index],
-                            width: 22.r,
-                            height: 22.r,
+                            width: 18.r,
+                            height: 18.r,
                             colorFilter: ColorFilter.mode(
                               isSelected
                                   ? Colors.white
