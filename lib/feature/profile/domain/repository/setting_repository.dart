@@ -11,4 +11,14 @@ class SettingRepository {
     await Future.delayed(const Duration(seconds: 2));
     return true;
   }
+
+  Future<bool> contactUs(
+    String name,
+    String email,
+    String subject,
+    String message,
+  ) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return true;
+  }
 }

@@ -31,6 +31,7 @@ class AppRoutes {
   final String profileScreen = "/profile-screen";
   final String settingScreen = "/setting-screen";
   final String changePasswordScreen = "/change-password-screen";
+  final String contactUsScreen = "/contact-us-screen";
 
   
 }

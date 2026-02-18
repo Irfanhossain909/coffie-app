@@ -47,7 +47,9 @@ class SettingScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Contact Us",
                   icon: AppAssets.contactUs,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.contactUsScreen);
+                  },
                 ),
                 ProfileRowCard(
                   title: "Terms & Conditions",

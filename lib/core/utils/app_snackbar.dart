@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -31,12 +32,15 @@ class AppSnackBar {
                 title,
                 style: TextStyle(
                   color: textColor,
-                  fontSize: 18,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w700,
                 ),
               ),
             if (title.isNotEmpty) const SizedBox(height: 4),
-            Text(message, style: TextStyle(color: textColor, fontSize: 15)),
+            Text(
+              message,
+              style: TextStyle(color: textColor, fontSize: 10.sp),
+            ),
           ],
         ),
       ),

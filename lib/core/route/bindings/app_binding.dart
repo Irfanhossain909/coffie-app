@@ -2,6 +2,7 @@ import 'package:coffie/feature/gift_card/presentation/controller/gift_card_contr
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/order/presentation/controller/order_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/change_password_controller.dart';
+import 'package:coffie/feature/profile/presentation/controller/contact_up_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/profile_controller.dart';
 import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
 import 'package:get/get.dart';
@@ -15,5 +16,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => GiftCardController());
     Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => ChangePasswordController());
+    Get.lazyPut(() => ContactUsController());
   }
 }
