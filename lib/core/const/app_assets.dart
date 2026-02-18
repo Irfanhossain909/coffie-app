@@ -18,7 +18,14 @@ class AppAssets {
   static const String logout = "assets/icons/logout.svg";
   static const String transection = "assets/icons/tansection.svg";
   static const String wallet = "assets/icons/wallet.svg";
+  static const String terms = "assets/icons/terms.svg";
+  static const String privacy = "assets/icons/privicy.svg";
+  static const String delete = "assets/icons/delete.svg";
+  static const String contactUs = "assets/icons/contacyUs.svg";
+  static const String changePassword = "assets/icons/chengePassword.svg";
 
   // ------------------------  Image ------------------------
   static const String branding = "assets/images/branding.svg";
+
+  static const String changePasswordImg = "assets/images/changeImg.svg";
 }

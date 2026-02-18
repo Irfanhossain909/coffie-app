@@ -30,6 +30,7 @@ class AppRoutes {
   // Profile Routes
   final String profileScreen = "/profile-screen";
   final String settingScreen = "/setting-screen";
+  final String changePasswordScreen = "/change-password-screen";
 
   
 }

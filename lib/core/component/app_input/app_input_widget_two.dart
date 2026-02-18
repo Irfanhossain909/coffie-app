@@ -141,7 +141,7 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
             decoration: InputDecoration(
               hintText: widget.hintText,
               hintStyle: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: Colors.black.withOpacity(.8),
+                color: Colors.black.withOpacity(.4),
               ),
               filled: widget.filled,
               fillColor: widget.fillColor ?? Colors.white,

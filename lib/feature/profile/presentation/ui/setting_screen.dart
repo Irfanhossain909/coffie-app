@@ -1,9 +1,11 @@
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/profile/presentation/widget/profile_row_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -36,35 +38,33 @@ class SettingScreen extends StatelessWidget {
               children: [
                 SizedBox(height: 12.h),
                 ProfileRowCard(
-                  title: "Edit Profile",
-                  icon: AppAssets.edit,
+                  title: "Change Password",
+                  icon: AppAssets.changePassword,
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.changePasswordScreen);
+                  },
+                ),
+                ProfileRowCard(
+                  title: "Contact Us",
+                  icon: AppAssets.contactUs,
                   onTap: () {},
                 ),
                 ProfileRowCard(
-                  title: "My Wallet",
-                  icon: AppAssets.wallet,
+                  title: "Terms & Conditions",
+                  icon: AppAssets.terms,
                   onTap: () {},
                 ),
                 ProfileRowCard(
-                  title: "Favorite",
-                  icon: AppAssets.favorate,
+                  title: "Privacy Policy",
+                  icon: AppAssets.privacy,
                   onTap: () {},
                 ),
                 ProfileRowCard(
-                  title: "Transaction History",
-                  icon: AppAssets.transection,
+                  title: "Delete Account",
+                  icon: AppAssets.delete,
                   onTap: () {},
                 ),
-                ProfileRowCard(
-                  title: "Settings",
-                  icon: AppAssets.setting,
-                  onTap: () {},
-                ),
-                ProfileRowCard(
-                  title: "Log Out",
-                  icon: AppAssets.logout,
-                  onTap: () {},
-                ),
+
                 SizedBox(height: 12.h),
               ],
             ),
