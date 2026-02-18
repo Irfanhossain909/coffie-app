@@ -12,6 +12,8 @@ import 'package:coffie/feature/navigation/presentation/ui/navigation_screen.dart
 import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/change_password_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/contact_us_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/delete_account_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/privicy_policy_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/profile_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/setting_screen.dart';
 import 'package:coffie/feature/reward/presentation/ui/reward_screen.dart';
@@ -106,5 +108,15 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.contactUsScreen,
     binding: AppBinding(),
     page: () => const ContactUsScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.privicyPolicyScreen,
+    binding: AppBinding(),
+    page: () => const PrivicyPolicyScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.deleteAccountScreen,
+    binding: AppBinding(),
+    page: () => const DeleteAccountScreen(),
   ),
 ];

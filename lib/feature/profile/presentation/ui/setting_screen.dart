@@ -20,7 +20,6 @@ class SettingScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          SizedBox(height: 100.h),
           Container(
             width: double.infinity,
             decoration: BoxDecoration(
@@ -54,17 +53,29 @@ class SettingScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Terms & Conditions",
                   icon: AppAssets.terms,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.instance.privicyPolicyScreen,
+                      arguments: {"title": "Terms & Conditions"},
+                    );
+                  },
                 ),
                 ProfileRowCard(
                   title: "Privacy Policy",
                   icon: AppAssets.privacy,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.instance.privicyPolicyScreen,
+                      arguments: {"title": "Privacy Policy"},
+                    );
+                  },
                 ),
                 ProfileRowCard(
                   title: "Delete Account",
                   icon: AppAssets.delete,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.deleteAccountScreen);
+                  },
                 ),
 
                 SizedBox(height: 12.h),

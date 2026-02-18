@@ -1,6 +1,5 @@
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
 import 'package:coffie/feature/home/presentation/ui/home_screen.dart';
 import 'package:coffie/feature/navigation/presentation/controller/navigation_screen_controller.dart';
@@ -79,8 +78,8 @@ class NavigationScreen extends StatelessWidget {
                               : null,
                           child: SvgPicture.asset(
                             iconPaths[index],
-                            width: 24.r,
-                            height: 24.r,
+                            width: 22.r,
+                            height: 22.r,
                             colorFilter: ColorFilter.mode(
                               isSelected
                                   ? Colors.white

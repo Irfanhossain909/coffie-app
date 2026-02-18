@@ -21,4 +21,9 @@ class SettingRepository {
     await Future.delayed(const Duration(seconds: 2));
     return true;
   }
+
+  Future<bool> deleteAccount(String password) async {
+    await Future.delayed(const Duration(seconds: 2));
+    return true;
+  }
 }
