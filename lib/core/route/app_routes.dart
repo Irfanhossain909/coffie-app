@@ -36,4 +36,5 @@ class AppRoutes {
   final String deleteAccountScreen = "/delete-account-screen";
   final String favorateScreen = "/favorate-screen";
   final String transectionHistoryScreen = "/transection-history-screen";
+  final String emailSubscrptionScreen = "/email-subscrption-screen";
 }

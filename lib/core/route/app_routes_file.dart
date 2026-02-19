@@ -13,6 +13,7 @@ import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/change_password_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/contact_us_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/delete_account_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/email_subscrption_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/favorate_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/privicy_policy_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/profile_screen.dart';
@@ -130,5 +131,10 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.transectionHistoryScreen,
     binding: AppBinding(),
     page: () => const TransectionHistoryScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.emailSubscrptionScreen,
+    binding: AppBinding(),
+    page: () => const EmailSubscrptionScreen(),
   ),
 ];

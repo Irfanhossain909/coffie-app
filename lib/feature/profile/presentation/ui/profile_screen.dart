@@ -52,12 +52,12 @@ class ProfileScreen extends StatelessWidget {
 
                     AppButton(
                       onTap: () {
-                        // Get.toNamed(AppRoutes.instance.changeProfileScreen);
+                        Get.toNamed(AppRoutes.instance.emailSubscrptionScreen);
                       },
                       title: "Subscribe",
 
-                      width: 170.w,
-                      height: 54.h,
+                      width: 150.w,
+                      height: 44.h,
                     ),
                   ],
                 ),
@@ -102,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
                   icon: AppAssets.transection,
                   onTap: () {
                     Get.toNamed(AppRoutes.instance.transectionHistoryScreen);
-                   },
+                  },
                 ),
                 ProfileRowCard(
                   title: "Settings",
