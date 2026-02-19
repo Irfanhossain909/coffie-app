@@ -7,6 +7,7 @@ import 'package:coffie/feature/profile/presentation/controller/delete_account_co
 import 'package:coffie/feature/profile/presentation/controller/favorate_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/privicy_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/profile_controller.dart';
+import 'package:coffie/feature/profile/presentation/controller/transection_controller.dart';
 import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
 import 'package:get/get.dart';
 
@@ -23,5 +24,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => PrivicyPolicyController());
     Get.lazyPut(() => DeleteAccountController());
     Get.lazyPut(() => FavorateController());
+    Get.lazyPut(() => TransectionController());
   }
 }

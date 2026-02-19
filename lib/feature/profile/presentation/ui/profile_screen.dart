@@ -100,7 +100,9 @@ class ProfileScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Transaction History",
                   icon: AppAssets.transection,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.transectionHistoryScreen);
+                   },
                 ),
                 ProfileRowCard(
                   title: "Settings",
