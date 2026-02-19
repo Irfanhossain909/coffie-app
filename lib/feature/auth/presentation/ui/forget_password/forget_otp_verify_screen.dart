@@ -1,5 +1,4 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
-import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/feature/auth/presentation/controller/forget_password/forget_otp_verify_controller.dart';

@@ -7,7 +7,7 @@ import 'package:shimmer_animation/shimmer_animation.dart';
 class AppImageCircular extends StatelessWidget {
   const AppImageCircular({
     super.key,
-    this.color = Colors.pinkAccent,
+    this.color = Colors.grey,
     this.fit = BoxFit.cover,
     this.height,
     this.path,
@@ -38,7 +38,7 @@ class AppImageCircular extends StatelessWidget {
           width: width,
           height: height,
           fit: fit,
-          errorBuilder: (_, error, __) {
+          errorBuilder: (_, error, _) {
             log("Error loading file image: $error");
             return _buildDefaultImage();
           },
@@ -76,7 +76,7 @@ class AppImageCircular extends StatelessWidget {
           width: width,
           height: height,
           fit: fit,
-          errorBuilder: (_, error, __) {
+          errorBuilder: (_, error, _) {
             log("Error loading asset image: $error");
             return _buildDefaultImage();
           },

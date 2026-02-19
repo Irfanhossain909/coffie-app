@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
