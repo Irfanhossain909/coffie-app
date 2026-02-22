@@ -33,7 +33,7 @@ class TransectionCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.yellow),
+        border: Border.all(color: AppColors.black.withValues(alpha: 0.1)),
         borderRadius: BorderRadius.circular(10.r),
       ),
       width: double.infinity,

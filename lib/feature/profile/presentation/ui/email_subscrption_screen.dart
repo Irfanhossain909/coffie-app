@@ -1,3 +1,4 @@
+import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
@@ -23,6 +24,7 @@ class EmailSubscrptionScreen extends StatelessWidget {
               height: 166.h,
               fit: BoxFit.cover,
             ),
+            SizedBox(height: 34.h),
             AppText(
               data: "Subscribe Now",
               fontSize: 18.sp,
@@ -43,11 +45,16 @@ class EmailSubscrptionScreen extends StatelessWidget {
               ),
             ),
             AppInputWidgetTwo(
-              
               title: "Email",
               isEmail: true,
               isOptional: true,
               hintText: "Enter your email",
+            ),
+
+            Spacer(),
+
+            SafeArea(
+              child: AppButton(title: "Subscribe", onTap: () {}),
             ),
           ],
         ),

@@ -83,12 +83,16 @@ class ProfileScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Edit Profile",
                   icon: AppAssets.edit,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.editProfileInfoScreen);
+                  },
                 ),
                 ProfileRowCard(
                   title: "My Wallet",
                   icon: AppAssets.wallet,
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(AppRoutes.instance.myWalletScreen);
+                  },
                 ),
                 ProfileRowCard(
                   title: "Favorite",
