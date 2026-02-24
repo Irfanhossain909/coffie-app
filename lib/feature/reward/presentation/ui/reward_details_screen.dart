@@ -13,8 +13,9 @@ class RewardDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenName = Get.arguments["screen_name"];
     return Scaffold(
-      appBar: CustomAppbar(text: "Reward Details"),
+      appBar: CustomAppbar(text: screenName),
       body: Padding(
         padding: EdgeInsets.all(16.r),
         child: Column(

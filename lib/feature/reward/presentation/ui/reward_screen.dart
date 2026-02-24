@@ -94,7 +94,10 @@ class RewardScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return LoyaltyCard(
                         onTap: () {
-                          Get.toNamed(AppRoutes.instance.rewardDetailsScreen);
+                          Get.toNamed(
+                            AppRoutes.instance.rewardDetailsScreen,
+                            arguments: {"screen_name": "Reward Details"},
+                          );
                         },
                       );
                     },
@@ -103,14 +106,28 @@ class RewardScreen extends StatelessWidget {
                   ListView.builder(
                     padding: EdgeInsets.all(16.r),
                     itemBuilder: (context, index) {
-                      return LoyaltyCard();
+                      return LoyaltyCard(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.instance.rewardDetailsScreen,
+                            arguments: {"screen_name": "Reward Details"},
+                          );
+                        },
+                      );
                     },
                   ),
                   // Spend
                   ListView.builder(
                     padding: EdgeInsets.all(16.r),
                     itemBuilder: (context, index) {
-                      return LoyaltyCard();
+                      return LoyaltyCard(
+                        onTap: () {
+                          Get.toNamed(
+                            AppRoutes.instance.rewardDetailsScreen,
+                            arguments: {"screen_name": "Reward Details"},
+                          );
+                        },
+                      );
                     },
                   ),
                 ],

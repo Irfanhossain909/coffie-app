@@ -6,7 +6,9 @@ import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_passw
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/new_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/register_screen.dart';
+import 'package:coffie/feature/gift_card/presentation/ui/add_existing_gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
+import 'package:coffie/feature/gift_card/presentation/ui/perchese_gift_card_screen.dart';
 import 'package:coffie/feature/home/presentation/ui/home_screen.dart';
 import 'package:coffie/feature/navigation/presentation/ui/navigation_screen.dart';
 import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
@@ -100,7 +102,16 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     binding: AppBinding(),
     page: () => const GiftCardScreen(),
   ),
-
+  GetPage(
+    name: AppRoutes.instance.addExistingGiftCardScreen,
+    binding: AppBinding(),
+    page: () => const AddExistingGiftCard(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.percheseGiftCardScreen,
+    binding: AppBinding(),
+    page: () => const PercheseGiftCardScreen(),
+  ),
   // --------------------- Profile ---------------------
   GetPage(
     name: AppRoutes.instance.profileScreen,

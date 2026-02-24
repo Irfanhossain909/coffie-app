@@ -27,7 +27,8 @@ class AppRoutes {
 
   // Gift Card Routes
   final String giftCardScreen = "/gift-card-screen";
-
+  final String addExistingGiftCardScreen = "/add-existing-gift-card-screen";
+  final String percheseGiftCardScreen = "/perchese-gift-card-screen";
   // Profile Routes
   final String profileScreen = "/profile-screen";
   final String settingScreen = "/setting-screen";
