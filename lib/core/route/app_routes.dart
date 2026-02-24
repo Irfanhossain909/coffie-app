@@ -20,6 +20,7 @@ class AppRoutes {
 
   // Reward Routes
   final String rewardScreen = "/reward-screen";
+  final String rewardDetailsScreen = "/reward-details-screen";
 
   // Order Routes
   final String orderScreen = "/order-screen";

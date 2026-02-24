@@ -23,6 +23,7 @@ import 'package:coffie/feature/profile/presentation/ui/privicy_policy_screen.dar
 import 'package:coffie/feature/profile/presentation/ui/profile_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/setting_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/transection_history_screen.dart';
+import 'package:coffie/feature/reward/presentation/ui/reward_details_screen.dart';
 import 'package:coffie/feature/reward/presentation/ui/reward_screen.dart';
 import 'package:get/get.dart';
 
@@ -79,6 +80,11 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.rewardScreen,
     binding: AppBinding(),
     page: () => const RewardScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.rewardDetailsScreen,
+    binding: AppBinding(),
+    page: () => const RewardDetailsScreen(),
   ),
 
   // --------------------- Order ---------------------

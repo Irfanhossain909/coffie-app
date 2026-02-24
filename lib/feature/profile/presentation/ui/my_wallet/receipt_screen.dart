@@ -27,6 +27,7 @@ class ReceiptScreen extends StatelessWidget {
                 spacing: 8.h,
                 children: [
                   Branding(),
+                  SizedBox(height: 4.h),
                   Row(
                     children: [
                       AppText(
