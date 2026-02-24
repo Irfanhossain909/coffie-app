@@ -16,7 +16,9 @@ import 'package:coffie/feature/profile/presentation/ui/delete_account_screen.dar
 import 'package:coffie/feature/profile/presentation/ui/edit_profile_info_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/email_subscrption_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/favorate_screen.dart';
-import 'package:coffie/feature/profile/presentation/ui/my_wallet_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/my_wallet/my_wallet_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/my_wallet/receipt_screen.dart';
+import 'package:coffie/feature/profile/presentation/ui/my_wallet/wallet_history_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/privicy_policy_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/profile_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/setting_screen.dart';
@@ -148,5 +150,15 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.myWalletScreen,
     binding: AppBinding(),
     page: () => const MyWalletScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.walletHistoryScreen,
+    binding: AppBinding(),
+    page: () => const WalletHistoryScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.receiptScreen,
+    binding: AppBinding(),
+    page: () => const ReceiptScreen(),
   ),
 ];

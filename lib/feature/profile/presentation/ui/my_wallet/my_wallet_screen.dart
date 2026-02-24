@@ -2,9 +2,11 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class MyWalletScreen extends StatelessWidget {
   const MyWalletScreen({super.key});
@@ -93,7 +95,11 @@ class MyWalletScreen extends StatelessWidget {
                     ListView.builder(
                       padding: EdgeInsets.all(6.r),
                       itemBuilder: (context, index) {
-                        return WalletCard();
+                        return WalletCard(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.instance.walletHistoryScreen);
+                          },
+                        );
                       },
                     ),
                     // Add Money
@@ -122,73 +128,77 @@ class MyWalletScreen extends StatelessWidget {
 }
 
 class WalletCard extends StatelessWidget {
-  const WalletCard({
-    super.key,
-  });
+  final void Function()? onTap;
+  final String? type; // plus, minus, normal
+  final String? price;
+  const WalletCard({super.key, this.onTap, this.type = "minus", this.price});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10.h),
-      padding: EdgeInsets.all(12.r),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: AppColors.yellow),
-      ),
-      width: double.infinity,
-      height: 100.h,
-    
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SvgPicture.asset(
-            AppAssets.branding,
-            width: 100.w,
-          ),
-          Column(
-            children: [
-              AppText(
-                data: "Americano",
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              AppText(
-                data: "May 15, 2026 • 9:41 AM",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment:
-                MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 10.w,
-                  vertical: 6.h,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 10.h),
+        padding: EdgeInsets.all(12.r),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          border: Border.all(color: AppColors.yellow),
+        ),
+        width: double.infinity,
+        height: 100.h,
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SvgPicture.asset(AppAssets.branding, width: 100.w),
+            Column(
+              children: [
+                AppText(
+                  data: "Americano",
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
                 ),
-                decoration: BoxDecoration(
-                  color: AppColors.green,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: AppText(
-                  data: "Success",
+                AppText(
+                  data: "May 15, 2026 • 9:41 AM",
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
-                  color: Colors.white,
                 ),
-              ),
-              AppText(
-                data: r"-$20.00",
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.red,
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 6.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.green,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: AppText(
+                    data: "Success",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                ),
+                AppText(
+                  data: price ?? r"-$20.00",
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: type == "normal"
+                      ? AppColors.black
+                      : type == "plus"
+                      ? AppColors.green
+                      : AppColors.red,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
