@@ -111,7 +111,7 @@ class RewardDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
-
+//
             Container(
               padding: EdgeInsets.all(12.r),
               width: double.infinity,

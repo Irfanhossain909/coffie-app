@@ -29,4 +29,5 @@ class AppAssets {
   static const String deleteAccountImg = "assets/images/deleteAccountImg.svg";
   static const String changePasswordImg = "assets/images/changeImg.svg";
   static const String emailSubscription = "assets/images/emailSubImg.svg";
+  static const String rewardPoint = "assets/images/reward_point.svg";
 }
