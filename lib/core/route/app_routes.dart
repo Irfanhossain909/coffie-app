@@ -24,7 +24,12 @@ class AppRoutes {
 
   // Order Routes
   final String orderScreen = "/order-screen";
-
+  // New Order Routes
+  final String pickupLocationScreen = "/pickup-location-screen";
+  final String shopDetailsScreen = "/shop-details-screen";
+  final String shopOrderInformationScreen = "/shop-order-information-screen";
+  final String productInfoScreen = "/product-info-screen";
+  final String myCartScreen = "/my-cart-screen";
   // Gift Card Routes
   final String giftCardScreen = "/gift-card-screen";
   final String addExistingGiftCardScreen = "/add-existing-gift-card-screen";

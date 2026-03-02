@@ -67,13 +67,10 @@ class FavorateScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final favoriteCardEntity =
                                       favoriteCardEntityList[index];
-                                  return Padding(
-                                    padding: EdgeInsets.only(bottom: 8.0),
-                                    child: FavoriteCrad(
-                                      isFavorite: () =>
-                                          controller.toggleFavorite(index),
-                                      favoriteCardEntity: favoriteCardEntity,
-                                    ),
+                                  return FavoriteCrad(
+                                    isFavorite: () =>
+                                        controller.toggleFavorite(index),
+                                    favoriteCardEntity: favoriteCardEntity,
                                   );
                                 },
                               ),
@@ -84,13 +81,10 @@ class FavorateScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   final favoriteCardEntity =
                                       favoriteCardEntityList[index];
-                                  return Padding(
-                                    padding: EdgeInsets.only(bottom: 8.0),
-                                    child: FavoriteItem(
-                                      isFavorite: () =>
-                                          controller.toggleFavorite(index),
-                                      favoriteCardEntity: favoriteCardEntity,
-                                    ),
+                                  return FavoriteItem(
+                                    isFavorite: () =>
+                                        controller.toggleFavorite(index),
+                                    favoriteCardEntity: favoriteCardEntity,
                                   );
                                 },
                               ),

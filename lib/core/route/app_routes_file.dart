@@ -11,6 +11,11 @@ import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/perchese_gift_card_screen.dart';
 import 'package:coffie/feature/home/presentation/ui/home_screen.dart';
 import 'package:coffie/feature/navigation/presentation/ui/navigation_screen.dart';
+import 'package:coffie/feature/new_order/presentation/ui/my_cart_screen.dart';
+import 'package:coffie/feature/new_order/presentation/ui/pickup_location_screen.dart';
+import 'package:coffie/feature/new_order/presentation/ui/product_info_screen.dart';
+import 'package:coffie/feature/new_order/presentation/ui/shop_details_screnn.dart';
+import 'package:coffie/feature/new_order/presentation/ui/shop_order_information_screen.dart';
 import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/change_password_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/contact_us_screen.dart';
@@ -95,7 +100,32 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     binding: AppBinding(),
     page: () => const OrderScreen(),
   ),
-
+  // --------------------- New Order ---------------------
+  GetPage(
+    name: AppRoutes.instance.pickupLocationScreen,
+    binding: AppBinding(),
+    page: () => const PickupLocationScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.shopDetailsScreen,
+    binding: AppBinding(),
+    page: () => const ShopDetailsScrenn(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.shopOrderInformationScreen,
+    binding: AppBinding(),
+    page: () => const ShopOrderInformationScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.productInfoScreen,
+    binding: AppBinding(),
+    page: () => const ProductInfoScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.myCartScreen,
+    binding: AppBinding(),
+    page: () => const MyCartScreen(),
+  ),
   // --------------------- Gift Card ---------------------
   GetPage(
     name: AppRoutes.instance.giftCardScreen,

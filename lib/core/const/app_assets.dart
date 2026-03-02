@@ -23,6 +23,10 @@ class AppAssets {
   static const String delete = "assets/icons/delete.svg";
   static const String contactUs = "assets/icons/contacyUs.svg";
   static const String changePassword = "assets/icons/chengePassword.svg";
+  static const String editNote = "assets/icons/editText.svg";
+  static const String rewardBox = "assets/icons/rewardBox.svg";
+  static const String giftBox = "assets/icons/giftBox.svg";
+  static const String stripe = "assets/icons/strip.svg";
 
   // ------------------------  Image ------------------------
   static const String branding = "assets/images/branding.svg";
@@ -30,4 +34,5 @@ class AppAssets {
   static const String changePasswordImg = "assets/images/changeImg.svg";
   static const String emailSubscription = "assets/images/emailSubImg.svg";
   static const String rewardPoint = "assets/images/reward_point.svg";
+  static const String mapImg = "assets/images/mapImg.jpg";
 }

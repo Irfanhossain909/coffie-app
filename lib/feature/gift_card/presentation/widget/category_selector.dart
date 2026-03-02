@@ -18,34 +18,41 @@ class CategorySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Wrap(
-        spacing: 16.w,
-        runSpacing: 10.h,
-        children: items.map((item) {
-          final bool isSelected = selectedItem.value == item;
+      () => SingleChildScrollView(
+        scrollDirection: Axis.horizontal, // 👈 horizontal scroll
+        child: Row(
+          children: items.map((item) {
+            final bool isSelected = selectedItem.value == item;
 
-          return GestureDetector(
-            onTap: () => onTap(item),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(
-                  color: isSelected ? Colors.transparent : AppColors.yellow,
+            return Padding(
+              padding: EdgeInsets.only(right: 12.w), // spacing between items
+              child: GestureDetector(
+                onTap: () => onTap(item),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(
+                      color: isSelected ? Colors.transparent : AppColors.yellow,
+                    ),
+                    color: isSelected ? AppColors.blue : Colors.transparent,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 6.h,
+                    horizontal: 12.w,
+                  ),
+                  child: Text(
+                    item,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: isSelected ? Colors.white : AppColors.black,
+                    ),
+                  ),
                 ),
-                color: isSelected ? AppColors.blue : Colors.transparent,
               ),
-              padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
-              child: Text(
-                item,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  color: isSelected ? Colors.white : AppColors.black,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

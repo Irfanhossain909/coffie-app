@@ -1,14 +1,15 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
-import 'package:coffie/core/component/app_image/app_image_circular.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/home/presentation/widget/auto_carosel_slider.dart';
 import 'package:coffie/feature/home/presentation/widget/last_order_card.dart';
 import 'package:coffie/feature/home/presentation/widget/wallet_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -67,7 +68,11 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 12.h),
-              AppButton(title: "Start Your Order"),
+              AppButton(
+                title: "Start Your Order",
+                onTap: () =>
+                    Get.toNamed(AppRoutes.instance.pickupLocationScreen),
+              ),
               SizedBox(height: 12.h),
               AppText(
                 data: "Last Order",

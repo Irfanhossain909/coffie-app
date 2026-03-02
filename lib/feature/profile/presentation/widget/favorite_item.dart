@@ -22,6 +22,7 @@ class FavoriteItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 8.h),
       padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.yellow),
