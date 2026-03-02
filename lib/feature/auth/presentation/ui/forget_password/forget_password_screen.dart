@@ -2,6 +2,7 @@ import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/auth/presentation/controller/forget_password/forget_password_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,12 @@ class ForgetPasswordScreen extends StatelessWidget {
                                 isAuthButton: true,
                                 titleSize: 18.sp,
                                 title: "Get Verification Code",
-                                onTap: () => controller.forgetPassword(),
+                                onTap: () {
+                                  // controller.forgetPassword();
+                                  Get.toNamed(
+                                    AppRoutes.instance.forgetOtpVerifyScreen,
+                                  );
+                                },
                               );
                       }),
                     ],

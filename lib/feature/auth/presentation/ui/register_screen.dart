@@ -3,6 +3,7 @@ import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/auth/presentation/controller/register_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,12 @@ class RegisterScreen extends StatelessWidget {
                                 isAuthButton: true,
                                 titleSize: 18.sp,
                                 title: "Sign Up",
-                                onTap: () => controller.register(),
+                                onTap: () {
+                                  // controller.register();
+                                  Get.offAllNamed(
+                                    AppRoutes.instance.forgetOtpVerifyScreen,
+                                  );
+                                },
                               );
                       }),
                       SizedBox(height: 8.h),
@@ -178,11 +184,19 @@ class RegisterScreen extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: AppColors.black,
                   ),
-                  AppText(
-                    data: "Sign in",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.blue,
+                  InkWell(
+                    onTap: () {
+                      Get.offAllNamed(AppRoutes.instance.loginScreen);
+                    },
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    child: AppText(
+                      data: "Sign in",
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.blue,
+                    ),
                   ),
                 ],
               ),

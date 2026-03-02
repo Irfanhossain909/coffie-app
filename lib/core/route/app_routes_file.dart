@@ -1,6 +1,7 @@
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/route/bindings/app_binding.dart';
 import 'package:coffie/core/route/bindings/auth_binding.dart';
+import 'package:coffie/core/route/bindings/splash_screen_binding.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_otp_verify_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
@@ -16,6 +17,7 @@ import 'package:coffie/feature/new_order/presentation/ui/pickup_location_screen.
 import 'package:coffie/feature/new_order/presentation/ui/product_info_screen.dart';
 import 'package:coffie/feature/new_order/presentation/ui/shop_details_screnn.dart';
 import 'package:coffie/feature/new_order/presentation/ui/shop_order_information_screen.dart';
+import 'package:coffie/feature/onboarding/on_boarding_screen.dart';
 import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/change_password_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/contact_us_screen.dart';
@@ -35,18 +37,14 @@ import 'package:coffie/feature/reward/presentation/ui/reward_screen.dart';
 import 'package:get/get.dart';
 
 List<GetPage> appRootRoutesFile = <GetPage>[
-  //   /////////////////  splash screen start
-  // GetPage(
-  //   name: AppRoutes.instance.initial,
-  //   binding: SplashScreenBinding(),
-  //   page: () => const SplashScreen(),
-  //   transitionDuration: Duration(milliseconds: 800),
-  //   opaque: false,
-  // ),
   // --------------------- Navigation ---------------------
   GetPage(
     name: AppRoutes.instance.navigationScreen,
     page: () => const NavigationScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.onBoardingScreen,
+    page: () => const OnBoardingScreen(),
   ),
   // -- -----------  Auth ---------------------
   GetPage(

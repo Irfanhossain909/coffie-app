@@ -27,6 +27,7 @@ class AppAssets {
   static const String rewardBox = "assets/icons/rewardBox.svg";
   static const String giftBox = "assets/icons/giftBox.svg";
   static const String stripe = "assets/icons/strip.svg";
+  static const String logo = "assets/icons/logo.png";
 
   // ------------------------  Image ------------------------
   static const String branding = "assets/images/branding.svg";

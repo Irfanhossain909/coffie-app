@@ -43,6 +43,7 @@ dependencies:
   flutter_otp_text_field: ^1.5.1+1
   cached_network_image: ^3.4.1
   shimmer_animation: ^2.2.2+1
+  flutter_native_splash: ^2.4.7
 
 
 dev_dependencies:
@@ -71,9 +72,24 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+  
+
+  # 🔥 IMPORTANT: This must be OUTSIDE flutter section
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/icons/logo.png
+
+  android: true
+  ios: true
+
+  android_12:
+    image: assets/icons/logo.png
+    icon_background_color: "#FFFFFF"
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
+
+  
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package

@@ -3,6 +3,7 @@ import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/auth/presentation/controller/login_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
@@ -71,11 +72,19 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(height: 8.h),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: AppText(
-                          data: "Forgot password?",
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.blue,
+                        child: InkWell(
+                          onTap: () => Get.toNamed(
+                            AppRoutes.instance.forgetPasswordScreen,
+                          ),
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          child: AppText(
+                            data: "Forgot password?",
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.blue,
+                          ),
                         ),
                       ),
                       SizedBox(height: 8.h),
@@ -86,7 +95,12 @@ class LoginScreen extends StatelessWidget {
                                 isAuthButton: true,
                                 titleSize: 18.sp,
                                 title: "Sign In",
-                                onTap: () => controller.login(),
+                                onTap: () {
+                                  // controller.login();
+                                  Get.offAllNamed(
+                                    AppRoutes.instance.navigationScreen,
+                                  );
+                                },
                               );
                       }),
                       SizedBox(height: 8.h),
@@ -156,11 +170,16 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 12.h),
-                      AppText(
-                        data: "Continue as Guest",
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.blue,
+                      InkWell(
+                        onTap: () {
+                          Get.offAllNamed(AppRoutes.instance.navigationScreen);
+                        },
+                        child: AppText(
+                          data: "Continue as Guest",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.blue,
+                        ),
                       ),
                       SizedBox(height: 8.h),
                     ],
@@ -182,11 +201,19 @@ class LoginScreen extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     color: AppColors.black,
                   ),
-                  AppText(
-                    data: "Sign up",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.blue,
+                  InkWell(
+                    onTap: () {
+                      Get.offAllNamed(AppRoutes.instance.registerScreen);
+                    },
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    child: AppText(
+                      data: "Sign up",
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.blue,
+                    ),
                   ),
                 ],
               ),

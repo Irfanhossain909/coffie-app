@@ -1,6 +1,7 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/auth/presentation/controller/forget_password/forget_otp_verify_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
             child: InkWell(
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: Center(
                 child: SingleChildScrollView(
@@ -62,12 +64,14 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
                             AppText(
                               data:
                                   "We've Sent a Code to Irfan.office66@gmail.com",
-                              fontSize: 16.sp,
+                              fontSize: 12.sp,
                               maxLines: 2,
                               fontWeight: FontWeight.w700,
                             ),
 
                             OtpTextField(
+                              fieldWidth: 40.w,
+                              fieldHeight: 50.h,
                               numberOfFields: 6, // Number of OTP fields
                               borderColor: AppColors
                                   .yellow, // Border color of the OTP field
@@ -186,6 +190,11 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
                                       titleSize: 18.sp,
                                       title: "Verify and Continue",
                                       // onTap: () => controller.newPassword(),
+                                      onTap: () {
+                                        Get.offAllNamed(
+                                          AppRoutes.instance.loginScreen,
+                                        );
+                                      },
                                     );
                             }),
                           ],
