@@ -16,31 +16,39 @@ class AutoCarouselSlider extends StatefulWidget {
 
 class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
   late PageController _pageController;
-  int _currentIndex = 0;
   Timer? _timer;
 
-  final int _initialPage = 1000;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _initialPage);
-    _currentIndex = _initialPage;
+    _pageController = PageController();
     _startAutoScroll();
   }
 
+  // 🔥 Auto Scroll Logic (Safe)
   void _startAutoScroll() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      _currentIndex++;
+    _timer?.cancel(); // prevent multiple timers
+
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (!mounted || !_pageController.hasClients) return;
+
+      final nextPage = (_pageController.page ?? 0).toInt() + 1;
 
       _pageController.animateToPage(
-        _currentIndex,
+        nextPage,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
-
-      setState(() {});
     });
+  }
+
+  // 🔥 VERY IMPORTANT (Get.to() fix)
+  @override
+  void deactivate() {
+    _timer?.cancel(); // stop when leaving screen
+    super.deactivate();
   }
 
   @override
@@ -50,7 +58,7 @@ class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
     super.dispose();
   }
 
-  /// 🔥 Glossy Shimmer using shimmer_animation
+  // ✨ Gloss Shimmer
   Widget _buildGlossShimmer() {
     return Shimmer(
       duration: const Duration(seconds: 2),
@@ -77,37 +85,28 @@ class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
       ),
     );
   }
-  // Widget _buildGlossShimmer() {
-  //   return Shimmer(
-  //     duration: const Duration(seconds: 2),
-  //     interval: const Duration(milliseconds: 300),
-  //     color: Colors.white.withOpacity(0.15),
-  //     colorOpacity: 0.3,
-  //     enabled: true,
-  //     direction: const ShimmerDirection.fromLTRB(),
-  //     child: Container(
-  //       width: double.infinity,
-  //       height: double.infinity,
-  //       decoration: BoxDecoration(
-  //         color: Colors.grey.shade900, // dark base
-  //         borderRadius: BorderRadius.circular(12.r),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.imageList.isEmpty) {
+      return const SizedBox();
+    }
+
     return SizedBox(
       height: 230.h,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          /// 🖼 Infinite Cached Slider
+          /// 🖼 Infinite Slider
           ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
             child: PageView.builder(
               controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
               itemBuilder: (context, index) {
                 final realIndex = index % widget.imageList.length;
 
@@ -116,26 +115,21 @@ class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
                   fit: BoxFit.cover,
                   width: double.infinity,
 
-                  /// ✨ Gloss Loading
+                  /// ✨ Loading
                   placeholder: (context, url) => _buildGlossShimmer(),
 
-                  /// ❌ Error fallback
+                  /// ❌ Error
                   errorWidget: (context, url, error) => Container(
-                    color: Colors.grey.shade900,
+                    color: Colors.grey.shade300,
                     child: Center(
                       child: Icon(
                         Icons.image_not_supported_outlined,
-                        color: Colors.grey.shade500,
+                        color: Colors.grey.shade600,
                         size: 40.sp,
                       ),
                     ),
                   ),
                 );
-              },
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
               },
             ),
           ),
@@ -151,17 +145,17 @@ class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: List.generate(widget.imageList.length, (index) {
+                children: List.generate(widget.imageList.length, (dotIndex) {
                   final realIndex = _currentIndex % widget.imageList.length;
 
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     margin: EdgeInsets.symmetric(horizontal: 3.w),
-                    width: realIndex == index ? 14.w : 8.w,
+                    width: realIndex == dotIndex ? 14.w : 8.w,
                     height: 8.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.r),
-                      color: realIndex == index
+                      color: realIndex == dotIndex
                           ? AppColors.blue
                           : AppColors.black,
                     ),
@@ -175,3 +169,4 @@ class _AutoCarouselSliderState extends State<AutoCarouselSlider> {
     );
   }
 }
+

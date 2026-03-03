@@ -48,9 +48,19 @@ class HomeScreen extends StatelessWidget {
         actions: [
           WalletContainer(amount: 320.50),
           SizedBox(width: 8.w),
-          Icon(Icons.notifications_none_outlined, color: AppColors.blue),
+          InkWell(
+            onTap: () => Get.toNamed(AppRoutes.instance.myCartScreen),
+            child: Icon(Icons.shopping_cart_outlined, color: AppColors.blue),
+          ),
+
           SizedBox(width: 8.w),
-          Icon(Icons.shopping_cart_outlined, color: AppColors.blue),
+          InkWell(
+            onTap: () => Get.toNamed(AppRoutes.instance.notificationScreen),
+            child: Icon(
+              Icons.notifications_none_outlined,
+              color: AppColors.blue,
+            ),
+          ),
         ],
       ),
       body: Padding(

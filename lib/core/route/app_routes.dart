@@ -15,6 +15,9 @@ class AppRoutes {
   final String newPasswordScreen = "/new-password-screen";
   final String forgetOtpVerifyScreen = "/forget-otp-verify-screen";
 
+  // Notification Routes
+  final String notificationScreen = "/notification-screen";
+
   // Home Routes
   final String homeScreen = "/home-screen";
 

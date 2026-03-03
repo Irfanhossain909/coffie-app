@@ -6,6 +6,7 @@ class AppColors {
   static AppColors get instance => _instance;
 
   static const Color backgrounColor = Color(0xFFFFFFFF);
+  static const Color offWhite = Color(0xFFE9E0CD);
   static const Color green = Color(0xFF4BAE4F);
   static const Color yellow = Color(0xFFA78133);
   static const Color blue = Color(0xFF195ABE);
