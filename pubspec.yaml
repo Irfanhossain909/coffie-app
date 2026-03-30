@@ -37,7 +37,8 @@ dependencies:
   get: ^4.7.3
   dio: ^5.9.1
   google_fonts: ^8.0.1
-  logger: ^2.6.2
+  get_storage: ^2.1.1
+  pretty_dio_logger: ^1.4.0
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.3
   flutter_otp_text_field: ^1.5.1+1

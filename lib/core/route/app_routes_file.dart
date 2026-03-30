@@ -2,7 +2,7 @@ import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/route/bindings/app_binding.dart';
 import 'package:coffie/core/route/bindings/auth_binding.dart';
 import 'package:coffie/core/route/bindings/splash_screen_binding.dart';
-import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_otp_verify_screen.dart';
+import 'package:coffie/feature/auth/presentation/ui/email_otp_verify_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/new_password_screen.dart';
@@ -75,9 +75,9 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     page: () => const NewPasswordScreen(),
   ),
   GetPage(
-    name: AppRoutes.instance.forgetOtpVerifyScreen,
+    name: AppRoutes.instance.emailOtpVerifyScreen,
     binding: AuthBinding(),
-    page: () => const ForgetOtpVerifyScreen(),
+    page: () => const EmailOtpVerifyScreen(),
   ),
 
   // --------------------- Home ---------------------

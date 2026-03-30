@@ -76,9 +76,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                                 title: "Get Verification Code",
                                 onTap: () {
                                   // controller.forgetPassword();
-                                  Get.toNamed(
-                                    AppRoutes.instance.forgetOtpVerifyScreen,
-                                  );
+                                  // Get.toNamed(
+                                  //   AppRoutes.instance.forgetOtpVerifyScreen,
+                                  // );
                                 },
                               );
                       }),

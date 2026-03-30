@@ -13,7 +13,7 @@ class AppRoutes {
   final String registerScreen = "/register-screen";
   final String forgetPasswordScreen = "/forget-password-screen";
   final String newPasswordScreen = "/new-password-screen";
-  final String forgetOtpVerifyScreen = "/forget-otp-verify-screen";
+  final String emailOtpVerifyScreen = "/email-otp-verify-screen";
 
   // Notification Routes
   final String notificationScreen = "/notification-screen";

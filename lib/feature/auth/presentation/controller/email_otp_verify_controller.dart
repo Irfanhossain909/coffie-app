@@ -1,59 +1,46 @@
 import 'dart:async';
 
+import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
+import 'package:coffie/feature/auth/domain/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ForgetOtpVerifyController extends GetxController {
- TextEditingController otpTextEditingController = TextEditingController();
-  // AuthRepository authRepository = AuthRepository.instance;
+class EmailOtpVerifyController extends GetxController {
+  TextEditingController otpTextEditingController = TextEditingController();
+  final AuthRepository _authRepository = AuthRepository.instance;
   RxInt remainingSeconds = 180.obs; // 3 minutes in seconds
   var canResend = false.obs;
   late String email;
+  late String type;
   late Timer _timer;
   RxBool isLoading = false.obs;
   var clearOtpField = false.obs; // To trigger clearing of OTP fields
 
-  // Future<void> verifyPhoneOtp() async {
-  //   try {
-  //     isLoading.value = true;
-  //     final response = await authRepository.resendPhoneOtp(phone: phone ?? "");
-  //     if (response) {
-  //       clearOtpFields(); // Clear OTP fields
-  //       AppSnackBar.success("A new OTP has been sent to your phone.");
-  //       resendCode();
-  //     }
-  //   } catch (e) {
-  //     AppPrint.appError(e, title: "Verify Phone OTP Error");
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+  Future<void> verifyEmailOtp() async {
+    try {
+      isLoading.value = true;
+      final response = await _authRepository.emailVerify(
+        email: email,
+        otp: int.parse(otpTextEditingController.text),
+      );
+      if (response) {
+        // Get.offAllNamed(AppRoutes.instance.signInScreen);
+        AppSnackBar.success("Verification Successful");
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-  // Future<void> verifyOtp() async {
-  //   try {
-  //     isLoading.value = true;
-  //     final response = await authRepository.phoneVerify(
-  //       phone: phone ?? "",
-  //       otp: otpTextEditingController.text,
-  //     );
-  //     if (response) {
-  //       Get.offAllNamed(AppRoutes.instance.signInScreen);
-  //       AppSnackBar.success("Verification Successful");
-  //     }
-  //   } catch (e) {
-  //     AppPrint.appError(e, title: "Verify OTP Error");
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
-  String? phone;
   @override
   void onInit() {
     super.onInit();
     startTimer();
-    // phone = Get.arguments["phone"];
+    email = Get.arguments["email"];
+    type = Get.arguments["type"];
   }
 
   void startTimer() {

@@ -89,19 +89,18 @@ class LoginScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 8.h),
                       Obx(() {
-                        return controller.isLoading.value
-                            ? const CircularProgressIndicator()
-                            : AppButton(
-                                isAuthButton: true,
-                                titleSize: 18.sp,
-                                title: "Sign In",
-                                onTap: () {
-                                  // controller.login();
-                                  Get.offAllNamed(
-                                    AppRoutes.instance.navigationScreen,
-                                  );
-                                },
-                              );
+                        return AppButton(
+                          isLoading: controller.isLoading.value,
+                          isAuthButton: true,
+                          titleSize: 18.sp,
+                          title: "Sign In",
+                          onTap: () {
+                            controller.login();
+                            // Get.offAllNamed(
+                            //   AppRoutes.instance.navigationScreen,
+                            // );
+                          },
+                        );
                       }),
                       SizedBox(height: 8.h),
 

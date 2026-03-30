@@ -27,7 +27,10 @@ class AppButton extends StatelessWidget {
   final double? circularHeight;
   final double? width;
   final String title;
+
+  /// Loading state
   final bool isLoading;
+
   final EdgeInsetsGeometry? margin;
   final BorderRadiusGeometry? borderRadius;
   final BoxDecoration? decoration;
@@ -51,14 +54,13 @@ class AppButton extends StatelessWidget {
               color: filColor ?? AppColors.blue,
               borderRadius: borderRadius ?? BorderRadius.circular(8.r),
             ),
-
         child: isLoading
             ? SizedBox(
-                height: circularHeight ?? 30.0.h,
-                width: circularHeight ?? 30.0.w,
+                height: circularHeight ?? 24.0.h,
+                width: circularHeight ?? 24.0.w,
                 child: const CircularProgressIndicator(
-                  // color: AppColors.white50,
                   strokeWidth: 2,
+                  color: Colors.white,
                 ),
               )
             : isAuthButton == true

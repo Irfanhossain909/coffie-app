@@ -85,19 +85,15 @@ class RegisterScreen extends StatelessWidget {
                       SizedBox(height: 8.h),
 
                       Obx(() {
-                        return controller.isLoading.value
-                            ? const CircularProgressIndicator()
-                            : AppButton(
-                                isAuthButton: true,
-                                titleSize: 18.sp,
-                                title: "Sign Up",
-                                onTap: () {
-                                  // controller.register();
-                                  Get.offAllNamed(
-                                    AppRoutes.instance.forgetOtpVerifyScreen,
-                                  );
-                                },
-                              );
+                        return AppButton(
+                          isLoading: controller.isLoading.value,
+                          isAuthButton: true,
+                          titleSize: 18.sp,
+                          title: "Sign Up",
+                          onTap: () {
+                            controller.register();
+                          },
+                        );
                       }),
                       SizedBox(height: 8.h),
 

@@ -1,21 +1,20 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/core/route/app_routes.dart';
-import 'package:coffie/feature/auth/presentation/controller/forget_password/forget_otp_verify_controller.dart';
+import 'package:coffie/feature/auth/presentation/controller/email_otp_verify_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class ForgetOtpVerifyScreen extends StatelessWidget {
-  const ForgetOtpVerifyScreen({super.key});
+class EmailOtpVerifyScreen extends StatelessWidget {
+  const EmailOtpVerifyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ForgetOtpVerifyController>(
-      init: ForgetOtpVerifyController(),
+    return GetBuilder<EmailOtpVerifyController>(
+      init: EmailOtpVerifyController(),
       builder: (controller) {
         return Scaffold(
           body: Padding(
@@ -62,8 +61,7 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
                             ),
 
                             AppText(
-                              data:
-                                  "We've Sent a Code to Irfan.office66@gmail.com",
+                              data: "We've Sent a Code to ${controller.email}",
                               fontSize: 12.sp,
                               maxLines: 2,
                               fontWeight: FontWeight.w700,
@@ -85,8 +83,8 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
                               alignment: Alignment.center,
                               contentPadding: EdgeInsets.all(0),
                               onSubmit: (String verificationCode) {
-                                // controller.otpTextEditingController.text =
-                                //     verificationCode;
+                                controller.otpTextEditingController.text =
+                                    verificationCode;
                               },
                               decoration: InputDecoration(
                                 filled:
@@ -183,19 +181,16 @@ class ForgetOtpVerifyScreen extends StatelessWidget {
                             ),
 
                             Obx(() {
-                              return controller.isLoading.value
-                                  ? const CircularProgressIndicator()
-                                  : AppButton(
-                                      isAuthButton: true,
-                                      titleSize: 18.sp,
-                                      title: "Verify and Continue",
-                                      // onTap: () => controller.newPassword(),
-                                      onTap: () {
-                                        Get.offAllNamed(
-                                          AppRoutes.instance.loginScreen,
-                                        );
-                                      },
-                                    );
+                              return AppButton(
+                                isLoading: controller.isLoading.value,
+                                isAuthButton: true,
+                                titleSize: 18.sp,
+                                title: "Verify and Continue",
+
+                                onTap: () {
+                                  controller.verifyEmailOtp();
+                                },
+                              );
                             }),
                           ],
                         ),
