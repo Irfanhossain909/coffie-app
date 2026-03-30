@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:coffie/core/api_service/api.dart';
-import 'package:coffie/core/api_service/non_auth_api.dart';
+import 'package:coffie/core/service/api_service/api.dart';
+import 'package:coffie/core/service/api_service/non_auth_api.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';

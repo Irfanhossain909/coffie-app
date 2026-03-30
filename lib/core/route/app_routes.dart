@@ -15,6 +15,9 @@ class AppRoutes {
   final String newPasswordScreen = "/new-password-screen";
   final String emailOtpVerifyScreen = "/email-otp-verify-screen";
 
+  // Personal Info Routes
+  final String personalInfoScreen = "/personal-info-screen";
+
   // Notification Routes
   final String notificationScreen = "/notification-screen";
 

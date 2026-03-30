@@ -14,7 +14,7 @@ class RegisterController extends GetxController {
     text: kDebugMode ? 'John Doe' : '',
   );
   TextEditingController emailController = TextEditingController(
-    text: kDebugMode ? 'jedel69136@izkat.com' : "",
+    text: kDebugMode ? 'yamiy60604@jsncos.com' : "",
   );
   TextEditingController passwordController = TextEditingController(
     text: kDebugMode ? 'Hello@123' : '',

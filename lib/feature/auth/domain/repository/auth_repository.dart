@@ -1,7 +1,8 @@
-import 'package:coffie/core/api_service/app_api_end_point.dart';
-import 'package:coffie/core/api_service/app_in_put_unfocused.dart';
-import 'package:coffie/core/api_service/get_storage_services.dart';
-import 'package:coffie/core/api_service/non_auth_api.dart';
+import 'package:coffie/core/service/api_service/api_services.dart';
+import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/service/api_service/app_in_put_unfocused.dart';
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
+import 'package:coffie/core/service/api_service/non_auth_api.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -205,16 +206,12 @@ class AuthRepository {
         AppApiEndPoint.instance.verifyEmailOtp,
         data: body,
       );
-      if (response.statusCode == 200 && response.data["data"] != null) {
-        String accessToken = response.data["data"]["accessToken"];
-        String userRole = response.data["data"]["role"];
+      if (response.data["success"] == true) {
+        String accessToken = response.data["data"];
         storageServices.setToken(accessToken);
-        storageServices.setUserRole(userRole);
         return true;
-      } else if (response.statusCode == 400) {
-        Get.snackbar("Error", response.data["message"]);
       } else {
-        AppLogger.api("Error: Access Token not found!");
+        AppLogger.api("Error: Email Verification Failed!");
       }
 
       return false;
@@ -260,6 +257,42 @@ class AuthRepository {
       if (response.data["success"] == true) {
         return true;
       }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool?> updateLocation({
+    required String address,
+    required double latitude,
+    required double longitude,
+    required String phone,
+    required String isOnboard,
+  }) async {
+    try {
+      Map<String, dynamic> body = {
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "phone": phone,
+        "isOnboard": isOnboard,
+      };
+      var response = await ApiServices.instance.apiPatchServices(
+        url: AppApiEndPoint.instance.updateLocation,
+        body: body,
+      );
+      if (response.data["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (error) {
+      if (error.response?.data["message"].runtimeType != Null) {
+        Get.snackbar("Error", error.response?.data["message"]);
+        return false;
+      }
+      return false;
     } catch (e) {
       AppLogger.error(e.toString());
     }

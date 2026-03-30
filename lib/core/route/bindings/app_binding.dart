@@ -1,3 +1,4 @@
+import 'package:coffie/feature/auth/presentation/controller/personal_info/personal_info_controller.dart';
 import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/shop_details_controller.dart';
@@ -31,5 +32,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => EditProfileInfoController());
     Get.lazyPut(() => MyWalletController());
     Get.lazyPut(() => ShopDetailsController());
+    Get.lazyPut(() => PersonalInfoController());
   }
 }

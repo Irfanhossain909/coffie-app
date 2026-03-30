@@ -1,5 +1,5 @@
-import 'package:coffie/core/api_service/app_api_end_point.dart';
-import 'package:coffie/core/api_service/get_storage_services.dart';
+import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:dio/dio.dart';

@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.7.3
   dio: ^5.9.1
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
   google_fonts: ^8.0.1
   get_storage: ^2.1.1
   pretty_dio_logger: ^1.4.0

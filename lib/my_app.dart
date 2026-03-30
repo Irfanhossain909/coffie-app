@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
         title: 'Coffecito',
         theme: AppTheme.lightTheme,
         getPages: appRootRoutesFile,
-        // initialRoute: AppRoutes.instance.navigationScreen,
-        initialRoute: AppRoutes.instance.onBoardingScreen,
+        // initialRoute: AppRoutes.instance.onBoardingScreen,
+        initialRoute: AppRoutes.instance.personalInfoScreen,
       ),
     );
   }

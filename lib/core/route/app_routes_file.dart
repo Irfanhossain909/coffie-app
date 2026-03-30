@@ -6,6 +6,7 @@ import 'package:coffie/feature/auth/presentation/ui/email_otp_verify_screen.dart
 import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/new_password_screen.dart';
+import 'package:coffie/feature/auth/presentation/ui/personal_info/personal_info_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/register_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/add_existing_gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
@@ -79,7 +80,12 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     binding: AuthBinding(),
     page: () => const EmailOtpVerifyScreen(),
   ),
-
+  // --------------------- Personal Info ---------------------
+  GetPage(
+    name: AppRoutes.instance.personalInfoScreen,
+    binding: AppBinding(),
+    page: () => const PersonalInfoScreen(),
+  ),
   // --------------------- Home ---------------------
   GetPage(
     name: AppRoutes.instance.homeScreen,

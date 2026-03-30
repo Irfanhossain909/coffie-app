@@ -25,6 +25,7 @@ class AppApiEndPoint {
   final String changePassword = "/auth/change-password";
   final String contactUs = "/contuct";
   final String deleteAccount = "/auth/user-delete-account";
+  final String updateLocation = "/users/profile";
   ////in app Url/////////////
   
   // static String genericCards(var type, var categoryId) => "/cards/occasion/$categoryId?type=$type";
