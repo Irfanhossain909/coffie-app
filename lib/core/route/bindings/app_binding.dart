@@ -33,5 +33,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => MyWalletController());
     Get.lazyPut(() => ShopDetailsController());
     Get.lazyPut(() => PersonalInfoController());
+    
   }
 }

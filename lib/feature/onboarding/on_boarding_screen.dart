@@ -38,7 +38,7 @@ class OnBoardingScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.r),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.black.withOpacity(0.9),
+                  color: AppColors.black.withValues(alpha: 0.9),
                   blurRadius: 20.r,
                   offset: Offset(0, 10.r),
                 ),

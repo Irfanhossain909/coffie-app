@@ -163,7 +163,7 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                 hintText: widget.hintText,
                 hintStyle: GoogleFonts.jost().copyWith(
                   fontSize: 14.sp,
-                  color: Colors.black.withOpacity(.4),
+                  color: Colors.black.withValues(alpha: .4),
                 ),
                 filled: widget.filled,
                 fillColor: widget.fillColor ?? Colors.white,

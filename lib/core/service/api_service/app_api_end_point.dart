@@ -19,7 +19,9 @@ class AppApiEndPoint {
   final String login = "/auth/login";
   final String signUp = "/users";
   final String verifyEmailOtp = "/auth/verify-email";
-  final String resendotp = "/auth/resend-otp";
+  final String verifyPhoneOtp = "/auth/verify-phone";
+  final String resendEmailOtp = "/auth/resend-email-otp";
+  final String resendPhoneOtp = "/auth/resend-phone-otp";
   final String forgotPassword = "/auth/forgot-password";
   final String resetPassword = "/auth/reset-password";
   final String changePassword = "/auth/change-password";

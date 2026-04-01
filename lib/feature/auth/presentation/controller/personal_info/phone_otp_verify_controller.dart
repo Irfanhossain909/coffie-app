@@ -7,26 +7,27 @@ import 'package:coffie/feature/auth/domain/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmailOtpVerifyController extends GetxController {
+class PhoneOtpVerifyController extends GetxController {
   TextEditingController otpTextEditingController = TextEditingController();
   final AuthRepository _authRepository = AuthRepository.instance;
   RxInt remainingSeconds = 180.obs; // 3 minutes in seconds
   var canResend = false.obs;
-  late String email;
+  late String phone;
   late String type;
   late Timer _timer;
   RxBool isLoading = false.obs;
   var clearOtpField = false.obs; // To trigger clearing of OTP fields
 
-  Future<void> verifyEmailOtp() async {
+  Future<void> verifyPhoneOtp() async {
     try {
       isLoading.value = true;
-      final response = await _authRepository.emailVerify(
-        email: email,
+      final response = await _authRepository.phoneVerify(
+        phone: phone,
         otp: int.parse(otpTextEditingController.text),
       );
       if (response) {
-        Get.offAllNamed(AppRoutes.instance.personalInfoScreen);
+        Get.offAllNamed(AppRoutes.instance.navigationScreen);
+        // AppSnackBar.success("Verification Successful");
       }
     } catch (e) {
       AppLogger.error(e.toString());
@@ -39,8 +40,7 @@ class EmailOtpVerifyController extends GetxController {
   void onInit() {
     super.onInit();
     startTimer();
-    email = Get.arguments["email"];
-    type = Get.arguments["type"];
+    phone = Get.arguments["phone"];
   }
 
   void startTimer() {
@@ -55,7 +55,6 @@ class EmailOtpVerifyController extends GetxController {
       }
     });
   }
-  
 
   @override
   void onClose() {
@@ -66,7 +65,7 @@ class EmailOtpVerifyController extends GetxController {
 
   void resetTimer() {
     remainingSeconds.value = 180; // Reset the timer back to 180 seconds
-    canResend.value = false;
+    canResend.value = false; // Disable the resend button
     startTimer(); // Restart the timer
   }
 
@@ -80,9 +79,9 @@ class EmailOtpVerifyController extends GetxController {
   void resendCode() async {
     try {
       // Assume success for now
-      final isSuccess = await _authRepository.resendEmailOtp(email: email);
+      final isSuccess = await _authRepository.resendPhoneOtp(phone: phone);
       if (isSuccess) {
-        clearOtpFields(); 
+        clearOtpFields();
         resetTimer(); // Reset the timer after sending the OTP
       }
     } catch (e) {

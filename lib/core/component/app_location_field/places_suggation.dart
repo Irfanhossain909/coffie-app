@@ -247,7 +247,7 @@ class _PlaceAutocompleteWidgetState extends State<PlaceAutocompleteWidget> {
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       itemCount: _predictions.length,
-      separatorBuilder: (_, __) => Divider(height: 1, color: AppColors.yellow),
+      separatorBuilder: (_, _) => Divider(height: 1, color: AppColors.yellow),
       itemBuilder: (context, index) {
         final item = _predictions[index];
         final isCurrent = item['is_current_location'] == true;

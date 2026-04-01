@@ -50,9 +50,9 @@ class AppApi {
 
             if (error.response?.statusCode == 400) {
               // ❌ Snackbar removed from here
-              // if (error.response?.data["message"] != null) {
-              //   Get.snackbar("Error", "${error.response?.data["message"]}");
-              // }
+              if (error.response?.data["message"] != null) {
+                Get.snackbar("Error", "${error.response?.data["message"]}");
+              }
 
               AppLogger.info("error message: ${error.message}");
               return handler.next(error);
@@ -84,5 +84,3 @@ class AppApi {
 
   Dio get sendRequest => _dio;
 }
-
-

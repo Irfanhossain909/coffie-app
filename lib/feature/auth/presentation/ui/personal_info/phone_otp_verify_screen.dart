@@ -1,20 +1,20 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/feature/auth/presentation/controller/email_otp_verify_controller.dart';
+import 'package:coffie/feature/auth/presentation/controller/personal_info/phone_otp_verify_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class EmailOtpVerifyScreen extends StatelessWidget {
-  const EmailOtpVerifyScreen({super.key});
+class PhoneOtpVerifyScreen extends StatelessWidget {
+  const PhoneOtpVerifyScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<EmailOtpVerifyController>(
-      init: EmailOtpVerifyController(),
+    return GetBuilder<PhoneOtpVerifyController>(
+      init: PhoneOtpVerifyController(),
       builder: (controller) {
         return Scaffold(
           body: InkWell(
@@ -34,7 +34,7 @@ class EmailOtpVerifyScreen extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.yellow),
-                        borderRadius: BorderRadius.circular(12.sp),
+                        borderRadius: BorderRadius.circular(10.sp),
                         color: Colors.white,
                       ),
                       child: Column(
@@ -61,7 +61,7 @@ class EmailOtpVerifyScreen extends StatelessWidget {
                           ),
 
                           AppText(
-                            data: "We've Sent a Code to ${controller.email}",
+                            data: "We've Sent a Code to ${controller.phone}",
                             fontSize: 12.sp,
                             maxLines: 2,
                             fontWeight: FontWeight.w700,
@@ -162,7 +162,7 @@ class EmailOtpVerifyScreen extends StatelessWidget {
                                 () => controller.canResend.value
                                     ? GestureDetector(
                                         onTap: () {
-                                          controller.resendCode();
+                                          // controller.verifyPhoneOtp();
                                         },
                                         child: Text(
                                           'Resend',
@@ -193,7 +193,7 @@ class EmailOtpVerifyScreen extends StatelessWidget {
                               title: "Verify and Continue",
 
                               onTap: () {
-                                controller.verifyEmailOtp();
+                                controller.verifyPhoneOtp();
                               },
                             );
                           }),

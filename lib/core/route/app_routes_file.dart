@@ -1,12 +1,12 @@
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/route/bindings/app_binding.dart';
 import 'package:coffie/core/route/bindings/auth_binding.dart';
-import 'package:coffie/core/route/bindings/splash_screen_binding.dart';
 import 'package:coffie/feature/auth/presentation/ui/email_otp_verify_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/forget_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/login_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/forget_password/new_password_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/personal_info/personal_info_screen.dart';
+import 'package:coffie/feature/auth/presentation/ui/personal_info/phone_otp_verify_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/register_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/add_existing_gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
@@ -85,6 +85,11 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.personalInfoScreen,
     binding: AppBinding(),
     page: () => const PersonalInfoScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.phoneOtpVerifyScreen,
+    binding: AuthBinding(),
+    page: () => const PhoneOtpVerifyScreen(),
   ),
   // --------------------- Home ---------------------
   GetPage(

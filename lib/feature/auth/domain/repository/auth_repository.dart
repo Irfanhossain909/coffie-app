@@ -99,6 +99,8 @@ class AuthRepository {
         String accessToken = response.data["data"]["accessToken"];
         String userRole = response.data["data"]["role"];
         storageServices.setToken(accessToken);
+        AppLogger.api(storageServices.getToken(), title: "Store Token");
+        AppLogger.api(userRole, title: "Store User Role");
         storageServices.setUserRole(userRole);
         return true;
       } else {
@@ -221,6 +223,29 @@ class AuthRepository {
     return false;
   }
 
+  Future<bool> phoneVerify({required String phone, required int otp}) async {
+    Map<String, dynamic> body = {"phone": phone, "oneTimeCode": otp};
+    try {
+      var response = await nonAuthApi.sendRequest.post(
+        AppApiEndPoint.instance.verifyPhoneOtp,
+        data: body,
+      );
+
+      if (response.data["success"] == true) {
+        String accessToken = response.data["data"]["accessToken"];
+        storageServices.setToken(accessToken);
+        return true;
+      } else {
+        AppLogger.api("Error: Phone Verification Failed!");
+      }
+
+      return false;
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+    return false;
+  }
+
   // Future<dynamic> forgetOtpVerify({
   //   required String phone,
   //   required String otp,
@@ -246,17 +271,45 @@ class AuthRepository {
   //   return false;
   // }
 
-  Future<bool> resendOtp({required String email}) async {
+  Future<bool> resendEmailOtp({required String email}) async {
     Map<String, String> body = {"email": email};
     try {
       final response = await nonAuthApi.sendRequest.post(
-        AppApiEndPoint.instance.resendotp,
+        AppApiEndPoint.instance.resendEmailOtp,
         data: body,
       );
       AppLogger.api(response.data.toString(), title: "Resend OTP");
       if (response.data["success"] == true) {
         return true;
       }
+    } on DioException catch (error) {
+      if (error.response?.data["message"].runtimeType != Null) {
+        Get.snackbar("Error", error.response?.data["message"]);
+        return false;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+    return false;
+  }
+  Future<bool> resendPhoneOtp({required String phone}) async {
+    Map<String, String> body = {"phone": phone};
+    try {
+      final response = await nonAuthApi.sendRequest.post(
+        AppApiEndPoint.instance.resendPhoneOtp,
+        data: body,
+      );
+      AppLogger.api(response.data.toString(), title: "Resend OTP");
+      if (response.data["success"] == true) {
+        return true;
+      }
+    } on DioException catch (error) {
+      if (error.response?.data["message"].runtimeType != Null) {
+        Get.snackbar("Error", error.response?.data["message"]);
+        return false;
+      }
+      return false;
     } catch (e) {
       AppLogger.error(e.toString());
     }
@@ -268,7 +321,7 @@ class AuthRepository {
     required double latitude,
     required double longitude,
     required String phone,
-    required String isOnboard,
+    required bool isOnboard,
   }) async {
     try {
       Map<String, dynamic> body = {
@@ -282,7 +335,7 @@ class AuthRepository {
         url: AppApiEndPoint.instance.updateLocation,
         body: body,
       );
-      if (response.data["success"] == true) {
+      if (response["success"] == true) {
         return true;
       } else {
         return false;

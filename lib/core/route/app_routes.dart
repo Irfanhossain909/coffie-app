@@ -17,6 +17,7 @@ class AppRoutes {
 
   // Personal Info Routes
   final String personalInfoScreen = "/personal-info-screen";
+  final String phoneOtpVerifyScreen = "/phone-otp-verify-screen";
 
   // Notification Routes
   final String notificationScreen = "/notification-screen";

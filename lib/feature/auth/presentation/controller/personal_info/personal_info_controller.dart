@@ -1,3 +1,4 @@
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/service/location_service/location_service.dart';
 import 'package:coffie/core/utils/app_logger.dart';
@@ -25,14 +26,21 @@ class PersonalInfoController extends GetxController {
   RxDouble selectedLatitude = 0.0.obs;
   RxDouble selectedLongitude = 0.0.obs;
   var isCurrentLocation = false.obs;
+  String? token;
+  @override
+  void onInit() {
+    super.onInit();
+    token = getStorageServices.getToken();
+    AppLogger.api(token ?? "Token is not available", title: "Token");
+    AppLogger.api(getStorageServices.getToken(), title: "Token2");
+  }
 
   // ///Functions GetLocation
   Future<void> updateProfileData() async {
-    final token = getStorageServices.getToken();
-    if (token.isNotEmpty) {
-      AppSnackBar.message("Token is not available");
-      return;
-    }
+    // if (token?.isNotEmpty ?? false) {
+    //   AppSnackBar.message("Token is not available");
+    //   return;
+    // }
     if (selectedLatitude.value == 0.0 && selectedLongitude.value == 0.0) {
       AppSnackBar.message("Please select a location to update your profile");
       return;
@@ -44,12 +52,15 @@ class PersonalInfoController extends GetxController {
         latitude: selectedLatitude.value,
         longitude: selectedLongitude.value,
         phone: phoneController.text,
-        isOnboard: "true",
+        isOnboard: true,
       );
 
       if (response != null) {
-        AppSnackBar.success("Profile updated successfully");
-        // Get.toNamed(AppRoutes.instance.navigationScreen);
+        // AppSnackBar.success("Profile updated successfully");
+        Get.toNamed(
+          AppRoutes.instance.phoneOtpVerifyScreen,
+          arguments: {"phone": phoneController.text},
+        );
       } else {
         AppLogger.error("Failed to update profile data");
         isLoadingForUpdate.value = false;

@@ -9,7 +9,6 @@ import 'package:coffie/feature/profile/presentation/widget/favorite_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
-import 'package:get/utils.dart';
 
 class PickupLocationScreen extends StatelessWidget {
   const PickupLocationScreen({super.key});

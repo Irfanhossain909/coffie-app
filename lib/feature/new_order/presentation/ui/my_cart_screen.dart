@@ -109,8 +109,8 @@ class MyCartScreen extends StatelessWidget {
                                           .white, // shadow visible korar jonno background thaka better
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(
-                                            0.08,
+                                          color: Colors.black.withValues(
+                                            alpha: 0.08,
                                           ), // light shadow
                                           blurRadius: 8.r,
                                           spreadRadius: 1.r,
