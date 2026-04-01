@@ -23,6 +23,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             child: InkWell(
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
@@ -67,11 +68,12 @@ class ForgetPasswordScreen extends StatelessWidget {
                       return controller.isLoading.value
                           ? const CircularProgressIndicator()
                           : AppButton(
+                              isLoading: controller.isLoading.value,
                               isAuthButton: true,
                               titleSize: 18.sp,
                               title: "Get Verification Code",
                               onTap: () {
-                                // controller.forgetPassword();
+                                controller.forgetPassword();
                                 // Get.toNamed(
                                 //   AppRoutes.instance.forgetOtpVerifyScreen,
                                 // );

@@ -22,7 +22,7 @@ class AppApiEndPoint {
   final String verifyPhoneOtp = "/auth/verify-phone";
   final String resendEmailOtp = "/auth/resend-email-otp";
   final String resendPhoneOtp = "/auth/resend-phone-otp";
-  final String forgotPassword = "/auth/forgot-password";
+  final String forgotPassword = "/auth/forget-password";
   final String resetPassword = "/auth/reset-password";
   final String changePassword = "/auth/change-password";
   final String contactUs = "/contuct";
@@ -40,8 +40,8 @@ class AppApiEndPoint {
 
 // Move this function outside the class
 String _getDomain() {
-  String liveServer = "http://10.10.7.23:4001";
-  String localServer = "http://10.10.7.23:4001";
+  String liveServer = "http://10.10.7.58:4001";
+  String localServer = "http://10.10.7.58:4001";
   try {
     if (kDebugMode) {
       return localServer;
@@ -55,8 +55,8 @@ String _getDomain() {
 }
 
 String getSocketUrl() {
-  String liveSocket = "http://10.10.7.23:4001";
-  String localSocket = "http://10.10.7.23:4001";
+  String liveSocket = "http://10.10.7.58:4001";
+  String localSocket = "http://10.10.7.58:4001";
   try {
     if (kDebugMode) {
       return localSocket;

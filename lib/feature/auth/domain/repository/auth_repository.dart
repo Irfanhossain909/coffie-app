@@ -246,6 +246,29 @@ class AuthRepository {
     return false;
   }
 
+  Future<bool> forgetPassword({required String email}) async {
+    try {
+      final response = await nonAuthApi.sendRequest.post(
+        AppApiEndPoint.instance.forgotPassword,
+        data: {"email": email},
+      );
+      if (response.data["success"] == true) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (error) {
+      if (error.response?.data["message"].runtimeType != Null) {
+        Get.snackbar("Error", error.response?.data["message"]);
+        return false;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+    return false;
+  }
+
   // Future<dynamic> forgetOtpVerify({
   //   required String phone,
   //   required String otp,
@@ -293,6 +316,7 @@ class AuthRepository {
     }
     return false;
   }
+
   Future<bool> resendPhoneOtp({required String phone}) async {
     Map<String, String> body = {"phone": phone};
     try {
@@ -352,61 +376,41 @@ class AuthRepository {
     return false;
   }
 
-  //   Map<String, String> body = {"identifier": phone};
+  // Future<bool> resetPassword({
+  //   required String newPassword,
+  //   required String confirmPassword,
+  //   required String resetToken,
+  // }) async {
   //   try {
+  //     appInPutUnfocused();
+  //     Map body = {
+  //       "newPassword": newPassword,
+  //       "confirmPassword": confirmPassword,
+  //     };
   //     var response = await nonAuthApi.sendRequest.post(
-  //       AppApiEndPoint.instance.forgotPassword,
+  //       AppApiEndPoint.instance.resetPassword,
   //       data: body,
+  //       options: Options(
+  //         receiveTimeout: const Duration(minutes: 2),
+  //         sendTimeout: const Duration(minutes: 2),
+  //         headers: {"Accept": "application/json", "Authorization": resetToken},
+  //       ),
   //     );
-  //     if (response.statusCode == 200) {
+
+  //     if (response.data["success"] == true) {
+  //       AppLogger.api("confirm password repository response :: $response");
   //       return true;
   //     }
-  //     if (response.statusCode == 400) {
-  //       AppSnackBar.error(
-  //         "${response.data["message"] ?? "Something went wrong"}",
-  //       );
+  //     return false;
+  //   } on DioException catch (error) {
+  //     if (error.response?.data["message"].runtimeType != Null) {
+  //       Get.snackbar("Error", error.response?.data["message"]);
+  //       return false;
   //     }
+  //     return false;
   //   } catch (e) {
-  //     AppPrint.appError(e, title: "ResendOtp");
+  //     AppLogger.error(e.toString());
+  //     return false;
   //   }
-  //   return false;
   // }
-
-  Future<bool> resetPassword({
-    required String newPassword,
-    required String confirmPassword,
-    required String resetToken,
-  }) async {
-    try {
-      appInPutUnfocused();
-      Map body = {
-        "newPassword": newPassword,
-        "confirmPassword": confirmPassword,
-      };
-      var response = await nonAuthApi.sendRequest.post(
-        AppApiEndPoint.instance.resetPassword,
-        data: body,
-        options: Options(
-          receiveTimeout: const Duration(minutes: 2),
-          sendTimeout: const Duration(minutes: 2),
-          headers: {"Accept": "application/json", "Authorization": resetToken},
-        ),
-      );
-
-      if (response.data["success"] == true) {
-        AppLogger.api("confirm password repository response :: $response");
-        return true;
-      }
-      return false;
-    } on DioException catch (error) {
-      if (error.response?.data["message"].runtimeType != Null) {
-        Get.snackbar("Error", error.response?.data["message"]);
-        return false;
-      }
-      return false;
-    } catch (e) {
-      AppLogger.error(e.toString());
-      return false;
-    }
-  }
 }

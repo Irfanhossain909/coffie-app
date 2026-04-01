@@ -44,14 +44,14 @@ class PhoneOtpVerifyScreen extends StatelessWidget {
                           Branding(),
                           SizedBox(height: 12.h),
                           AppText(
-                            data: "Verify Your Account",
+                            data: "Verify Your Phone Number",
                             fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
                             color: AppColors.black,
                           ),
                           AppText(
                             data:
-                                "We’ve sent a verification code to your email. Enter the code below to continue and secure your account.",
+                                "We’ve sent a verification code to your Phone Number. Enter the code below to continue and secure your account.",
                             fontSize: 12.sp,
                             maxLines: 3,
                             textAlign: TextAlign.center,
