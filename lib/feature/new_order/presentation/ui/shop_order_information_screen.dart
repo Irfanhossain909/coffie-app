@@ -4,7 +4,7 @@ import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
-import 'package:coffie/feature/new_order/presentation/controller/shop_details_controller.dart';
+import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
 import 'package:coffie/feature/new_order/presentation/widget/shop_details_info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,8 +17,8 @@ class ShopOrderInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppbar(text: "Shop Order Information"),
-      body: GetBuilder<ShopDetailsController>(
-        init: ShopDetailsController(),
+      body: GetBuilder<PickupLocationWithGetShopController>(
+        init: PickupLocationWithGetShopController(),
         builder: (controller) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),

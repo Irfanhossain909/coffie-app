@@ -1,3 +1,4 @@
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
 import 'package:coffie/feature/auth/domain/repository/auth_repository.dart';
@@ -29,6 +30,7 @@ class LoginController extends GetxController {
       );
 
       if (result) {
+        Get.offAllNamed(AppRoutes.instance.navigationScreen);
         AppLogger.success('Login successful');
         AppSnackBar.success('Login successful');
       } else {

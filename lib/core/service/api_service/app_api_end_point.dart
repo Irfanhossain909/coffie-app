@@ -29,8 +29,10 @@ class AppApiEndPoint {
   final String deleteAccount = "/auth/user-delete-account";
   final String updateLocation = "/users/profile";
   ////in app Url/////////////
-  
-  // static String genericCards(var type, var categoryId) => "/cards/occasion/$categoryId?type=$type";
+  final String homeSlider = "/promotions/admin";
+  final String stores = "/stores";
+  // static String stores(var latitude, var longitude) =>
+  //     "/stores/?latitude=$latitude&longitude=$longitude";
 
   // ////Chat/////////////
   final String chats = "/chat";

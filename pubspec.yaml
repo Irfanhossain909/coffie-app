@@ -47,6 +47,8 @@ dependencies:
   cached_network_image: ^3.4.1
   shimmer_animation: ^2.2.2+1
   flutter_native_splash: ^2.4.7
+  permission_handler: ^12.0.1
+  google_maps_flutter: ^2.17.0
 
 
 dev_dependencies:

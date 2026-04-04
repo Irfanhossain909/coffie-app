@@ -5,7 +5,7 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/feature/new_order/presentation/controller/shop_details_controller.dart';
+import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,7 +16,7 @@ class MyCartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ShopDetailsController>(
+    return GetBuilder<PickupLocationWithGetShopController>(
       builder: (controller) {
         return Scaffold(
           appBar: CustomAppbar(text: "My Cart"),
