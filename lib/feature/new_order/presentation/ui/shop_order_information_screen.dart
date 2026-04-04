@@ -3,8 +3,11 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
-import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
+import 'package:coffie/feature/new_order/presentation/controller/shop_order_information_controller.dart';
+import 'package:coffie/feature/new_order/presentation/widget/product_card.dart';
 import 'package:coffie/feature/new_order/presentation/widget/shop_details_info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,10 +18,11 @@ class ShopOrderInformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final store = Get.arguments;
     return Scaffold(
       appBar: CustomAppbar(text: "Shop Order Information"),
-      body: GetBuilder<PickupLocationWithGetShopController>(
-        init: PickupLocationWithGetShopController(),
+      body: GetBuilder<ShopOrderInformationController>(
+        init: ShopOrderInformationController(),
         builder: (controller) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -27,7 +31,7 @@ class ShopOrderInformationScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ShowDetailsInfoCard(),
+                  ShowDetailsInfoCard(store: controller.store),
                   SizedBox(height: 16.h),
                   AppText(
                     data: "Last Order",
@@ -121,22 +125,26 @@ class ShopOrderInformationScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 16.h),
-                  CategorySelector(
-                    items: const [
-                      "Coffee & Drinks",
-                      "Sandwiches",
-                      "Iced Drinks",
-                      "Bakery",
-                      "Hot Drinks",
-                      "Hot Food",
-                      "Cold Food",
-                      "Desserts",
-                      "Snacks",
-                      "Other",
-                    ],
-                    selectedItem: controller.selectedCategory,
-                    onTap: controller.selectCategory,
-                  ),
+                  Obx(() {
+                    if (controller.storeCategories.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+                    return CategorySelector(
+                      items: controller.storeCategories
+                          .map((category) => category.name ?? '')
+                          .toList(),
+                      selectedItem: controller.itemCategory,
+                      onTap: (categoryName) {
+                        controller.selectItemCategory(categoryName);
+
+                        final selectedCategory = controller.storeCategories
+                            .firstWhere((cat) => cat.name == categoryName);
+                        controller.getStoreProductById(
+                          categoryId: selectedCategory.id,
+                        );
+                      },
+                    );
+                  }),
                   SizedBox(height: 16.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,148 +162,58 @@ class ShopOrderInformationScreen extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 8.h),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.instance.productInfoScreen);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 10.h),
-                          padding: EdgeInsets.all(12.r),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.r),
-                            border: Border.all(color: AppColors.yellow),
-                          ),
-                          width: double.infinity,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /// 🔹 Image
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  border: Border.all(color: AppColors.yellow),
-                                ),
-                                child: AppImageCircular(
-                                  borderRadius: 8.r,
-                                  url:
-                                      "https://i.pinimg.com/736x/f0/4e/90/f04e90b671eccbde302107dc0a447135.jpg",
-                                  width: 99.w,
-                                  height: 93.h,
-                                ),
-                              ),
-                        
-                              SizedBox(width: 10.w),
-                        
-                              /// 🔹 Right Content
-                              Expanded(
-                                child: SizedBox(
-                                  height: 93.h, // 👈 image height er shoman
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      /// 🔸 Title + Favorite
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          AppText(
-                                            data: "Americano",
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          Icon(
-                                            Icons.favorite_border_rounded,
-                                            size: 24.w,
-                                            color: AppColors.yellow,
-                                          ),
-                                        ],
-                                      ),
-                        
-                                      SizedBox(height: 4.h),
-                        
-                                      /// 🔸 Description
-                                      AppText(
-                                        data: "Pickup Time: Ready in 6 mins",
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                        
-                                      /// 🔥 Push price to bottom
-                                      const Spacer(),
-                        
-                                      /// 🔸 Price (bottom right)
-                                      Row(
-                                        children: [
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 6.w,
-                                              vertical: 2.h,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: AppColors.yellow,
-                                              ),
-                                              borderRadius: BorderRadius.circular(
-                                                10.r,
-                                              ),
-                                            ),
-                                            child: AppText(
-                                              data: "VEGAN",
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColors.black,
-                                            ),
-                                          ),
-                                          SizedBox(width: 8.w),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: 6.w,
-                                              vertical: 2.h,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: AppColors.yellow,
-                                              ),
-                                              borderRadius: BorderRadius.circular(
-                                                10.r,
-                                              ),
-                                            ),
-                                            child: AppText(
-                                              data: "DAIRY FREE",
-                                              fontSize: 12.sp,
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColors.black,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: AppText(
-                                              data: "45\$",
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                  Obx(() {
+                    if (controller.storeProducts.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24.h),
+                        child: Center(
+                          child: AppText(data: "No products found"),
                         ),
                       );
-                    },
-                  ),
+                    }
+                    if (controller.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.storeProducts.length,
+                      // itemCount: controller.storeProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = controller.storeProducts[index];
+                        return ProductCard(
+                          image: "${AppApiEndPoint.domain}${product.image}",
+                          name: product.name ?? "",
+                          readyTime: product.readyTime ?? 0,
+                          price: "\$${product.basePrice}",
+                          // tags: [
+                          //   "Hot",
+                          //   "Cold",
+                          //   "Sweet",
+                          //   "Sour",
+                          //   "Bitter",
+                          //   "Salty",
+                          //   "Umami",
+                          //   "Spicy",
+                          //   "Bland",
+                          //   "Hot",
+                          //   "Cold",
+                          //   "Sweet",
+                          //   "Sour",
+                          //   "Bitter",
+                          //   "Salty",
+                          //   "Umami",
+                          //   "Spicy",
+                          //   "Bland",
+                          // ],
+                          tags: product.dietaryLabels ?? [],
+                          onTap: () {
+                            Get.toNamed(AppRoutes.instance.productInfoScreen);
+                          },
+                        );
+                      },
+                    );
+                  }),
                 ],
               ),
             ),

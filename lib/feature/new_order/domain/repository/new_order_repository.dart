@@ -1,7 +1,9 @@
 import 'package:coffie/core/service/api_service/api_services.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
+import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
+import 'package:coffie/feature/new_order/domain/model/store_product_model.dart';
 
 class NewOrderRepository {
   NewOrderRepository._();
@@ -45,5 +47,47 @@ class NewOrderRepository {
       AppLogger.error("Error in getStores: $e");
     }
     return stores;
+  }
+
+  Future<List<StoreCategoryDataModel>> getStoreCategories() async {
+    List<StoreCategoryDataModel> storeCategories = <StoreCategoryDataModel>[];
+    try {
+      final response = await ApiServices.instance.apiGetServices(
+        AppApiEndPoint.instance.storeCategories,
+      );
+      if (response["success"] == true && response["data"] != null) {
+        for (var category in response["data"]) {
+          storeCategories.add(StoreCategoryDataModel.fromJson(category));
+        }
+      }
+    } catch (e) {
+      AppLogger.error("Error in getStoreCategories: $e");
+    }
+    return storeCategories;
+  }
+
+  Future<List<StoreProjectDataModel>> getStoreProductById(
+    String storeId,
+    String? categoryId,
+  ) async {
+    List<StoreProjectDataModel> storeProducts = <StoreProjectDataModel>[];
+    try {
+      Map<String, dynamic> queryParameters = {};
+      if (categoryId != null) {
+        queryParameters["category"] = categoryId;
+      }
+      final response = await ApiServices.instance.apiGetServices(
+        AppApiEndPoint.storeProductById(storeId),
+        queryParameters: queryParameters,
+      );
+      if (response["success"] == true) {
+        for (var product in response["data"]) {
+          storeProducts.add(StoreProjectDataModel.fromJson(product));
+        }
+      }
+    } catch (e) {
+      AppLogger.error("Error in getStoreProductById: $e");
+    }
+    return storeProducts;
   }
 }

@@ -30,7 +30,11 @@ class AppApiEndPoint {
   final String updateLocation = "/users/profile";
   ////in app Url/////////////
   final String homeSlider = "/promotions/admin";
+
+  /// Store Orders
   final String stores = "/stores";
+  final String storeCategories = "/categories";
+  static String storeProductById(var storeId) => "/stores/$storeId/products";
   // static String stores(var latitude, var longitude) =>
   //     "/stores/?latitude=$latitude&longitude=$longitude";
 

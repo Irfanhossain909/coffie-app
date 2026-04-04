@@ -70,9 +70,15 @@ class PickupLocationScreen extends StatelessWidget {
                         return FavoriteCrad(
                           orderNow: () => Get.toNamed(
                             AppRoutes.instance.shopOrderInformationScreen,
+                            arguments: store,
                           ),
-                          viewHours: () =>
-                              Get.toNamed(AppRoutes.instance.shopDetailsScreen),
+                          viewHours: () {
+                            Get.toNamed(
+                              AppRoutes.instance.shopDetailsScreen,
+                              arguments: store,
+                            );
+                          },
+
                           isFavorite: () {},
                           favoriteCardEntity: FavoriteCardEntity(
                             image: "${AppApiEndPoint.domain}${store.image}",

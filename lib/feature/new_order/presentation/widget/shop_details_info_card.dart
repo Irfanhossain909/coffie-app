@@ -1,11 +1,14 @@
 import 'package:coffie/core/component/app_image/app_image_circular.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/feature/new_order/domain/model/store_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowDetailsInfoCard extends StatelessWidget {
-  const ShowDetailsInfoCard({super.key});
+  final StoreDataModel? store;
+  const ShowDetailsInfoCard({super.key, this.store});
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,7 @@ class ShowDetailsInfoCard extends StatelessWidget {
                       width: 64.w,
                       height: 68.h,
                       borderRadius: 50.r,
-                      url:
-                          "https://i.pinimg.com/1200x/de/82/43/de824313ab9a1ee67f25dbc73666abc6.jpg",
+                      url: "${AppApiEndPoint.domain}${store?.image}",
                     ),
                   ),
 
@@ -47,7 +49,7 @@ class ShowDetailsInfoCard extends StatelessWidget {
                       spacing: 4.h,
                       children: [
                         AppText(
-                          data: "Starbucks",
+                          data: store?.name ?? "",
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -55,13 +57,13 @@ class ShowDetailsInfoCard extends StatelessWidget {
                         AppText(
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          data: "+1664456285966",
+                          data: store?.phone ?? "",
                           fontSize: 14.sp,
                         ),
                         AppText(
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          data: "17 Motijheel C/A, Dhaka 1000 (2.6km)",
+                          data: store?.address ?? "",
                           fontSize: 14.sp,
                         ),
                       ],
@@ -73,22 +75,30 @@ class ShowDetailsInfoCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppText(
-                    data: "About Shop",
+                    data: "About",
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                   ),
                   Row(
                     children: [
-                      AppText(data: "Open", fontSize: 12.sp),
+                      AppText(
+                        data: store?.isOpen == true ? "Open" : "Closed",
+                        fontSize: 12.sp,
+                      ),
                       SizedBox(width: 4.w),
-                      Icon(Icons.circle, color: AppColors.green, size: 6.w),
+                      Icon(
+                        Icons.circle,
+                        color: store?.isOpen == true
+                            ? AppColors.green
+                            : AppColors.red,
+                        size: 6.w,
+                      ),
                     ],
                   ),
                 ],
               ),
               AppText(
-                data:
-                    "Prepared with 1x single chicken patty, 1x sliced cheddar cheese, secret sauce, sliced onion, tomato & lettuce",
+                data: store?.about ?? "",
                 fontSize: 12.sp,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

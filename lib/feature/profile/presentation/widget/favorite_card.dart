@@ -86,7 +86,13 @@ class FavoriteCrad extends StatelessWidget {
                           fontSize: 12.sp,
                         ),
                         SizedBox(width: 4.w),
-                        Icon(Icons.circle, color: AppColors.red, size: 6.w),
+                        Icon(
+                          Icons.circle,
+                          color: favoriteCardEntity.status == true
+                              ? AppColors.green
+                              : AppColors.red,
+                          size: 6.w,
+                        ),
                       ],
                     ),
 

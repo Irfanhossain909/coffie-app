@@ -2,6 +2,7 @@ import 'package:coffie/feature/auth/presentation/controller/personal_info/person
 import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
+import 'package:coffie/feature/new_order/presentation/controller/shop_order_information_controller.dart';
 import 'package:coffie/feature/order/presentation/controller/order_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/change_password_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/contact_up_controller.dart';
@@ -33,6 +34,6 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => MyWalletController());
     Get.lazyPut(() => PersonalInfoController());
     Get.lazyPut(() => PickupLocationWithGetShopController());
-    
+    Get.lazyPut(() => ShopOrderInformationController());
   }
 }
