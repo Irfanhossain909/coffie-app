@@ -67,4 +67,47 @@ class GiftCardRepository {
     }
     return giftCardRedeem;
   }
+
+  Future<dynamic> sendGiftCard({
+    required int amount,
+    required String receiverEmail,
+    required String receiverName,
+    required String message,
+  }) async {
+    try {
+      final response = await apiServices.apiPostServices(
+        url: AppApiEndPoint.instance.giftCardBalance,
+        body: {
+          "amount": amount,
+          "receiverEmail": receiverEmail,
+          "receiverName": receiverName,
+          "message": message,
+        },
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        AppLogger.api(response.toString());
+        return response["data"]["checkoutUrl"];
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+
+    return false;
+  }
+
+  Future<bool> addExistingGiftCard({required String cardNumber}) async {
+    try {
+      final response = await apiServices.apiPostServices(
+        url: AppApiEndPoint.instance.giftCardsAdd,
+        body: {"cardNumber": cardNumber},
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+    return false;
+  }
 }

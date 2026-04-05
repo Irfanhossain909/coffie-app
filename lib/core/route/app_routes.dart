@@ -59,4 +59,5 @@ class AppRoutes {
   // Guest Routes
   final String guestScreen = "/guest-screen";
   final String geustProfileScreen = "/geust-profile-screen";
+  final String successFullScreen = "/success-full-screen";
 }

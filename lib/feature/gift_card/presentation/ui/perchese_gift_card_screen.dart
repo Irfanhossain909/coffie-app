@@ -3,7 +3,7 @@ import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
+import 'package:coffie/feature/gift_card/presentation/controller/perchese_gift_card_controller.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,8 +14,8 @@ class PercheseGiftCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GiftCardController>(
-      init: GiftCardController(),
+    return GetBuilder<PercheseGiftCardController>(
+      init: PercheseGiftCardController(),
       builder: (controller) {
         return Scaffold(
           appBar: CustomAppbar(showLeading: true, text: "Purchase Gift Card"),
@@ -39,28 +39,31 @@ class PercheseGiftCardScreen extends StatelessWidget {
                 ),
                 CategorySelector(
                   items: const [
-                    "\$20.00",
-                    "\$50.00",
-                    "\$100.00",
-                    "\$200.00",
-                    "\$500.00",
-                    "\$1000.00",
+                    "20",
+                    "50",
+                    "100",
+                    "200",
+                    "500",
+                    "1000",
                   ],
                   selectedItem: controller.selectedCategory,
                   onTap: controller.selectCategory,
                 ),
                 AppInputWidgetTwo(
+                  controller: controller.messageController,
                   isOptional: true,
                   isDescription: true,
                   title: "Message",
                   hintText: "Add a message (optional)",
                 ),
                 AppInputWidgetTwo(
+                  controller: controller.receiverNameController,
                   isOptional: true,
                   title: "To",
                   hintText: "Enter Receiver Name",
                 ),
                 AppInputWidgetTwo(
+                  controller: controller.receiverEmailController,
                   isOptional: true,
                   title: "Email Address",
                   hintText: "Enter Email Address",
@@ -75,7 +78,12 @@ class PercheseGiftCardScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 spacing: 10.h,
                 children: [
-                  AppButton(title: "Continue", onTap: () {}),
+                  AppButton(
+                    title: "Continue",
+                    onTap: () {
+                      controller.sendGiftCard();
+                    },
+                  ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     width: double.infinity,

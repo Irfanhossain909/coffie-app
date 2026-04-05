@@ -238,4 +238,6 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     binding: AppBinding(),
     page: () => GuestProfileScreen(),
   ),
+
+  
 ];

@@ -14,19 +14,18 @@ class GiftCardController extends GetxController
   // controller here
   late TabController tabController;
   var currentIndex = 0.obs;
+ 
 
   // Model
   final Rxn<GiftCardBalanceModel> giftCardBalanceModel =
       Rxn<GiftCardBalanceModel>();
-
   RxList<GiftCardDataModel> giftCardTransactions = <GiftCardDataModel>[].obs;
   RxList<GiftCardRedemDataModel> giftCardRedeem =
       <GiftCardRedemDataModel>[].obs;
+
   // Is Loading
   final RxBool isLoading = false.obs;
   final RxBool isLoadingGiftCardTransactions = false.obs;
-
-  final RxString selectedCategory = "".obs;
 
   /// init state here
   @override
@@ -52,6 +51,8 @@ class GiftCardController extends GetxController
     super.onClose();
   }
 
+  // ================== My Gift Card Transactions =================
+
   void onTabChanged(int index) {
     if (index == 0) {
       getGiftCardTransactions(giftCardEndPoint: "available");
@@ -66,10 +67,8 @@ class GiftCardController extends GetxController
     getGiftCardBalance();
   }
 
-  void selectCategory(String category) {
-    selectedCategory.value = category;
-  }
-
+ 
+  /// Function to get gift card transactions
   Future<void> getGiftCardTransactions({
     required String giftCardEndPoint,
   }) async {
@@ -124,4 +123,6 @@ class GiftCardController extends GetxController
       isLoading.value = false;
     }
   }
+
+  
 }

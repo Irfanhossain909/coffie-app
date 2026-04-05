@@ -132,7 +132,9 @@ class GiftCardScreen extends StatelessWidget {
                     // All
                     RefreshIndicator(
                       onRefresh: () async {
-                        controller.getGiftCardTransactions(giftCardEndPoint: "available");
+                        controller.getGiftCardTransactions(
+                          giftCardEndPoint: "available",
+                        );
                       },
                       child: Obx(() {
                         if (controller.isLoadingGiftCardTransactions.value) {
@@ -161,7 +163,9 @@ class GiftCardScreen extends StatelessWidget {
                     // Add Money
                     RefreshIndicator(
                       onRefresh: () async {
-                        controller.getGiftCardTransactions(giftCardEndPoint: "sent");
+                        controller.getGiftCardTransactions(
+                          giftCardEndPoint: "sent",
+                        );
                       },
                       child: Obx(() {
                         if (controller.isLoadingGiftCardTransactions.value) {
@@ -321,7 +325,7 @@ class GiftCard extends StatelessWidget {
             height: 29.h,
             fit: BoxFit.cover,
           ),
-          Flexible(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 4.h,

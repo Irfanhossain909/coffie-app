@@ -41,7 +41,7 @@ class CategorySelector extends StatelessWidget {
                     horizontal: 12.w,
                   ),
                   child: Text(
-                    item,
+                    "\$$item.00",
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
