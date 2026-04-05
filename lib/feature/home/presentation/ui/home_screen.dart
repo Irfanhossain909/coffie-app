@@ -26,24 +26,26 @@ class HomeScreen extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Obx(() {
-                  return Row(
-                    children: [
-                      AppText(
-                        data: "Hi",
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.w500,
-                      ),
+                Row(
+                  children: [
+                    AppText(
+                      data: "Hi",
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
 
-                      SizedBox(width: 4.w),
+                    SizedBox(width: 4.w),
 
-                      Expanded(
+                    Obx(() {
+                      return Expanded(
                         // ✅ important
                         child: !controller.isGuest
                             ? AppText(
-                                data: controller.isLoading.value
-                                    ? "Guest Loading..."
-                                    : controller.getName(),
+                                data: controller.isNameLoading.value
+                                    ? "Loading..."
+                                    : (controller.name.value.isNotEmpty
+                                          ? controller.name.value
+                                          : "there"),
                                 fontSize: 22.sp,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -67,10 +69,10 @@ class HomeScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.lightBlue,
                               ),
-                      ),
-                    ],
-                  );
-                }),
+                      );
+                    }),
+                  ],
+                ),
 
                 AppText(
                   data: "What would you like to order today?",

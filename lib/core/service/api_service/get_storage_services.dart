@@ -132,6 +132,7 @@ class GetStorageServices {
       await box.remove("fcmToken"); // Remove token
       await box.remove(AppStorageKey.instance.userRole); // Remove user role
       await box.remove(AppStorageKey.instance.isGuest); // Remove is guest
+      await box.remove(AppStorageKey.instance.name); // Remove name
       await box.save();
 
       // Note: Navigation is now handled by the calling controller
