@@ -1,5 +1,7 @@
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/feature/geust/presentation/ui/geuse_screen.dart';
+import 'package:coffie/feature/geust/presentation/ui/geust_profile_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
 import 'package:coffie/feature/home/presentation/ui/home_screen.dart';
 import 'package:coffie/feature/navigation/presentation/controller/navigation_screen_controller.dart';
@@ -25,10 +27,18 @@ class NavigationScreen extends StatelessWidget {
               index: controller.selectedIndex.value,
               children: [
                 HomeScreen(),
-                RewardScreen(),
-                OrderScreen(),
-                GiftCardScreen(),
-                ProfileScreen(),
+                controller.isGuest
+                    ? GeuseScreen(title: "Rewards & Loyalty Program")
+                    : RewardScreen(),
+                controller.isGuest
+                    ? GeuseScreen(title: "Order")
+                    : OrderScreen(),
+                controller.isGuest
+                    ? GeuseScreen(title: "Gift Card")
+                    : GiftCardScreen(),
+                controller.isGuest
+                    ?  GuestProfileScreen()
+                    : ProfileScreen(),
               ],
             ),
           ),

@@ -64,6 +64,7 @@ class ShopOrderInformationController extends GetxController {
 
   void selectCategory(String category) {
     storeCategories.value = storeCategories
+        // ignore: unrelated_type_equality_checks
         .where((category) => category.name == category)
         .toList();
   }

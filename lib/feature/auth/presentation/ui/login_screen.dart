@@ -4,6 +4,7 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/feature/auth/presentation/controller/login_controller.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
@@ -169,6 +170,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 12.h),
                     InkWell(
                       onTap: () {
+                        GetStorageServices.instance.setIsGuest(true);
                         Get.offAllNamed(AppRoutes.instance.navigationScreen);
                       },
                       child: AppText(

@@ -1,5 +1,6 @@
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/route/app_routes_file.dart';
+import 'package:coffie/core/route/bindings/app_binding.dart';
 import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/theme/app_theme.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
@@ -13,8 +14,8 @@ class MyApp extends StatelessWidget {
   /// ✅ Route Decide Function
   String _getInitialRoute() {
     final token = GetStorageServices.instance.getToken();
-
-    if (token.isNotEmpty) {
+    final isGuest = GetStorageServices.instance.getIsGuest();
+    if (token.isNotEmpty || isGuest) {
       return AppRoutes.instance.navigationScreen;
     } else {
       return AppRoutes.instance.loginScreen;
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: GetMaterialApp(
+        initialBinding: AppBinding(),
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'Coffecito',
@@ -40,8 +42,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
 
 // import 'package:coffie/core/route/app_routes.dart';
 // import 'package:coffie/core/route/app_routes_file.dart';

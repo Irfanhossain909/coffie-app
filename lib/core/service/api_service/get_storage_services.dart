@@ -32,6 +32,22 @@ class GetStorageServices {
       return "";
     }
   }
+  Future<void> setIsGuest(bool value) async {
+    try {
+      await box.write(AppStorageKey.instance.isGuest, value);
+      await box.save();
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+  bool getIsGuest() {
+    try {
+      return box.read(AppStorageKey.instance.isGuest) ?? false;
+    } catch (e) {
+      AppLogger.error(e.toString());
+      return false;
+    }
+  }
 
   //////////////// UID (_id)
   // Future<void> setUID(String value) async {
@@ -95,6 +111,7 @@ class GetStorageServices {
       await box.remove(AppStorageKey.instance.token); // Remove token
       await box.remove("fcmToken"); // Remove token
       await box.remove(AppStorageKey.instance.userRole); // Remove user role
+      await box.remove(AppStorageKey.instance.isGuest); // Remove is guest
       await box.save();
 
       // Note: Navigation is now handled by the calling controller

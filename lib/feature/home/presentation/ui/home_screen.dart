@@ -35,7 +35,16 @@ class HomeScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                     AppText(
-                      data: "COFFECITO",
+                      data:
+                          controller
+                              .navigationScreenController
+                              .geustLoading
+                              .value
+                          ? "Guest Loading..."
+                          : controller
+                                .navigationScreenController
+                                .guestName
+                                .value,
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w500,
                       color: AppColors.lightBlue,
@@ -51,15 +60,17 @@ class HomeScreen extends StatelessWidget {
             ),
             actionsPadding: EdgeInsets.only(right: 16.w),
             actions: [
-              WalletContainer(amount: 320.50),
+              if (!controller.navigationScreenController.isGuest)
+                WalletContainer(amount: 320.50),
               SizedBox(width: 8.w),
-              InkWell(
-                onTap: () => Get.toNamed(AppRoutes.instance.myCartScreen),
-                child: Icon(
-                  Icons.shopping_cart_outlined,
-                  color: AppColors.blue,
+              if (!controller.navigationScreenController.isGuest)
+                InkWell(
+                  onTap: () => Get.toNamed(AppRoutes.instance.myCartScreen),
+                  child: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: AppColors.blue,
+                  ),
                 ),
-              ),
 
               SizedBox(width: 8.w),
               InkWell(
@@ -93,14 +104,16 @@ class HomeScreen extends StatelessWidget {
                     onTap: () =>
                         Get.toNamed(AppRoutes.instance.pickupLocationScreen),
                   ),
-                  SizedBox(height: 12.h),
-                  AppText(
-                    data: "Last Order",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(height: 8.h),
-                  LastOrderCard(),
+                  if (!controller.navigationScreenController.isGuest) ...[
+                    SizedBox(height: 12.h),
+                    AppText(
+                      data: "Last Order",
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    SizedBox(height: 8.h),
+                    LastOrderCard(),
+                  ],
                   SizedBox(height: 12.h),
                   Container(
                     padding: EdgeInsets.only(top: 16.h, left: 16.w),

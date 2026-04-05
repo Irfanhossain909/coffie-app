@@ -4,7 +4,6 @@ import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
-import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
 import 'package:coffie/feature/new_order/presentation/controller/shop_order_information_controller.dart';
 import 'package:coffie/feature/new_order/presentation/widget/product_card.dart';

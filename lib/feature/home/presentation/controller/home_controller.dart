@@ -1,11 +1,13 @@
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/home/domain/model/slider_model.dart';
 import 'package:coffie/feature/home/domain/repository/home_repository.dart';
+import 'package:coffie/feature/navigation/presentation/controller/navigation_screen_controller.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   /// repository here
   final HomeRepository _homeRepository = HomeRepository.instance;
+  NavigationScreenController navigationScreenController = Get.find<NavigationScreenController>();
 
   /// isLoading here
   RxBool isLoading = false.obs;

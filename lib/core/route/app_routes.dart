@@ -55,4 +55,8 @@ class AppRoutes {
   final String myWalletScreen = "/my-wallet-screen";
   final String walletHistoryScreen = "/wallet-history-screen";
   final String receiptScreen = "/receipt-screen";
+
+  // Guest Routes
+  final String guestScreen = "/guest-screen";
+  final String geustProfileScreen = "/geust-profile-screen";
 }

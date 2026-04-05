@@ -8,6 +8,8 @@ import 'package:coffie/feature/auth/presentation/ui/forget_password/new_password
 import 'package:coffie/feature/auth/presentation/ui/personal_info/personal_info_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/personal_info/phone_otp_verify_screen.dart';
 import 'package:coffie/feature/auth/presentation/ui/register_screen.dart';
+import 'package:coffie/feature/geust/presentation/ui/geuse_screen.dart';
+import 'package:coffie/feature/geust/presentation/ui/geust_profile_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/add_existing_gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/gift_card_screen.dart';
 import 'package:coffie/feature/gift_card/presentation/ui/perchese_gift_card_screen.dart';
@@ -223,5 +225,17 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     name: AppRoutes.instance.receiptScreen,
     binding: AppBinding(),
     page: () => const ReceiptScreen(),
+  ),
+
+  // --------------------- Guest ---------------------
+  GetPage(
+    name: AppRoutes.instance.guestScreen,
+    binding: AppBinding(),
+    page: () => const GeuseScreen(),
+  ),
+  GetPage(
+    name: AppRoutes.instance.geustProfileScreen,
+    binding: AppBinding(),
+    page: () => GuestProfileScreen(),
   ),
 ];

@@ -5,9 +5,11 @@ import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/feature/profile/presentation/widget/profile_row_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -118,7 +120,105 @@ class ProfileScreen extends StatelessWidget {
                 ProfileRowCard(
                   title: "Log Out",
                   icon: AppAssets.logout,
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 24,
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min, // গুরুত্বপূর্ণ
+                          children: [
+                            SvgPicture.asset(
+                              AppAssets.logout,
+                              width: 80.w,
+                              height: 80.h,
+                              // ignore: deprecated_member_use
+                              color: AppColors.blue,
+                            ),
+                            SizedBox(height: 20),
+
+                            /// Text
+                            AppText(
+                              data: "Do you want to log out of your profile?",
+                              textAlign: TextAlign.center,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+
+                            SizedBox(height: 24),
+
+                            /// Buttons Row
+                            Row(
+                              children: [
+                                /// Cancel Button
+                                Expanded(
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(color: AppColors.yellow),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.r,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: AppText(
+                                      data: "Cancel",
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.black,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(width: 12),
+
+                                /// Logout Button
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 12.r,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      GetStorageServices.instance
+                                          .completeLogout();
+                                    },
+                                    child: AppText(
+                                      data: "Log Out",
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 12.h),
               ],

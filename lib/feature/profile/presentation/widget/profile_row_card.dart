@@ -26,7 +26,8 @@ class ProfileRowCard extends StatelessWidget {
               icon!,
               width: 24.w,
               height: 24.h,
-              
+
+              // ignore: deprecated_member_use
               color: AppColors.black.withValues(alpha: 0.9),
             ),
             SizedBox(width: 15.w),

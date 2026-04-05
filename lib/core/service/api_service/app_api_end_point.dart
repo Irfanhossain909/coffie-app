@@ -29,7 +29,7 @@ class AppApiEndPoint {
   final String deleteAccount = "/auth/user-delete-account";
   final String updateLocation = "/users/profile";
   ////in app Url/////////////
-  final String homeSlider = "/promotions/admin";
+  final String homeSlider = "/promotions";
 
   /// Store Orders
   final String stores = "/stores";

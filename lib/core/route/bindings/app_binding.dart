@@ -1,4 +1,5 @@
 import 'package:coffie/feature/auth/presentation/controller/personal_info/personal_info_controller.dart';
+import 'package:coffie/feature/geust/presentation/controller/geust_profile_controller.dart';
 import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
@@ -35,5 +36,9 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => PersonalInfoController());
     Get.lazyPut(() => PickupLocationWithGetShopController());
     Get.lazyPut(() => ShopOrderInformationController());
+
+
+    // --------------------- Guest ---------------------
+    Get.lazyPut(() => GeustProfileController());
   }
 }

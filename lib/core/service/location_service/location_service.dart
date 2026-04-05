@@ -49,6 +49,7 @@ class LocationService {
       // 3️⃣ Get Current Position
       // -----------------------------
       Position position = await Geolocator.getCurrentPosition(
+        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.high,
       );
 

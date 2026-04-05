@@ -1,6 +1,5 @@
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/utils/app_logger.dart';
-import 'package:coffie/core/utils/app_snackbar.dart';
 import 'package:coffie/feature/auth/domain/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
