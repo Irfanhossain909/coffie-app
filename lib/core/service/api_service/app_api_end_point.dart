@@ -38,10 +38,11 @@ class AppApiEndPoint {
   // static String stores(var latitude, var longitude) =>
   //     "/stores/?latitude=$latitude&longitude=$longitude";
 
-  // ////Chat/////////////
-  final String chats = "/chat";
-  static String messages(var chatId) => "/message/$chatId";
-  final String sendMessage = "/message";
+
+// Gift card
+  final String giftCardBalance = "/giftCards";
+  final String giftCardsTransactions = "/giftCards";
+  final String giftCardsRedeem = "/giftCardTransactions/redeem";
 }
 
 // Move this function outside the class

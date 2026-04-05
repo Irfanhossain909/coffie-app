@@ -11,10 +11,10 @@ class LoginController extends GetxController {
   final AuthRepository _authRepository = AuthRepository.instance;
   // email and password Controller here
   TextEditingController emailController = TextEditingController(
-    text: kDebugMode ? 'vewegem683@jsncos.com' : '',
+    text: kDebugMode ? 'abdussalamsuhag104+friend@gmail.com' : '',
   );
   TextEditingController passwordController = TextEditingController(
-    text: kDebugMode ? 'Test@1234' : "",
+    text: kDebugMode ? 'Test@123' : "",
   );
 
   /// isLoading here

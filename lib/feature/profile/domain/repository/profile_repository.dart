@@ -21,9 +21,7 @@ class ProfileRepository {
       }
       final map = Map<String, dynamic>.from(response);
       if (map["success"] == true) {
-        AppLogger.api(map["data"]?.toString() ?? "", title: "Profile Response");
         GetStorageServices.instance.setName(map["data"]["name"] ?? "");
-        AppLogger.api(GetStorageServices.instance.getName(), title: "Name");
         // Full API body { success, message, data: { user } } — not only `data`,
         // otherwise ProfileModel.fromJson looks for nested `data` and gets null.
         return ProfileModel.fromJson(map);

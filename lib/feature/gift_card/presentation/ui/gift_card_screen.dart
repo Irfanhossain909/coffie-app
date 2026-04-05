@@ -4,6 +4,11 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/utils/formet_date.dart';
+import 'package:coffie/feature/gift_card/domain/model/gift_card_model.dart';
+import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
+import 'package:coffie/feature/gift_card/presentation/widget/gift_card_shimmer.dart';
+import 'package:coffie/feature/home/presentation/widget/gloss_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,159 +18,269 @@ class GiftCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: CustomAppbar(showLeading: false, text: "My Gift Card"),
-        body: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              decoration: BoxDecoration(
-                border: Border.all(color: AppColors.yellow),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              child: Column(
-                spacing: 5.h,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText(
-                    data: "Your Gift Card",
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400,
+    return GetBuilder<GiftCardController>(
+      init: GiftCardController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: CustomAppbar(showLeading: false, text: "My Gift Card"),
+          body: Column(
+            children: [
+              Obx(() {
+                if (controller.isLoading.value) {
+                  return GlossShimmer(
+                    height: 100.h,
+                    width: double.infinity,
+                    borderRadius: 12.r,
+                  );
+                }
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.yellow),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
-                  Row(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 10.h,
+                  ),
+                  child: Column(
+                    spacing: 5.h,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        data: "Total Gift Card Available: ",
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.deepBlue,
+                        data: "Your Gift Card",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
                       ),
-                      AppText(
-                        data: "2",
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.deepBlue,
+                      Row(
+                        children: [
+                          AppText(
+                            data: "Total Gift Card Available: ",
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deepBlue,
+                          ),
+                          AppText(
+                            data:
+                                controller
+                                    .giftCardBalanceModel
+                                    .value
+                                    ?.data
+                                    ?.totalGiftCards
+                                    .toString() ??
+                                "0",
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deepBlue,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          AppText(
+                            data: "Total Amount: ",
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deepBlue,
+                          ),
+                          AppText(
+                            data:
+                                "\$${controller.giftCardBalanceModel.value?.data?.totalBalance.toString() ?? "0"}",
+                            fontSize: 22.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deepBlue,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      AppText(
-                        data: "Total Amount: ",
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.deepBlue,
-                      ),
-                      AppText(
-                        data: r"$50.00",
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.deepBlue,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w),
-              height: 45.h,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200, // background color
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: TabBar(
-                dividerColor: Colors.transparent,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicator: BoxDecoration(
-                  color: Color(0xFF1E4DB7), // blue selected color
+                );
+              }),
+              SizedBox(height: 16.h),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.w),
+                height: 45.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200, // background color
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black87,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14.sp,
+                child: TabBar(
+                  controller: controller.tabController,
+                  dividerColor: Colors.transparent,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    color: Color(0xFF1E4DB7), // blue selected color
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black87,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                  ),
+                  tabs: const [
+                    Tab(text: "Available"),
+                    Tab(text: "Sent"),
+                    Tab(text: "Redeemed"),
+                  ],
                 ),
-                tabs: const [
-                  Tab(text: "Available"),
-                  Tab(text: "Sent"),
-                  Tab(text: "Redeemed"),
-                ],
               ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // All
-                  ListView.builder(
-                    padding: EdgeInsets.all(16.r),
-                    itemBuilder: (context, index) {
-                      return GiftCard();
-                    },
-                  ),
-                  // Add Money
-                  ListView.builder(
-                    padding: EdgeInsets.all(16.r),
-                    itemBuilder: (context, index) {
-                      return GiftCard(lastColumType: "Sent");
-                    },
-                  ),
-                  // Spend
-                  ListView.builder(
-                    padding: EdgeInsets.all(16.r),
-                    itemBuilder: (context, index) {
-                      return GiftCard(lastColumType: "Redeemed");
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 10.h,
-              children: [
-                AppButton(
-                  title: "Purchase Gift Card",
-                  onTap: () {
-                    Get.toNamed(AppRoutes.instance.percheseGiftCardScreen);
-                  },
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.instance.addExistingGiftCardScreen);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12.h),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(color: AppColors.yellow),
+              Expanded(
+                child: TabBarView(
+                  controller: controller.tabController,
+                  children: [
+                    // All
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        controller.getGiftCardTransactions(giftCardEndPoint: "available");
+                      },
+                      child: Obx(() {
+                        if (controller.isLoadingGiftCardTransactions.value) {
+                          return GiftCardShimmer();
+                        }
+                        if (controller.giftCardTransactions.isEmpty) {
+                          return Center(
+                            child: AppText(
+                              data: "No data found",
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          padding: EdgeInsets.all(16.r),
+                          itemCount: controller.giftCardTransactions.length,
+                          itemBuilder: (context, index) {
+                            final giftCard =
+                                controller.giftCardTransactions[index];
+                            return GiftCard(giftCardDataModel: giftCard);
+                          },
+                        );
+                      }),
                     ),
-                    child: Center(
-                      child: AppText(
-                        data: "Add Existing Gift Card",
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.black,
+                    // Add Money
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        controller.getGiftCardTransactions(giftCardEndPoint: "sent");
+                      },
+                      child: Obx(() {
+                        if (controller.isLoadingGiftCardTransactions.value) {
+                          return GiftCardShimmer();
+                        }
+                        if (controller.giftCardTransactions.isEmpty) {
+                          return Center(
+                            child: AppText(
+                              data: "No data found",
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          padding: EdgeInsets.all(16.r),
+                          itemCount: controller.giftCardTransactions.length,
+                          itemBuilder: (context, index) {
+                            final giftCard =
+                                controller.giftCardTransactions[index];
+                            return GiftCard(
+                              lastColumType: "Sent",
+                              giftCardDataModel: giftCard,
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                    // Spend
+                    RefreshIndicator(
+                      onRefresh: () async {
+                        controller.getGiftCardRedeem();
+                      },
+                      child: Obx(() {
+                        if (controller.isLoadingGiftCardTransactions.value) {
+                          return GiftCardShimmer();
+                        }
+                        if (controller.giftCardTransactions.isEmpty) {
+                          return Center(
+                            child: AppText(
+                              data: "No data found",
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          padding: EdgeInsets.all(16.r),
+                          itemCount: controller.giftCardRedeem.length,
+                          itemBuilder: (context, index) {
+                            final giftCard = controller.giftCardRedeem[index];
+                            return GiftCard(
+                              lastColumType: "Redeemed",
+                              remainingBalance: giftCard.balanceAfter ?? 0,
+                              giftCardDataModel: GiftCardDataModel(
+                                receiverName:
+                                    giftCard.giftCard?.receiverName ?? "",
+                                receiverEmail:
+                                    giftCard.giftCard?.receiverEmail ?? "",
+                                amount: giftCard.giftCard?.amount ?? 0,
+                                createdAt:
+                                    giftCard.giftCard?.createdAt ??
+                                    DateTime.now(),
+                                status: giftCard.giftCard?.status ?? "",
+                                id: giftCard.giftCard?.id ?? "",
+                                cardNumber: giftCard.giftCard?.cardNumber ?? "",
+                                currentBalance:
+                                    giftCard.giftCard?.currentBalance ?? 0,
+                              ),
+                            );
+                          },
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10.h,
+                children: [
+                  AppButton(
+                    title: "Purchase Gift Card",
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instance.percheseGiftCardScreen);
+                    },
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.instance.addExistingGiftCardScreen);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(color: AppColors.yellow),
+                      ),
+                      child: Center(
+                        child: AppText(
+                          data: "Add Existing Gift Card",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.black,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -173,7 +288,15 @@ class GiftCardScreen extends StatelessWidget {
 class GiftCard extends StatelessWidget {
   final VoidCallback? onTap;
   final String lastColumType;
-  const GiftCard({this.onTap, super.key, this.lastColumType = "Available"});
+  final double? remainingBalance;
+  final GiftCardDataModel? giftCardDataModel;
+  const GiftCard({
+    this.onTap,
+    super.key,
+    this.lastColumType = "Available",
+    this.giftCardDataModel,
+    this.remainingBalance,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -198,28 +321,29 @@ class GiftCard extends StatelessWidget {
             height: 29.h,
             fit: BoxFit.cover,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 4.h,
-            children: [
-              AppText(
-                data: "Mr. Sabbir",
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600,
-              ),
-              AppText(
-                data: "New Work",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-              ),
-              AppText(
-                data: "May 15, 2026",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-              ),
-            ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4.h,
+              children: [
+                AppText(
+                  data: giftCardDataModel?.receiverName ?? "",
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+                AppText(
+                  data: giftCardDataModel?.receiverEmail ?? "",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                AppText(
+                  data: formatDate(giftCardDataModel?.createdAt),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+              ],
+            ),
           ),
-          Spacer(),
           if (lastColumType == "Available")
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -227,7 +351,7 @@ class GiftCard extends StatelessWidget {
               spacing: 8.h,
               children: [
                 AppText(
-                  data: r"$20.00",
+                  data: "\$${giftCardDataModel?.amount?.toString() ?? "0"}",
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.blue,
@@ -266,7 +390,7 @@ class GiftCard extends StatelessWidget {
               spacing: 16.h,
               children: [
                 AppText(
-                  data: r"$20.00",
+                  data: "\$${giftCardDataModel?.amount?.toString() ?? "0"}",
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.blue,
@@ -300,13 +424,13 @@ class GiftCard extends StatelessWidget {
               spacing: 8.h,
               children: [
                 AppText(
-                  data: r"-$20.00",
+                  data: "\$ -${giftCardDataModel?.amount?.toString() ?? "0"}",
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   color: AppColors.red,
                 ),
                 AppText(
-                  data: r"Remaining: $9.49",
+                  data: "Remaining: \$${remainingBalance?.toString() ?? "0"}",
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                   color: AppColors.black,

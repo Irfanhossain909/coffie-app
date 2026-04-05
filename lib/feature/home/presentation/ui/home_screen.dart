@@ -6,6 +6,7 @@ import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/home/presentation/widget/auto_carosel_slider.dart';
+import 'package:coffie/feature/home/presentation/widget/gloss_shimmer.dart';
 import 'package:coffie/feature/home/presentation/widget/last_order_card.dart';
 import 'package:coffie/feature/home/presentation/widget/wallet_container.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,13 @@ class HomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Obx(() {
+                    if (controller.isSliderLoading.value) {
+                      return GlossShimmer(
+                        height: 230.h,
+                        width: double.infinity,
+                        borderRadius: 12.r,
+                      );
+                    }
                     return AutoCarouselSlider(
                       imageList: controller.homeSliderList
                           .map(
