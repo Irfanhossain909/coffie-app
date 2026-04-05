@@ -5,6 +5,7 @@ class AppStorageKey {
   String token = "Token";
   String userRole = "role";
   String isGuest = "isGuest";
+  String name = "name";
 
   //=====================================================`
 

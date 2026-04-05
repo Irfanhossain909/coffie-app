@@ -26,31 +26,52 @@ class HomeScreen extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  spacing: 4.w,
-                  children: [
-                    AppText(
-                      data: "Hi",
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    AppText(
-                      data:
-                          controller
-                              .navigationScreenController
-                              .geustLoading
-                              .value
-                          ? "Guest Loading..."
-                          : controller
-                                .navigationScreenController
-                                .guestName
-                                .value,
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.lightBlue,
-                    ),
-                  ],
-                ),
+                Obx(() {
+                  return Row(
+                    children: [
+                      AppText(
+                        data: "Hi",
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+
+                      SizedBox(width: 4.w),
+
+                      Expanded(
+                        // ✅ important
+                        child: !controller.isGuest
+                            ? AppText(
+                                data: controller.isLoading.value
+                                    ? "Guest Loading..."
+                                    : controller.getName(),
+                                fontSize: 22.sp,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.lightBlue,
+                              )
+                            : AppText(
+                                data:
+                                    controller
+                                        .navigationScreenController
+                                        .geustLoading
+                                        .value
+                                    ? "Guest Loading..."
+                                    : controller
+                                          .navigationScreenController
+                                          .guestName
+                                          .value,
+                                fontSize: 22.sp,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.lightBlue,
+                              ),
+                      ),
+                    ],
+                  );
+                }),
+
                 AppText(
                   data: "What would you like to order today?",
                   fontSize: 12.sp,

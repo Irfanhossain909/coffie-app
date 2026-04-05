@@ -32,6 +32,7 @@ class GetStorageServices {
       return "";
     }
   }
+
   Future<void> setIsGuest(bool value) async {
     try {
       await box.write(AppStorageKey.instance.isGuest, value);
@@ -40,12 +41,31 @@ class GetStorageServices {
       AppLogger.error(e.toString());
     }
   }
+
   bool getIsGuest() {
     try {
       return box.read(AppStorageKey.instance.isGuest) ?? false;
     } catch (e) {
       AppLogger.error(e.toString());
       return false;
+    }
+  }
+
+  Future<void> setName(String value) async {
+    try {
+      await box.write(AppStorageKey.instance.name, value);
+      await box.save();
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+
+  String getName() {
+    try {
+      return box.read(AppStorageKey.instance.name) ?? "";
+    } catch (e) {
+      AppLogger.error(e.toString());
+      return "";
     }
   }
 
