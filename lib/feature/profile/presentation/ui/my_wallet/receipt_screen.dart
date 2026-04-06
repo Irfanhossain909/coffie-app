@@ -4,12 +4,15 @@ import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/feature/auth/presentation/widget/app_branding/branding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ReceiptScreen extends StatelessWidget {
   const ReceiptScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final data = Get.arguments;
+
     return Scaffold(
       appBar: CustomAppbar(text: "Receipt"),
       body: Padding(
@@ -37,7 +40,7 @@ class ReceiptScreen extends StatelessWidget {
                         color: AppColors.black,
                       ),
                       AppText(
-                        data: "TXN-1023498",
+                        data: data?.orderId ?? "",
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w400,
                         color: AppColors.black,
@@ -51,40 +54,31 @@ class ReceiptScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: AppColors.black,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppText(
-                        data: "Americano ×1",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                      AppText(
-                        data: r"$3.00",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppText(
-                        data: "Croissant ×1",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                      AppText(
-                        data: r"$1.50",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ],
-                  ),
+                  if (data?.items?.isNotEmpty ?? false)
+                    ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: data?.items?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final item = data?.items?[index];
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            AppText(
+                              data: "${item?.productName} ×${item?.quantity}",
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            AppText(
+                              data: "\$${item?.totalPrice ?? 0}",
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -95,30 +89,31 @@ class ReceiptScreen extends StatelessWidget {
                         color: AppColors.black,
                       ),
                       AppText(
-                        data: "New Work • 2.6 km",
+                        data:
+                            "${data?.store?.name} • ${data?.store?.distanceKm ?? 0} km",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         color: AppColors.black,
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppText(
-                        data: "Previous Balance",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                      AppText(
-                        data: r"+$25.99",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     AppText(
+                  //       data: "Previous Balance",
+                  //       fontSize: 12.sp,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: AppColors.black,
+                  //     ),
+                  //     AppText(
+                  //       data: r"+$25.99",
+                  //       fontSize: 12.sp,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: AppColors.black,
+                  //     ),
+                  //   ],
+                  // ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -129,30 +124,30 @@ class ReceiptScreen extends StatelessWidget {
                         color: AppColors.black,
                       ),
                       AppText(
-                        data: r"-$10.09",
+                        data: "\$${data?.totalAmount ?? 0}",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         color: AppColors.black,
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppText(
-                        data: "New Balance",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                      AppText(
-                        data: r"$15.99",
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     AppText(
+                  //       data: "New Balance",
+                  //       fontSize: 12.sp,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: AppColors.black,
+                  //     ),
+                  //     AppText(
+                  //       data: r"$15.99",
+                  //       fontSize: 12.sp,
+                  //       fontWeight: FontWeight.w400,
+                  //       color: AppColors.black,
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

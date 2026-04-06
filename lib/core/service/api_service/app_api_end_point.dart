@@ -43,6 +43,11 @@ class AppApiEndPoint {
   final String giftCardsTransactions = "/giftCards";
   final String giftCardsRedeem = "/giftCardTransactions/redeem";
   final String giftCardsAdd = "/giftCards/add";
+
+  // Reward
+  final String rewardPoints = "/users/loyalty-points";
+  final String rewardHistory = "/pointTransactions/my-history";
+  static String loyeltyCardDetails(var orderId) => "/orders/$orderId";
 }
 
 // Move this function outside the class
