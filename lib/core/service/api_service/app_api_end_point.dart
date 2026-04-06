@@ -49,6 +49,12 @@ class AppApiEndPoint {
   final String rewardHistory = "/pointTransactions/my-history";
   static String loyeltyCardDetails(var orderId) => "/orders/$orderId";
   static String orderList(var orderType) => "/orders/$orderType";
+
+  // Wallet
+  final String walletBalance = "/wallets/balance";
+  final String walletCardList = "/walletTransactions";
+  static String walletHistory(var walletId) => "/walletTransactions/$walletId";
+  final String walletAdd = "/wallets/add-money";
 }
 
 // Move this function outside the class

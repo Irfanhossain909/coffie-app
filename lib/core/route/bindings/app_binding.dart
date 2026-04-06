@@ -12,11 +12,13 @@ import 'package:coffie/feature/profile/presentation/controller/contact_up_contro
 import 'package:coffie/feature/profile/presentation/controller/delete_account_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/edit_profile_info_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/favorate_controller.dart';
-import 'package:coffie/feature/profile/presentation/controller/my_wallet_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/privicy_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/profile_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/transection_controller.dart';
 import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
+import 'package:coffie/feature/wallet/presentation/controller/my_wallet_controller.dart';
+import 'package:coffie/feature/wallet/presentation/controller/wallet_add_controller.dart';
+import 'package:coffie/feature/wallet/presentation/controller/wallet_history_controller.dart';
 import 'package:get/get.dart';
 
 class AppBinding extends Bindings {
@@ -40,6 +42,8 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => ShopOrderInformationController());
     Get.lazyPut(() => PercheseGiftCardController());
     Get.lazyPut(() => AddExisingCardController());
+    Get.lazyPut(() => WalletHistoryController());
+    Get.lazyPut(() => WalletAddController());
 
     // --------------------- Guest ---------------------
     Get.lazyPut(() => GeustProfileController());

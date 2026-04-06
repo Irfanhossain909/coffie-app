@@ -17,13 +17,32 @@ String formatDate(dynamic inputDate) {
       return "Invalid date";
     }
 
-    // Format: May 15, 2026
     const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
 
-    return "${months[date.month - 1]} ${date.day}, ${date.year}";
+    // Time formatting (12-hour with AM/PM)
+    int hour = date.hour;
+    int minute = date.minute;
+
+    String period = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12;
+    if (hour == 0) hour = 12;
+
+    String formattedMinute = minute.toString().padLeft(2, '0');
+
+    return "${months[date.month - 1]} ${date.day}, ${date.year} • $hour:$formattedMinute $period";
   } catch (e) {
     return "Invalid date";
   }
