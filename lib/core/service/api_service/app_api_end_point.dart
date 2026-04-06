@@ -55,6 +55,10 @@ class AppApiEndPoint {
   final String walletCardList = "/walletTransactions";
   static String walletHistory(var walletId) => "/walletTransactions/$walletId";
   final String walletAdd = "/wallets/add-money";
+
+  // Favorite
+  final String favoriteStoreList = "/favorites/stores";
+  final String favoriteProductList = "/favorites/products";
 }
 
 // Move this function outside the class

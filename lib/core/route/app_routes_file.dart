@@ -28,7 +28,7 @@ import 'package:coffie/feature/profile/presentation/ui/contact_us_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/delete_account_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/edit_profile_info_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/email_subscrption_screen.dart';
-import 'package:coffie/feature/profile/presentation/ui/favorate_screen.dart';
+import 'package:coffie/feature/favorite/presentation/ui/favorate_screen.dart';
 import 'package:coffie/feature/wallet/presentation/ui/my_wallet_screen.dart';
 import 'package:coffie/feature/profile/presentation/ui/my_wallet/receipt_screen.dart';
 import 'package:coffie/feature/wallet/presentation/ui/wallet_add_screen.dart';

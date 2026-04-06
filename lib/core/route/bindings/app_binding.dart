@@ -11,7 +11,7 @@ import 'package:coffie/feature/profile/presentation/controller/change_password_c
 import 'package:coffie/feature/profile/presentation/controller/contact_up_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/delete_account_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/edit_profile_info_controller.dart';
-import 'package:coffie/feature/profile/presentation/controller/favorate_controller.dart';
+import 'package:coffie/feature/favorite/presentation/controller/favorate_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/privicy_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/profile_controller.dart';
 import 'package:coffie/feature/profile/presentation/controller/transection_controller.dart';
