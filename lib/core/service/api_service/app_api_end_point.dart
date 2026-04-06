@@ -48,6 +48,7 @@ class AppApiEndPoint {
   final String rewardPoints = "/users/loyalty-points";
   final String rewardHistory = "/pointTransactions/my-history";
   static String loyeltyCardDetails(var orderId) => "/orders/$orderId";
+  static String orderList(var orderType) => "/orders/$orderType";
 }
 
 // Move this function outside the class
