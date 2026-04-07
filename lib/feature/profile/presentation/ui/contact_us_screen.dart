@@ -62,7 +62,7 @@ class ContactUsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(12.r),
 
                         child: AppText(
-                          data: "Irfan Khan",
+                          data: controller.nameController.text,
                           style: GoogleFonts.jost().copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
@@ -94,7 +94,7 @@ class ContactUsScreen extends StatelessWidget {
                         padding: EdgeInsets.all(12.r),
 
                         child: AppText(
-                          data: "test@example.com",
+                          data: controller.emailController.text,
                           style: GoogleFonts.jost().copyWith(
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
@@ -124,15 +124,14 @@ class ContactUsScreen extends StatelessWidget {
           ),
           bottomNavigationBar: SafeArea(
             child: Obx(() {
-              return controller.isLoading.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: AppButton(
-                        title: "Send",
-                        onTap: () => controller.contactUs(),
-                      ),
-                    );
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: AppButton(
+                  isLoading: controller.isLoading.value,
+                  title: "Send",
+                  onTap: () => controller.contactUs(),
+                ),
+              );
             }),
           ),
         );

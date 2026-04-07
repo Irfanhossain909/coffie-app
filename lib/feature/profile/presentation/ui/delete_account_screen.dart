@@ -1,4 +1,3 @@
-
 import 'package:coffie/core/component/app_button/app_button.dart';
 import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
@@ -48,6 +47,7 @@ class DeleteAccountScreen extends StatelessWidget {
                   ),
                 ),
                 AppInputWidgetTwo(
+                  controller: controller.passwordController,
                   isOptional: true,
                   title: "Password",
                   hintText: "Enter your password",
@@ -57,15 +57,14 @@ class DeleteAccountScreen extends StatelessWidget {
           ),
           bottomNavigationBar: SafeArea(
             child: Obx(() {
-              return controller.isLoading.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: AppButton(
-                        title: "Delete Account",
-                        onTap: () => controller.deleteAccount(),
-                      ),
-                    );
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: AppButton(
+                  isLoading: controller.isLoading.value,
+                  title: "Delete Account",
+                  onTap: () => controller.deleteAccount(),
+                ),
+              );
             }),
           ),
         );

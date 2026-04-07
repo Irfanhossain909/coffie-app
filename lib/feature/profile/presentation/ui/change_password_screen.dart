@@ -85,15 +85,14 @@ class ChangePasswordScreen extends StatelessWidget {
           ),
           bottomNavigationBar: SafeArea(
             child: Obx(() {
-              return controller.isLoading.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: AppButton(
-                        title: "Update Password",
-                        onTap: () => controller.updatePassword(),
-                      ),
-                    );
+              return Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: AppButton(
+                  isLoading: controller.isLoading.value,
+                  title: "Update Password",
+                  onTap: () => controller.updatePassword(),
+                ),
+              );
             }),
           ),
         );

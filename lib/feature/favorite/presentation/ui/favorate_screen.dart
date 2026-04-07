@@ -121,6 +121,23 @@ class FavorateScreen extends StatelessWidget {
 
                       /// 🔹 Item Content
                       Obx(() {
+                        if (controller.isLoading.value) {
+                          return ListView.builder(
+                            padding: EdgeInsets.all(16.r),
+                            itemCount: 6,
+                            itemBuilder: (_, __) => const LoyaltyCardShimmer(),
+                          );
+                        }
+
+                        if (controller.favoriteStoreList.isEmpty) {
+                          return Center(
+                            child: AppText(
+                              data: "No favorite product found",
+                              fontSize: 16.sp,
+                              color: Colors.grey,
+                            ),
+                          );
+                        }
                         return RefreshIndicator(
                           onRefresh: () async {
                             await controller.getFavoriteProductList();
@@ -137,26 +154,7 @@ class FavorateScreen extends StatelessWidget {
                                 name: product.product?.name ?? "",
                                 readyTime: product.product?.readyTime ?? 0,
                                 price: "\$${product.product?.basePrice}",
-                                // tags: [
-                                //   "Hot",
-                                //   "Cold",
-                                //   "Sweet",
-                                //   "Sour",
-                                //   "Bitter",
-                                //   "Salty",
-                                //   "Umami",
-                                //   "Spicy",
-                                //   "Bland",
-                                //   "Hot",
-                                //   "Cold",
-                                //   "Sweet",
-                                //   "Sour",
-                                //   "Bitter",
-                                //   "Salty",
-                                //   "Umami",
-                                //   "Spicy",
-                                //   "Bland",
-                                // ],
+
                                 tags: product.product?.dietaryLabels ?? [],
                                 onTap: () {
                                   Get.toNamed(

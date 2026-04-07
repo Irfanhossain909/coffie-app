@@ -205,7 +205,7 @@ List<GetPage> appRootRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.instance.emailSubscrptionScreen,
     binding: AppBinding(),
-    page: () => const EmailSubscrptionScreen(),
+    page: () =>  EmailSubscrptionScreen(),
   ),
   GetPage(
     name: AppRoutes.instance.editProfileInfoScreen,

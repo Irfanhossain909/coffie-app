@@ -52,7 +52,10 @@ class SettingScreen extends StatelessWidget {
                   onTap: () {
                     Get.toNamed(
                       AppRoutes.instance.privicyPolicyScreen,
-                      arguments: {"title": "Terms & Conditions"},
+                      arguments: {
+                        "title": "Terms & Conditions",
+                        "endPoint": "terms-and-conditions",
+                      },
                     );
                   },
                 ),
@@ -62,7 +65,10 @@ class SettingScreen extends StatelessWidget {
                   onTap: () {
                     Get.toNamed(
                       AppRoutes.instance.privicyPolicyScreen,
-                      arguments: {"title": "Privacy Policy"},
+                      arguments: {
+                        "title": "Privacy Policy",
+                        "endPoint": "privacy-policy",
+                      },
                     );
                   },
                 ),

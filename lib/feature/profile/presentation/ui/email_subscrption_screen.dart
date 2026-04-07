@@ -3,12 +3,15 @@ import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
+import 'package:coffie/feature/profile/presentation/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class EmailSubscrptionScreen extends StatelessWidget {
-  const EmailSubscrptionScreen({super.key});
+  EmailSubscrptionScreen({super.key});
+  final ProfileController controller = Get.find<ProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,7 @@ class EmailSubscrptionScreen extends StatelessWidget {
               ),
             ),
             AppInputWidgetTwo(
+              controller: controller.emailSubscriptionController,
               title: "Email",
               isEmail: true,
               isOptional: true,
@@ -53,9 +57,17 @@ class EmailSubscrptionScreen extends StatelessWidget {
 
             Spacer(),
 
-            SafeArea(
-              child: AppButton(title: "Subscribe", onTap: () {}),
-            ),
+            Obx(() {
+              return SafeArea(
+                child: AppButton(
+                  isLoading: controller.isLoading.value,
+                  title: "Subscribe",
+                  onTap: () {
+                    controller.sendEmailSubscription();
+                  },
+                ),
+              );
+            }),
           ],
         ),
       ),

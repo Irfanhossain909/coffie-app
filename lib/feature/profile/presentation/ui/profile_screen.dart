@@ -38,7 +38,7 @@ class ProfileScreen extends StatelessWidget {
                       AppImageCircular(
                         fit: BoxFit.cover,
                         url:
-                            "${AppApiEndPoint.domain}${controller.profileModel.value?.data?.image}",
+                            "${AppApiEndPoint.domain}${controller.profileModel.value?.data?.profileImage}",
                         width: 150.w,
                         height: 150.h,
                       ),

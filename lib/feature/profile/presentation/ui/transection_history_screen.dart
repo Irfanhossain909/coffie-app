@@ -1,32 +1,59 @@
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/feature/profile/domain/model/transection_history_model.dart';
+import 'package:coffie/feature/profile/presentation/controller/transection_controller.dart';
+import 'package:coffie/feature/profile/presentation/widget/transection_card_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class TransectionHistoryScreen extends StatelessWidget {
   const TransectionHistoryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppbar(text: "Transaction History"),
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 8.h),
-            child: TransectionCard(),
-          );
-        },
-      ),
+    return GetBuilder<TransectionController>(
+      init: TransectionController(),
+      builder: (controller) {
+        return Scaffold(
+          appBar: CustomAppbar(text: "Transaction History"),
+          body: Obx(() {
+            if (controller.isLoading.value) {
+              return ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return TransactionCardShimmer();
+                },
+              );
+            }
+            if (controller.transectionHistoryList.isEmpty) {
+              return Center(
+                child: AppText(data: "No transaction history found"),
+              );
+            }
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              itemCount: controller.transectionHistoryList.length,
+              itemBuilder: (context, index) {
+                final transection = controller.transectionHistoryList[index];
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: TransectionCard(transection: transection),
+                );
+              },
+            );
+          }),
+        );
+      },
     );
   }
 }
 
 class TransectionCard extends StatelessWidget {
-  const TransectionCard({super.key});
+  final TtrancestionHistoryDataModel transection;
+  const TransectionCard({super.key, required this.transection});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +69,7 @@ class TransectionCard extends StatelessWidget {
         spacing: 4.h,
         children: [
           AppText(
-            data: "Transaction ID: #INV-00123",
+            data: "Transaction ID: #${transection.id}",
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -56,7 +83,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                data: r"+$10.99",
+                data: "+\$${transection.totalAmount}",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -71,7 +98,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                data: r"+$5.00",
+                data: "+\$${transection.tipAmount}",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -86,7 +113,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                data: r"-100p",
+                data: "-${transection.pointsEarned}p",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -103,7 +130,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
               AppText(
-                data: r"$5.99",
+                data: "\$${transection.totalAmount}",
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w600,
               ),
@@ -118,7 +145,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                data: "Wallet",
+                data: "${transection.paymentMethod}",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),
@@ -133,7 +160,7 @@ class TransectionCard extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
               AppText(
-                data: "Pending",
+                data: "${transection.paymentStatus}",
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
               ),

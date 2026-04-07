@@ -24,9 +24,7 @@ class AppApiEndPoint {
   final String resendPhoneOtp = "/auth/resend-phone-otp";
   final String forgotPassword = "/auth/forget-password";
   final String resetPassword = "/auth/reset-password";
-  final String changePassword = "/auth/change-password";
-  final String contactUs = "/contuct";
-  final String deleteAccount = "/auth/user-delete-account";
+  final String contactUs = "/admin/contact-us";
   final String updateLocation = "/users/profile";
   ////in app Url/////////////
   final String homeSlider = "/promotions";
@@ -59,6 +57,13 @@ class AppApiEndPoint {
   // Favorite
   final String favoriteStoreList = "/favorites/stores";
   final String favoriteProductList = "/favorites/products";
+
+  // Profile
+  final String sendEmailSubscription = "/emailSubscriptions/subscribe";
+  final String transectionHistory = "/orders/transactions/history";
+  final String changePassword = "/auth/change-password";
+  static String privacyPolicy(String title) => "/disclaimers/$title";
+  static String deleteAccount(String userId) => "/users/$userId";
 }
 
 // Move this function outside the class
