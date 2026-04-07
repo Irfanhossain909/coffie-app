@@ -28,7 +28,7 @@ class AppApiEndPoint {
   final String updateLocation = "/users/profile";
   ////in app Url/////////////
   final String homeSlider = "/promotions";
-
+  final String lastOrder = "/orders/last-order";
   /// Store Orders
   final String stores = "/stores";
   final String storeCategories = "/categories";

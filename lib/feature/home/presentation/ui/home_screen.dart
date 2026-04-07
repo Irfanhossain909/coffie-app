@@ -143,7 +143,18 @@ class HomeScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                     SizedBox(height: 8.h),
-                    LastOrderCard(),
+                    Obx(() {
+                      if (controller.lastOrder.value == null) {
+                        return GlossShimmer(
+                          height: 120.h,
+                          width: double.infinity,
+                          borderRadius: 12.r,
+                        );
+                      }
+                      return LastOrderCard(
+                        lastOrder: controller.lastOrder.value,
+                      );
+                    }),
                   ],
                   SizedBox(height: 12.h),
                   Container(

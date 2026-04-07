@@ -18,6 +18,8 @@ class PercheseGiftCardController extends GetxController {
   TextEditingController messageController = TextEditingController();
   TextEditingController receiverNameController = TextEditingController();
   TextEditingController receiverEmailController = TextEditingController();
+
+  
   //================= Init State ==================
   @override
   void onInit() {

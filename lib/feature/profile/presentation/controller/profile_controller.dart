@@ -1,7 +1,8 @@
-import 'dart:io';
+
 
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
+import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
 import 'package:coffie/feature/profile/domain/model/profile_model.dart';
 import 'package:coffie/feature/profile/domain/repository/profile_repository.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,9 @@ class ProfileController extends GetxController {
       if (result != null) {
         profileModel.value =
             result; // GetBuilder does not listen to Rx; rebuild after load.
+        if (Get.isRegistered<HomeController>()) {
+          Get.find<HomeController>().refreshNameFromStorage();
+        }
       }
     } catch (e) {
       AppLogger.error(e.toString());

@@ -38,17 +38,12 @@ class PercheseGiftCardScreen extends StatelessWidget {
                   color: AppColors.black,
                 ),
                 CategorySelector(
-                  items: const [
-                    "20",
-                    "50",
-                    "100",
-                    "200",
-                    "500",
-                    "1000",
-                  ],
+                  items: giftCardAmounts,
                   selectedItem: controller.selectedCategory,
                   onTap: controller.selectCategory,
+                  labelBuilder: (value) => "\$$value.00", // 👈 এখানে magic
                 ),
+              
                 AppInputWidgetTwo(
                   controller: controller.messageController,
                   isOptional: true,
@@ -110,3 +105,5 @@ class PercheseGiftCardScreen extends StatelessWidget {
     );
   }
 }
+
+List<String> giftCardAmounts = ["20", "50", "100", "200", "500", "1000"];

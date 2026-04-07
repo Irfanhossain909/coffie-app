@@ -5,6 +5,8 @@ import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
+import 'package:coffie/feature/home/presentation/widget/gloss_shimmer.dart';
+import 'package:coffie/feature/home/presentation/widget/last_order_card.dart';
 import 'package:coffie/feature/new_order/presentation/controller/shop_order_information_controller.dart';
 import 'package:coffie/feature/new_order/presentation/widget/product_card.dart';
 import 'package:coffie/feature/new_order/presentation/widget/shop_details_info_card.dart';
@@ -32,97 +34,119 @@ class ShopOrderInformationScreen extends StatelessWidget {
                 children: [
                   ShowDetailsInfoCard(store: controller.store),
                   SizedBox(height: 16.h),
-                  AppText(
-                    data: "Last Order",
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(height: 8.h),
-                  Container(
-                    padding: EdgeInsets.all(12.r),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.yellow),
+
+                  if (!controller.isGuest) ...[
+                    SizedBox(height: 12.h),
+                    AppText(
+                      data: "Last Order",
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
                     ),
-                    width: double.infinity,
+                    SizedBox(height: 8.h),
+                    Obx(() {
+                      if (controller.lastOrder.value == null) {
+                        return GlossShimmer(
+                          height: 120.h,
+                          width: double.infinity,
+                          borderRadius: 12.r,
+                        );
+                      }
+                      return LastOrderCard(
+                        lastOrder: controller.lastOrder.value,
+                      );
+                    }),
+                  ],
 
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10.w,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            border: Border.all(color: AppColors.yellow),
-                          ),
-                          child: AppImageCircular(
-                            borderRadius: 8.r,
-                            url:
-                                "https://i.pinimg.com/736x/f0/4e/90/f04e90b671eccbde302107dc0a447135.jpg",
-                            width: 99.w,
-                            height: 93.h,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 4.h,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppText(
-                                    data: "Americano",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  AppText(
-                                    data: "45\$",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.black,
-                                  ),
-                                ],
-                              ),
+                  // AppText(
+                  //   data: "Last Order",
+                  //   fontSize: 14.sp,
+                  //   fontWeight: FontWeight.w600,
+                  // ),
+                  // SizedBox(height: 8.h),
+                  // Container(
+                  //   padding: EdgeInsets.all(12.r),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(8.r),
+                  //     border: Border.all(color: AppColors.yellow),
+                  //   ),
+                  //   width: double.infinity,
 
-                              AppText(
-                                data: "Pickup Time: Ready in 6 mins",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              SizedBox(height: 24.h),
-                              InkWell(
-                                onTap: () {},
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10.w,
-                                      vertical: 6.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.green,
-                                      borderRadius: BorderRadius.circular(10.r),
-                                    ),
-                                    child: AppText(
-                                      data: "Order Completed",
-                                      fontSize: 12.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  //   child: Row(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     spacing: 10.w,
+                  //     children: [
+                  //       Container(
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10.r),
+                  //           border: Border.all(color: AppColors.yellow),
+                  //         ),
+                  //         child: AppImageCircular(
+                  //           borderRadius: 8.r,
+                  //           url:
+                  //               "https://i.pinimg.com/736x/f0/4e/90/f04e90b671eccbde302107dc0a447135.jpg",
+                  //           width: 99.w,
+                  //           height: 93.h,
+                  //         ),
+                  //       ),
+                  //       Expanded(
+                  //         child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           spacing: 4.h,
+                  //           children: [
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 AppText(
+                  //                   data: "Americano",
+                  //                   fontSize: 18.sp,
+                  //                   fontWeight: FontWeight.w600,
+                  //                 ),
+                  //                 AppText(
+                  //                   data: "45\$",
+                  //                   fontSize: 18.sp,
+                  //                   fontWeight: FontWeight.bold,
+                  //                   color: AppColors.black,
+                  //                 ),
+                  //               ],
+                  //             ),
 
+                  //             AppText(
+                  //               data: "Pickup Time: Ready in 6 mins",
+                  //               maxLines: 2,
+                  //               overflow: TextOverflow.ellipsis,
+                  //               fontSize: 12.sp,
+                  //               fontWeight: FontWeight.w400,
+                  //             ),
+                  //             SizedBox(height: 24.h),
+                  //             InkWell(
+                  //               onTap: () {},
+                  //               child: Align(
+                  //                 alignment: Alignment.centerRight,
+                  //                 child: Container(
+                  //                   padding: EdgeInsets.symmetric(
+                  //                     horizontal: 10.w,
+                  //                     vertical: 6.h,
+                  //                   ),
+                  //                   decoration: BoxDecoration(
+                  //                     color: AppColors.green,
+                  //                     borderRadius: BorderRadius.circular(10.r),
+                  //                   ),
+                  //                   child: AppText(
+                  //                     data: "Order Completed",
+                  //                     fontSize: 12.sp,
+                  //                     fontWeight: FontWeight.w400,
+                  //                     color: Colors.white,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(height: 16.h),
                   Obx(() {
                     if (controller.storeCategories.isEmpty) {
@@ -185,26 +209,7 @@ class ShopOrderInformationScreen extends StatelessWidget {
                           name: product.name ?? "",
                           readyTime: product.readyTime ?? 0,
                           price: "\$${product.basePrice}",
-                          // tags: [
-                          //   "Hot",
-                          //   "Cold",
-                          //   "Sweet",
-                          //   "Sour",
-                          //   "Bitter",
-                          //   "Salty",
-                          //   "Umami",
-                          //   "Spicy",
-                          //   "Bland",
-                          //   "Hot",
-                          //   "Cold",
-                          //   "Sweet",
-                          //   "Sour",
-                          //   "Bitter",
-                          //   "Salty",
-                          //   "Umami",
-                          //   "Spicy",
-                          //   "Bland",
-                          // ],
+
                           tags: product.dietaryLabels ?? [],
                           onTap: () {
                             Get.toNamed(AppRoutes.instance.productInfoScreen);

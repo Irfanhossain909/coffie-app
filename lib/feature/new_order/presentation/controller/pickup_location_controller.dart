@@ -2,18 +2,17 @@ import 'package:coffie/core/service/location_service/location_service.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
 import 'package:coffie/feature/new_order/domain/repository/new_order_repository.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PickupLocationWithGetShopController extends GetxController {
   /// repository here
   final NewOrderRepository _newOrderRepository = NewOrderRepository.instance;
   LocationService getLocation = LocationService.instance;
+  TextEditingController searchController = TextEditingController();
 
   /// Observable variables
   RxBool isLoading = false.obs;
-  RxString address = ''.obs;
-  RxString lat = ''.obs;
-  RxString lng = ''.obs;
   RxString error = ''.obs;
   RxList<StoreDataModel> stores = <StoreDataModel>[].obs;
   RxList<List<double>> storeLocationList = <List<double>>[].obs;
@@ -23,48 +22,36 @@ class PickupLocationWithGetShopController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getUserLocation();
+    // getUserLocation();
+    getStores();
   }
 
-  /// Get Location Method
-  Future<void> getUserLocation() async {
-    try {
-      error.value = '';
+  RxBool isSearchLoading = false.obs;
 
-      await LocationService.instance.requestLocationPermission();
+  void searchLocation() {
+    isSearchLoading.value = true;
 
-      // Get values from service
-      final service = LocationService.instance;
-
-      if (service.latitude != null && service.longitude != null) {
-        lat.value = service.latitude!;
-        lng.value = service.longitude!;
-        address.value = service.userAddress ?? '';
-        getStores(
-          latitude: double.parse(lat.value),
-          longitude: double.parse(lng.value),
-        );
-      } else {
-        error.value = "Location not available";
-      }
-    } catch (e) {
-      error.value = "Failed to get location";
+    if (selectedLatitude.value != 0.0 && selectedLongitude.value != 0.0) {
+      storeLocationList.clear();
+      stores.clear();
+      page = 1;
+      limit = 10;
+      getStores(
+        latitude: double.parse(selectedLatitude.value.toString()),
+        longitude: double.parse(selectedLongitude.value.toString()),
+      );
     }
+    isSearchLoading.value = false;
   }
 
-  Future<void> getStores({
-    required double latitude,
-    required double longitude,
-  }) async {
+  Future<void> getStores({double? latitude, double? longitude}) async {
     try {
       isLoading.value = true;
       error.value = '';
 
       final response = await _newOrderRepository.getStores(
-        // latitude: double.parse("40.7128"),
-        // longitude: double.parse("-74.006"),
-        // latitude: double.parse(lat.value),
-        // longitude: double.parse(lng.value),
+        latitude: latitude,
+        longitude: longitude,
         limit: limit,
         page: page,
       );
@@ -83,6 +70,121 @@ class PickupLocationWithGetShopController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  // =============================== LOCATION DATA START ===============================
+
+  var selectedPlaceId = ''.obs;
+  var selectedAddress = ''.obs;
+  RxDouble selectedLatitude = 0.0.obs;
+  RxDouble selectedLongitude = 0.0.obs;
+  var isCurrentLocation = false.obs;
+
+  ////////////////////////// LOCATION DATA ////////////////////////////////////////
+  Future<void> fetchUserLocation() async {
+    isLoading.value = true;
+    // Call location permission and fetch location
+    await getLocation.requestLocationPermission();
+
+    // Get location data from LocationService
+    final address = getLocation.userAddress;
+    final lat = getLocation.latitude;
+    final lng = getLocation.longitude;
+
+    // If location found successfully, set values
+    if (lat != null && lng != null && address != null) {
+      selectedLatitude.value = double.parse(lat);
+      selectedLongitude.value = double.parse(lng);
+      selectedAddress.value = address;
+      selectedPlaceId.value = 'current_location';
+      isCurrentLocation.value = true;
+
+      // Update search controller to show current location
+      searchController.text = address;
+
+      AppLogger.info(
+        "User location:\n"
+        "Address: $address\n"
+        "Latitude: $lat\n"
+        "Longitude: $lng",
+      );
+      AppLogger.info(
+        "Data lat  : ${selectedLatitude.value}\nData long  : ${selectedLongitude.value}\n",
+      );
+
+      isLoading.value = false;
+    } else {
+      // Handle case where location not found
+      isCurrentLocation.value = false;
+      isLoading.value = false;
+      AppLogger.error('Failed to fetch user location');
+    }
+    isLoading.value = false;
+  }
+
+  // Handle place selection from PlaceAutocompleteWidget
+  void onPlaceSelected(
+    String placeId,
+    String description, {
+    bool isCurrentLocation = false,
+    double? lat,
+    double? lng,
+  }) {
+    // Update all location data
+    selectedPlaceId.value = placeId;
+    selectedAddress.value = description;
+    this.isCurrentLocation.value = isCurrentLocation;
+
+    if (lat != null && lng != null) {
+      selectedLatitude.value = lat;
+      selectedLongitude.value = lng;
+
+      AppLogger.info(
+        "Selected place: $description\n"
+        "Place ID: $placeId\n"
+        "Latitude: $lat\n"
+        "Longitude: $lng\n"
+        "Is Current Location: $isCurrentLocation",
+      );
+    } else {
+      AppLogger.info(
+        "Selected place: $description\n"
+        "Place ID: $placeId\n"
+        "⚠️ Lat/Lng not available\n"
+        "Is Current Location: $isCurrentLocation",
+      );
+    }
+  }
+
+  // Check if current location data is available
+  bool get hasLocationData {
+    return selectedAddress.value.isNotEmpty &&
+        selectedLatitude.value != 0.0 &&
+        selectedLongitude.value != 0.0;
+  }
+
+  // Clear location data
+  void clearLocation() {
+    selectedPlaceId.value = '';
+    selectedAddress.value = '';
+    selectedLatitude.value = 0.0;
+    selectedLongitude.value = 0.0;
+    isCurrentLocation.value = false;
+  }
+
+  // Get location as Map
+  Map<String, dynamic> getLocationData() {
+    return {
+      'place_id': selectedPlaceId.value,
+      'address': selectedAddress.value,
+      'latitude': selectedLatitude.value,
+      'longitude': selectedLongitude.value,
+      'is_current_location': isCurrentLocation.value,
+    };
+  }
+
+  ////////////////////////// LOCATION DATA END ////////////////////////////////////////
+
+  // =============================== LOCATION DATA END ===============================
 
   //===============================//
 

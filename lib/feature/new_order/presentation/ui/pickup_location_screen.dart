@@ -1,4 +1,5 @@
-import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
+
+import 'package:coffie/core/component/app_location_field/places_suggation.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
@@ -26,24 +27,93 @@ class PickupLocationScreen extends StatelessWidget {
             child: Column(
               spacing: 16.h,
               children: [
-                AppInputWidgetTwo(
-                  hintText: "Search Location",
-                  prefix: Icon(
-                    Icons.search,
-                    size: 20.w,
-                    color: AppColors.black,
-                  ),
-                  borderColor: AppColors.yellow,
-                  suffixIcon: Container(
-                    margin: EdgeInsets.only(right: 8.w),
-                    padding: EdgeInsets.all(7.w),
-                    decoration: BoxDecoration(
-                      color: AppColors.blue,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(Icons.send, size: 18.w, color: Colors.white),
+                Obx(
+                  () => Row(
+                    children: [
+                      Expanded(
+                        child: PlaceAutocompleteWidget(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            size: 20.w,
+                            color: AppColors.black,
+                          ),
+
+                          controller: controller.searchController,
+                          hintText: 'Enter location',
+                          hintColor: AppColors.black,
+                          borderWidth: 0.9,
+                          borderRadius: 12,
+                          borderColor: AppColors.yellow,
+                          textColor: AppColors.black,
+                          showCurrentLocation: controller.hasLocationData,
+                          currentLocationAddress:
+                              controller.selectedAddress.value.isNotEmpty
+                              ? controller.selectedAddress.value
+                              : null,
+                          currentLocationLat:
+                              controller.selectedLatitude.value != 0.0
+                              ? controller.selectedLatitude.value
+                              : null,
+                          currentLocationLng:
+                              controller.selectedLongitude.value != 0.0
+                              ? controller.selectedLongitude.value
+                              : null,
+                          onPlaceSelected:
+                              (
+                                placeId,
+                                description, {
+                                isCurrentLocation = false,
+                                lat,
+                                lng,
+                              }) {
+                                controller.onPlaceSelected(
+                                  placeId,
+                                  description,
+                                  isCurrentLocation: isCurrentLocation,
+                                  lat: lat,
+                                  lng: lng,
+                                );
+                              },
+                        ),
+                      ),
+                      InkWell(
+                        onTap: controller.isLoading.value
+                            ? null
+                            : () {
+                                // controller.onLocationTap();
+                                controller.searchLocation();
+                              },
+                        borderRadius: BorderRadius.circular(8.r),
+                        child: Container(
+                          width: 46.w,
+                          height: 46.h,
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(left: 8.w),
+                          padding: EdgeInsets.all(8.r),
+                          decoration: BoxDecoration(
+                            color: AppColors.blue,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          child: controller.isLoading.value
+                              ? SizedBox(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.send,
+                                  size: 20.w,
+                                  color: Colors.white,
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 Obx(() {
                   if (controller.storeLocationList.isEmpty) {
                     return const SizedBox.shrink();
@@ -53,7 +123,9 @@ class PickupLocationScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: HomeMapPreview(
+                        isReload: controller.isSearchLoading.value,
                         merchantList: controller.storeLocationList,
+                        
                       ),
                     ),
                   );

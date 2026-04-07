@@ -1,4 +1,7 @@
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/utils/app_logger.dart';
+import 'package:coffie/feature/home/domain/model/last_order_model.dart';
+import 'package:coffie/feature/home/domain/repository/home_repository.dart';
 import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_product_model.dart';
@@ -8,6 +11,7 @@ import 'package:get/get.dart';
 class ShopOrderInformationController extends GetxController {
   /// repository here
   final NewOrderRepository _newOrderRepository = NewOrderRepository.instance;
+  final HomeRepository _homeRepository = HomeRepository.instance;
 
   /// Observable variables
   RxList<StoreCategoryDataModel> storeCategories =
@@ -16,14 +20,34 @@ class ShopOrderInformationController extends GetxController {
   RxBool isLoading = false.obs;
   StoreDataModel? store;
 
+  GetStorageServices getStorageServices = GetStorageServices.instance;
+  bool get isGuest => getStorageServices.getIsGuest();
+  Rxn<LastOrderModel> lastOrder = Rxn<LastOrderModel>();
+  RxBool isLastOrderLoading = false.obs;
+
   /// init state here
   @override
   void onInit() {
     super.onInit();
     final store = Get.arguments as StoreDataModel;
     this.store = store;
+    if (!isGuest) {
+      getLastOrder();
+    }
     getStoreCategories();
     getStoreProductById();
+  }
+
+  Future<void> getLastOrder() async {
+    try {
+      isLastOrderLoading.value = true;
+      final result = await _homeRepository.getLastOrder();
+      lastOrder.value = result;
+    } catch (e) {
+      AppLogger.error(e.toString());
+    } finally {
+      isLastOrderLoading.value = false;
+    }
   }
 
   /// get store categories here
@@ -69,7 +93,7 @@ class ShopOrderInformationController extends GetxController {
         .toList();
   }
 
-  final RxString itemCategory = "".obs;
+  final RxString itemCategory = "All".obs;
 
   void selectItemCategory(String category) {
     itemCategory.value = category;
