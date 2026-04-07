@@ -4,6 +4,7 @@ import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
 import 'package:coffie/feature/home/presentation/widget/gloss_shimmer.dart';
 import 'package:coffie/feature/home/presentation/widget/last_order_card.dart';
@@ -57,96 +58,6 @@ class ShopOrderInformationScreen extends StatelessWidget {
                     }),
                   ],
 
-                  // AppText(
-                  //   data: "Last Order",
-                  //   fontSize: 14.sp,
-                  //   fontWeight: FontWeight.w600,
-                  // ),
-                  // SizedBox(height: 8.h),
-                  // Container(
-                  //   padding: EdgeInsets.all(12.r),
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(8.r),
-                  //     border: Border.all(color: AppColors.yellow),
-                  //   ),
-                  //   width: double.infinity,
-
-                  //   child: Row(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     spacing: 10.w,
-                  //     children: [
-                  //       Container(
-                  //         decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(10.r),
-                  //           border: Border.all(color: AppColors.yellow),
-                  //         ),
-                  //         child: AppImageCircular(
-                  //           borderRadius: 8.r,
-                  //           url:
-                  //               "https://i.pinimg.com/736x/f0/4e/90/f04e90b671eccbde302107dc0a447135.jpg",
-                  //           width: 99.w,
-                  //           height: 93.h,
-                  //         ),
-                  //       ),
-                  //       Expanded(
-                  //         child: Column(
-                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                  //           spacing: 4.h,
-                  //           children: [
-                  //             Row(
-                  //               mainAxisAlignment:
-                  //                   MainAxisAlignment.spaceBetween,
-                  //               children: [
-                  //                 AppText(
-                  //                   data: "Americano",
-                  //                   fontSize: 18.sp,
-                  //                   fontWeight: FontWeight.w600,
-                  //                 ),
-                  //                 AppText(
-                  //                   data: "45\$",
-                  //                   fontSize: 18.sp,
-                  //                   fontWeight: FontWeight.bold,
-                  //                   color: AppColors.black,
-                  //                 ),
-                  //               ],
-                  //             ),
-
-                  //             AppText(
-                  //               data: "Pickup Time: Ready in 6 mins",
-                  //               maxLines: 2,
-                  //               overflow: TextOverflow.ellipsis,
-                  //               fontSize: 12.sp,
-                  //               fontWeight: FontWeight.w400,
-                  //             ),
-                  //             SizedBox(height: 24.h),
-                  //             InkWell(
-                  //               onTap: () {},
-                  //               child: Align(
-                  //                 alignment: Alignment.centerRight,
-                  //                 child: Container(
-                  //                   padding: EdgeInsets.symmetric(
-                  //                     horizontal: 10.w,
-                  //                     vertical: 6.h,
-                  //                   ),
-                  //                   decoration: BoxDecoration(
-                  //                     color: AppColors.green,
-                  //                     borderRadius: BorderRadius.circular(10.r),
-                  //                   ),
-                  //                   child: AppText(
-                  //                     data: "Order Completed",
-                  //                     fontSize: 12.sp,
-                  //                     fontWeight: FontWeight.w400,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SizedBox(height: 16.h),
                   Obx(() {
                     if (controller.storeCategories.isEmpty) {
@@ -212,7 +123,10 @@ class ShopOrderInformationScreen extends StatelessWidget {
 
                           tags: product.dietaryLabels ?? [],
                           onTap: () {
-                            Get.toNamed(AppRoutes.instance.productInfoScreen);
+                            Get.toNamed(
+                              AppRoutes.instance.productInfoScreen,
+                              arguments: product.id,
+                            );
                           },
                         );
                       },

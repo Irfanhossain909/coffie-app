@@ -29,12 +29,15 @@ class AppApiEndPoint {
   ////in app Url/////////////
   final String homeSlider = "/promotions";
   final String lastOrder = "/orders/last-order";
+
+  // Notification
+  final String notification = "/notifications";
+
   /// Store Orders
   final String stores = "/stores";
   final String storeCategories = "/categories";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
-  // static String stores(var latitude, var longitude) =>
-  //     "/stores/?latitude=$latitude&longitude=$longitude";
+  static String singleProduct(var productId) => "/products/$productId";
 
   // Gift card
   final String giftCardBalance = "/giftCards";

@@ -2,6 +2,7 @@ import 'package:coffie/core/service/api_service/api_services.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
+import 'package:coffie/feature/new_order/domain/model/single_product_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_product_model.dart';
 
@@ -89,5 +90,19 @@ class NewOrderRepository {
       AppLogger.error("Error in getStoreProductById: $e");
     }
     return storeProducts;
+  }
+
+  Future<SingleProductModel?> getSingleProduct(String productId) async {
+    try {
+      final response = await ApiServices.instance.apiGetServices(
+        AppApiEndPoint.singleProduct(productId),
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return SingleProductModel.fromJson(response);
+      }
+    } catch (e) {
+      AppLogger.error("Error in getSingleProduct: $e");
+    }
+    return null;
   }
 }

@@ -4,19 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class CategoryGridSelector extends StatelessWidget {
-  final String title; // 👈 add title
+class MultiCategoryGridSelector extends StatelessWidget {
+  final String title; // 👈 title add
   final List<String> items;
-  final RxString selectedItem;
-  final ValueChanged<String> onTap;
+  final RxList<String> selectedItems;
+  final ValueChanged<List<String>> onChanged;
 
-  const CategoryGridSelector({
+  const MultiCategoryGridSelector({
     super.key,
     required this.title,
     required this.items,
-    required this.selectedItem,
-    required this.onTap,
+    required this.selectedItems,
+    required this.onChanged,
   });
+
+  void _onItemTap(String item) {
+    if (selectedItems.contains(item)) {
+      selectedItems.remove(item);
+    } else {
+      selectedItems.add(item);
+    }
+    onChanged(selectedItems);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +56,10 @@ class CategoryGridSelector extends StatelessWidget {
             final item = items[index];
 
             return Obx(() {
-              final bool isSelected = selectedItem.value == item;
+              final bool isSelected = selectedItems.contains(item);
 
               return GestureDetector(
-                onTap: () => onTap(item),
+                onTap: () => _onItemTap(item),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(
