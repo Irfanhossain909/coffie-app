@@ -4,6 +4,7 @@ import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/entity/add_to_cart_entity.dart';
 import 'package:coffie/feature/new_order/domain/model/cart_item_model.dart'
     hide SelectedCustomization;
+import 'package:coffie/feature/new_order/domain/model/cart_summary_model.dart';
 import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
 import 'package:coffie/feature/new_order/domain/model/single_product_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
@@ -164,6 +165,48 @@ class NewOrderRepository {
       return false;
     } catch (e) {
       AppLogger.error("Error in updateItemQuantity: $e");
+    }
+
+    return false;
+  }
+
+  Future<CartSummaryModel?> getOrderSummary() async {
+    try {
+      final response = await apiServices.apiGetServices(
+        AppApiEndPoint.instance.orderSummary,
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return CartSummaryModel.fromJson(response);
+      }
+    } catch (e) {
+      AppLogger.error("Error in getOrderSummary: $e");
+    }
+
+    return null;
+  }
+
+  Future<bool> updateTipAndPoints({
+    double? tipAmount,
+    int? redeemLoyaltyPoints,
+  }) async {
+    try {
+      Map<String, dynamic> body = {};
+      if (tipAmount != null && tipAmount > 0) {
+        body["tipAmount"] = tipAmount;
+      }
+      if (redeemLoyaltyPoints != null && redeemLoyaltyPoints > 0) {
+        body["redeemLoyaltyPoints"] = redeemLoyaltyPoints;
+      }
+      final response = await apiServices.apiPatchServices(
+        url: AppApiEndPoint.instance.updatetipAndPoints,
+        body: body,
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in updateTipAndPoints: $e");
     }
 
     return false;

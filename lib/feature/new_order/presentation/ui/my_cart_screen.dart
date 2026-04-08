@@ -6,8 +6,11 @@ import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
+import 'package:coffie/feature/new_order/domain/model/cart_summary_model.dart';
 import 'package:coffie/feature/new_order/presentation/controller/my_cart_controller.dart';
 import 'package:coffie/feature/new_order/presentation/widget/product_cart_with_counter.dart.dart';
+import 'package:coffie/feature/new_order/presentation/widget/reward_point_input.dart';
+import 'package:coffie/feature/new_order/presentation/widget/support_baristas_widget.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -67,149 +70,54 @@ class MyCartScreen extends StatelessWidget {
                       },
                     );
                   }),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.yellow),
-                    ),
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AppText(
-                              data: "Support the Baristas",
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            SvgPicture.asset(AppAssets.editNote),
-                          ],
-                        ),
-                        SizedBox(height: 16.h),
-                        Row(
-                          spacing: 8.w,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 18.w,
-                                vertical: 4.h,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(color: AppColors.yellow),
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  data: "40%",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 18.w,
-                                vertical: 4.h,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(color: AppColors.yellow),
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  data: "60%",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 18.w,
-                                vertical: 4.h,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(color: AppColors.yellow),
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  data: "80%",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 18.w,
-                                vertical: 4.h,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.r),
-                                border: Border.all(color: AppColors.yellow),
-                              ),
-                              child: Center(
-                                child: AppText(
-                                  data: "100%",
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.yellow),
-                    ),
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AppText(
-                              data: "Rewards & Loyalty",
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            SvgPicture.asset(AppAssets.editNote),
-                          ],
-                        ),
-                        SizedBox(height: 16.h),
+                  Obx(() {
+                    return SupportBaristaWidget(
+                      defaultValues: [5, 10, 15, 20],
+                      totalAmount:
+                          controller.cartSummary.value?.data?.totalPrice ?? 0,
 
-                        AppInputWidgetTwo(
-                          borderColor: AppColors.yellow,
-                          prefix: SvgPicture.asset(AppAssets.rewardBox),
-                          suffixIcon: Padding(
-                            padding: EdgeInsets.only(right: 8.w),
-                            child: AppText(
-                              data: "100p",
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          hintText: "Reward Point ",
-                        ),
-                      ],
-                    ),
-                  ),
-                  SummaryCard(),
+                      /// optional
+                      initialAmount:
+                          controller.cartSummary.value?.data?.tipAmount
+                              ?.toDouble() ??
+                          0.0,
+                      onApply: (percent, amount) {
+                        controller.updateTipAndPoints(tipAmount: amount);
+                      },
+                    );
+                  }),
+
+                  Obx(() {
+                    return RewardPointWidget(
+                      pointGiven:
+                          (controller
+                                      .cartSummary
+                                      .value
+                                      ?.data
+                                      ?.redeemLoyaltyPoints ??
+                                  0)
+                              .toInt(),
+                      points:
+                          controller
+                              .rewardController
+                              .rewardPointModel
+                              .value
+                              ?.data
+                              ?.loyaltyPoints ??
+                          0,
+                      onApply: (value) {
+                        controller.updateTipAndPoints(
+                          redeemLoyaltyPoints: value,
+                        );
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return SummaryCard(
+                      cartSummary:
+                          controller.cartSummary.value ?? CartSummaryModel(),
+                    );
+                  }),
                   PaymentCard(),
                 ],
               ),
@@ -296,7 +204,8 @@ class PaymentCard extends StatelessWidget {
 }
 
 class SummaryCard extends StatelessWidget {
-  const SummaryCard({super.key});
+  final CartSummaryModel cartSummary;
+  const SummaryCard({super.key, required this.cartSummary});
 
   @override
   Widget build(BuildContext context) {
@@ -316,9 +225,18 @@ class SummaryCard extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
           SizedBox(height: 16.h),
-          _buildSummaryItem(title: "Total Product Price", value: "+\$10.99"),
-          _buildSummaryItem(title: "Tip", value: "+\$05.99"),
-          _buildSummaryItem(title: "Rewards & Loyalty", value: "-100p"),
+          _buildSummaryItem(
+            title: "Total Product Price",
+            value: "+\$${cartSummary.data?.totalPrice ?? 0}",
+          ),
+          _buildSummaryItem(
+            title: "Tip",
+            value: "+\$${cartSummary.data?.tipAmount ?? 0}",
+          ),
+          _buildSummaryItem(
+            title: "Rewards & Loyalty",
+            value: "-${cartSummary.data?.redeemLoyaltyPoints ?? 0}p",
+          ),
           Divider(color: AppColors.black),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -329,7 +247,7 @@ class SummaryCard extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
               AppText(
-                data: "\$5.99",
+                data: "\$${cartSummary.data?.totalPayableAmount ?? 0}",
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
               ),

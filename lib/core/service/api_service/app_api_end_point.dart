@@ -37,6 +37,8 @@ class AppApiEndPoint {
   final String stores = "/stores";
   final String addToCart = "/carts";
   final String updateItemQuantity = "/carts/update-quantity";
+  final String orderSummary = "/carts/addons-summary";
+  final String updatetipAndPoints = "/carts/addons";
   final String storeCategories = "/categories";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
   static String singleProduct(var productId) => "/products/$productId";
