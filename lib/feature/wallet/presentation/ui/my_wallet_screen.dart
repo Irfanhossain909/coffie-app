@@ -20,6 +20,100 @@ class MyWalletScreen extends StatelessWidget {
     return GetBuilder<MyWalletController>(
       // init: MyWalletController(),
       builder: (controller) {
+        Widget buildWalletHistoryTab({required String? type}) {
+          return Obx(() {
+            final isInitialLoading = controller.isLoadingWalletCardList.value &&
+                controller.walletCardList.isEmpty;
+
+            if (isInitialLoading) {
+              return ListView.builder(
+                padding: EdgeInsets.all(16.r),
+                itemCount: 6,
+                itemBuilder: (_, __) => const LoyaltyCardShimmer(),
+              );
+            }
+
+            if (controller.walletCardList.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.reloadWalletCardList(type: type);
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 140.h),
+                    Center(
+                      child: AppText(
+                        data: "No data found",
+                        fontSize: 16.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.reloadWalletCardList(type: type);
+              },
+              child: ListView.builder(
+                controller: controller.scrollController,
+                padding: EdgeInsets.all(6.r),
+                itemCount: controller.walletCardList.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= controller.walletCardList.length) {
+                    if (controller.isLoadingMoreWalletCardList.value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (!controller.hasMoreWalletCardList.value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: AppText(
+                            data: "End",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox(height: 16.h);
+                  }
+
+                  final data = controller.walletCardList[index];
+                  return WalletCard(
+                    type: data.type,
+                    name: data.title,
+                    date: formatDate(data.createdAt),
+                    status: data.status,
+                    price: data.amount.toString(),
+                    onTap: () {
+                      Get.toNamed(
+                        AppRoutes.instance.walletHistoryScreen,
+                        arguments: data.id,
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          });
+        }
+
         return Scaffold(
           appBar: CustomAppbar(text: "My Wallet"),
           body: Padding(
@@ -105,143 +199,11 @@ class MyWalletScreen extends StatelessWidget {
                     controller: controller.tabController,
                     children: [
                       // All
-                      Obx(() {
-                        if (controller.isLoadingWalletCardList.value) {
-                          return ListView.builder(
-                            padding: EdgeInsets.all(16.r),
-                            itemCount: 6,
-                            itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                          );
-                        }
-
-                        if (controller.walletCardList.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              color: Colors.grey,
-                            ),
-                          );
-                        }
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            await controller.getWalletCardList();
-                          },
-                          child: ListView.builder(
-                            padding: EdgeInsets.all(6.r),
-                            itemCount: controller.walletCardList.length,
-
-                            itemBuilder: (context, index) {
-                              final data = controller.walletCardList[index];
-                              return WalletCard(
-                                type: data.type,
-                                name: data.title,
-                                date: formatDate(data.createdAt),
-                                status: data.status,
-                                price: data.amount.toString(),
-                                onTap: () {
-                                  Get.toNamed(
-                                    AppRoutes.instance.walletHistoryScreen,
-                                    arguments: data.id,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      }),
+                      buildWalletHistoryTab(type: null),
                       // Add Money
-                      Obx(() {
-                        if (controller.isLoadingWalletCardList.value) {
-                          return ListView.builder(
-                            padding: EdgeInsets.all(16.r),
-                            itemCount: 6,
-                            itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                          );
-                        }
-
-                        if (controller.walletCardList.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              color: Colors.grey,
-                            ),
-                          );
-                        }
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            await controller.getWalletCardList(type: "deposit");
-                          },
-                          child: ListView.builder(
-                            padding: EdgeInsets.all(6.r),
-                            itemCount: controller.walletCardList.length,
-
-                            itemBuilder: (context, index) {
-                              final data = controller.walletCardList[index];
-                              return WalletCard(
-                                type: data.type,
-                                name: data.title,
-                                date: formatDate(data.createdAt),
-                                status: data.status,
-                                price: data.amount.toString(),
-                                onTap: () {
-                                  Get.toNamed(
-                                    AppRoutes.instance.walletHistoryScreen,
-                                    arguments: data.id,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      }),
+                      buildWalletHistoryTab(type: "deposit"),
                       // Spend
-                      Obx(() {
-                        if (controller.isLoadingWalletCardList.value) {
-                          return ListView.builder(
-                            padding: EdgeInsets.all(16.r),
-                            itemCount: 6,
-                            itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                          );
-                        }
-
-                        if (controller.walletCardList.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              color: Colors.grey,
-                            ),
-                          );
-                        }
-                        return RefreshIndicator(
-                          onRefresh: () async {
-                            await controller.getWalletCardList(type: "spend");
-                          },
-                          child: ListView.builder(
-                            padding: EdgeInsets.all(6.r),
-                            itemCount: controller.walletCardList.length,
-
-                            itemBuilder: (context, index) {
-                              final data = controller.walletCardList[index];
-                              return WalletCard(
-                                type: data.type,
-                                name: data.title,
-                                date: formatDate(data.createdAt),
-                                status: data.status,
-                                price: data.amount.toString(),
-                                onTap: () {
-                                  Get.toNamed(
-                                    AppRoutes.instance.walletHistoryScreen,
-                                    arguments: data.id,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        );
-                      }),
+                      buildWalletHistoryTab(type: "spend"),
                     ],
                   ),
                 ),
