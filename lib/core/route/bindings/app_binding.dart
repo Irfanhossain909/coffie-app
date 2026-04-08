@@ -4,6 +4,7 @@ import 'package:coffie/feature/gift_card/presentation/controller/add_exising_car
 import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
 import 'package:coffie/feature/gift_card/presentation/controller/perchese_gift_card_controller.dart';
 import 'package:coffie/feature/home/presentation/controller/home_controller.dart';
+import 'package:coffie/feature/new_order/presentation/controller/my_cart_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/product_info_controller.dart';
 import 'package:coffie/feature/new_order/presentation/controller/shop_order_information_controller.dart';
@@ -48,6 +49,7 @@ class AppBinding extends Bindings {
     Get.lazyPut(() => WalletAddController());
     Get.lazyPut(() => ProductInfoController());
     Get.lazyPut(() => NotificationController());
+    Get.lazyPut(() => MyCartController());
 
     // --------------------- Guest ---------------------
     Get.lazyPut(() => GeustProfileController());

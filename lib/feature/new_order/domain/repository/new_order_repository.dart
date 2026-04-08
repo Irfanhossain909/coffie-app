@@ -2,6 +2,8 @@ import 'package:coffie/core/service/api_service/api_services.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/entity/add_to_cart_entity.dart';
+import 'package:coffie/feature/new_order/domain/model/cart_item_model.dart'
+    hide SelectedCustomization;
 import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
 import 'package:coffie/feature/new_order/domain/model/single_product_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
@@ -118,8 +120,7 @@ class NewOrderRepository {
         body: {
           "product": product,
           "quantity": quantity,
-          "selectedCustomizations":
-              addToCart.map((e) => e.toJson()).toList(),
+          "selectedCustomizations": addToCart.map((e) => e.toJson()).toList(),
         },
       );
       if (response != null && response is Map<String, dynamic>) {
@@ -128,6 +129,41 @@ class NewOrderRepository {
       return false;
     } catch (e) {
       AppLogger.error("Error in addToCart: $e");
+    }
+
+    return false;
+  }
+
+  Future<CartItemModel?> getCart() async {
+    try {
+      final response = await apiServices.apiGetServices(
+        AppApiEndPoint.instance.addToCart,
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return CartItemModel.fromJson(response);
+      }
+    } catch (e) {
+      AppLogger.error("Error in getCart: $e");
+    }
+
+    return null;
+  }
+
+  Future<bool> updateItemQuantity({
+    required String itemId,
+    required int quantity,
+  }) async {
+    try {
+      final response = await apiServices.apiPatchServices(
+        url: AppApiEndPoint.instance.updateItemQuantity,
+        body: {"itemId": itemId, "quantity": quantity},
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in updateItemQuantity: $e");
     }
 
     return false;

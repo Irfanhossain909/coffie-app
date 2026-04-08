@@ -1,12 +1,13 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
-import 'package:coffie/core/component/app_image/app_image_circular.dart';
 import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/feature/new_order/presentation/controller/pickup_location_controller.dart';
-import 'package:coffie/feature/new_order/presentation/controller/product_info_controller.dart';
+import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/utils/app_logger.dart';
+import 'package:coffie/feature/new_order/presentation/controller/my_cart_controller.dart';
+import 'package:coffie/feature/new_order/presentation/widget/product_cart_with_counter.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,7 +18,8 @@ class MyCartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProductInfoController>(
+    return GetBuilder<MyCartController>(
+      init: MyCartController(),
       builder: (controller) {
         return Scaffold(
           appBar: CustomAppbar(text: "My Cart"),
@@ -27,155 +29,44 @@ class MyCartScreen extends StatelessWidget {
               child: Column(
                 spacing: 18.h,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(12.r),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: AppColors.yellow),
-                    ),
-                    width: double.infinity,
-
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10.w,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            border: Border.all(color: AppColors.yellow),
-                          ),
-                          child: AppImageCircular(
-                            borderRadius: 8.r,
-                            url:
-                                "https://i.pinimg.com/736x/f0/4e/90/f04e90b671eccbde302107dc0a447135.jpg",
-                            width: 99.w,
-                            height: 93.h,
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 4.h,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  AppText(
-                                    data: "Americano",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  AppText(
-                                    data: "45\$",
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.black,
-                                  ),
-                                ],
-                              ),
-
-                              AppText(
-                                data: "Default Customization",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-
-                              AppText(
-                                data: "Pickup Time: Ready in 6 mins",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              SizedBox(height: 4.h),
-                              Obx(() {
-                                final bool isEnabled =
-                                    controller.numberOfSyrupPumps.value > 0;
-                                final bool maxEnabled =
-                                    controller.numberOfSyrupPumps.value < 10;
-                                return Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                    width: 88.w,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w,
-                                      vertical: 4.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                      color: Colors
-                                          .white, // shadow visible korar jonno background thaka better
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withValues(
-                                            alpha: 0.08,
-                                          ), // light shadow
-                                          blurRadius: 8.r,
-                                          spreadRadius: 1.r,
-                                          offset: Offset(
-                                            0,
-                                            2,
-                                          ), // soft bottom depth
-                                        ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        isEnabled
-                                            ? InkWell(
-                                                onTap: controller
-                                                    .decrementNumberOfSyrupPumps,
-                                                child: Icon(
-                                                  Icons.remove_rounded,
-                                                  size: 14.w,
-                                                  color: AppColors.black,
-                                                ),
-                                              )
-                                            : Icon(
-                                                Icons.remove_rounded,
-                                                size: 14.w,
-                                                color: AppColors.black
-                                                    .withValues(alpha: 0.5),
-                                              ),
-                                        AppText(
-                                          data: controller.numberOfSyrupPumps
-                                              .toString(),
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        maxEnabled
-                                            ? InkWell(
-                                                onTap: controller
-                                                    .incrementNumberOfSyrupPumps,
-                                                child: Icon(
-                                                  Icons.add_rounded,
-                                                  size: 14.w,
-                                                  color: AppColors.black,
-                                                ),
-                                              )
-                                            : Icon(
-                                                Icons.add_rounded,
-                                                size: 14.w,
-                                                color: AppColors.black
-                                                    .withValues(alpha: 0.5),
-                                              ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
+                  Obx(() {
+                    return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount:
+                          controller.cartItem.value?.data?.items?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final item =
+                            controller.cartItem.value?.data?.items?[index];
+                        return ProductCardWithCounter(
+                          id: item?.product?.id ?? "",
+                          name: item?.productName ?? "",
+                          description: "Default Customization",
+                          readyTime:
+                              "Ready in ${item?.product?.readyTime} mins",
+                          price: item?.unitFinalPrice ?? 0,
+                          imageUrl:
+                              "${AppApiEndPoint.domain}${item?.product?.image}",
+                          initialQuantity: item?.quantity ?? 0,
+                          onIncrement: (id, qty) {
+                            controller.updateItemQuantity(
+                              itemId: item?.id ?? "",
+                              quantity: qty,
+                            );
+                          },
+                          onDecrement: (id, qty) {
+                            controller.updateItemQuantity(
+                              itemId: item?.id ?? "",
+                              quantity: qty,
+                            );
+                          },
+                          onZero: (id) {
+                            AppLogger.info("Item quantity is zero for $id");
+                          },
+                        );
+                      },
+                    );
+                  }),
                   Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
