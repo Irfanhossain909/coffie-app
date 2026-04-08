@@ -5,16 +5,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CategoryGridSelector extends StatelessWidget {
-  final String title; // 👈 add title
+  final String title;
   final List<String> items;
-  final RxString selectedItem;
+  /// Parallel to [items]; selection state uses these ids.
+  final List<String> itemIds;
+  final RxString selectedItemId;
   final ValueChanged<String> onTap;
 
   const CategoryGridSelector({
     super.key,
     required this.title,
     required this.items,
-    required this.selectedItem,
+    required this.itemIds,
+    required this.selectedItemId,
     required this.onTap,
   });
 
@@ -44,13 +47,14 @@ class CategoryGridSelector extends StatelessWidget {
             childAspectRatio: 3.5,
           ),
           itemBuilder: (context, index) {
-            final item = items[index];
+            final label = items[index];
+            final id = itemIds[index];
 
             return Obx(() {
-              final bool isSelected = selectedItem.value == item;
+              final bool isSelected = selectedItemId.value == id;
 
               return GestureDetector(
-                onTap: () => onTap(item),
+                onTap: () => onTap(id),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(
@@ -69,7 +73,7 @@ class CategoryGridSelector extends StatelessWidget {
                         : Colors.transparent,
                   ),
                   child: Text(
-                    item,
+                    label,
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,

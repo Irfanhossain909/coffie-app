@@ -5,26 +5,29 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class MultiCategoryGridSelector extends StatelessWidget {
-  final String title; // 👈 title add
+  final String title;
   final List<String> items;
-  final RxList<String> selectedItems;
+  /// Parallel to [items]; selection state uses these ids.
+  final List<String> itemIds;
+  final RxList<String> selectedItemIds;
   final ValueChanged<List<String>> onChanged;
 
   const MultiCategoryGridSelector({
     super.key,
     required this.title,
     required this.items,
-    required this.selectedItems,
+    required this.itemIds,
+    required this.selectedItemIds,
     required this.onChanged,
   });
 
-  void _onItemTap(String item) {
-    if (selectedItems.contains(item)) {
-      selectedItems.remove(item);
+  void _onItemTap(String optionId) {
+    if (selectedItemIds.contains(optionId)) {
+      selectedItemIds.remove(optionId);
     } else {
-      selectedItems.add(item);
+      selectedItemIds.add(optionId);
     }
-    onChanged(selectedItems);
+    onChanged(List<String>.from(selectedItemIds));
   }
 
   @override
@@ -53,13 +56,14 @@ class MultiCategoryGridSelector extends StatelessWidget {
             childAspectRatio: 3.5,
           ),
           itemBuilder: (context, index) {
-            final item = items[index];
+            final label = items[index];
+            final id = itemIds[index];
 
             return Obx(() {
-              final bool isSelected = selectedItems.contains(item);
+              final bool isSelected = selectedItemIds.contains(id);
 
               return GestureDetector(
-                onTap: () => _onItemTap(item),
+                onTap: () => _onItemTap(id),
                 child: Container(
                   alignment: Alignment.center,
                   padding: EdgeInsets.symmetric(
@@ -78,7 +82,7 @@ class MultiCategoryGridSelector extends StatelessWidget {
                         : Colors.transparent,
                   ),
                   child: Text(
-                    item,
+                    label,
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,

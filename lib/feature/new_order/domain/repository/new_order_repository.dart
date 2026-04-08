@@ -1,6 +1,7 @@
 import 'package:coffie/core/service/api_service/api_services.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
+import 'package:coffie/feature/new_order/domain/entity/add_to_cart_entity.dart';
 import 'package:coffie/feature/new_order/domain/model/shop_categoty_model.dart';
 import 'package:coffie/feature/new_order/domain/model/single_product_model.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
@@ -104,5 +105,31 @@ class NewOrderRepository {
       AppLogger.error("Error in getSingleProduct: $e");
     }
     return null;
+  }
+
+  Future<bool> addToCart({
+    required String product,
+    required int quantity,
+    required List<SelectedCustomization> addToCart,
+  }) async {
+    try {
+      final response = await apiServices.apiPostServices(
+        url: AppApiEndPoint.instance.addToCart,
+        body: {
+          "product": product,
+          "quantity": quantity,
+          "selectedCustomizations":
+              addToCart.map((e) => e.toJson()).toList(),
+        },
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in addToCart: $e");
+    }
+
+    return false;
   }
 }

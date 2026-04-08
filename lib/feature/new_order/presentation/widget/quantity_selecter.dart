@@ -11,6 +11,8 @@ class QuantitySelector extends StatelessWidget {
   final int min;
   final int max;
   final ValueChanged<int>? onChanged;
+  /// When false, only the bordered counter row is shown (e.g. multiple options under one heading).
+  final bool showTitle;
 
   const QuantitySelector({
     super.key,
@@ -20,6 +22,7 @@ class QuantitySelector extends StatelessWidget {
     this.min = 0,
     this.max = 10,
     this.onChanged,
+    this.showTitle = true,
   });
 
   void _increment() {
@@ -41,14 +44,14 @@ class QuantitySelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// 🔹 Title
-        AppText(
-          data: title,
-          fontSize: 18.sp,
-          fontWeight: FontWeight.w600,
-        ),
-
-        SizedBox(height: 8.h),
+        if (showTitle) ...[
+          AppText(
+            data: title,
+            fontSize: 18.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          SizedBox(height: 8.h),
+        ],
 
         /// 🔹 Container
         Container(

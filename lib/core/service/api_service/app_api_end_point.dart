@@ -35,6 +35,7 @@ class AppApiEndPoint {
 
   /// Store Orders
   final String stores = "/stores";
+  final String addToCart = "/carts";
   final String storeCategories = "/categories";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
   static String singleProduct(var productId) => "/products/$productId";

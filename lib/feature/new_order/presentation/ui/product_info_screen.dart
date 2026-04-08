@@ -5,8 +5,10 @@ import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/presentation/controller/product_info_controller.dart';
 import 'package:coffie/feature/new_order/presentation/widget/category_gride_selector.dart';
+import 'package:coffie/feature/new_order/presentation/widget/multi_category_grid_selector.dart';
 import 'package:coffie/feature/new_order/presentation/widget/quantity_selecter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +16,17 @@ import 'package:get/get.dart';
 
 class ProductInfoScreen extends StatelessWidget {
   const ProductInfoScreen({super.key});
+
+  static String _formatMoney(double value) {
+    if (value.isNaN || value.isInfinite) {
+      return '0';
+    }
+    final rounded = double.parse(value.toStringAsFixed(2));
+    if (rounded == rounded.roundToDouble()) {
+      return rounded.toInt().toString();
+    }
+    return rounded.toStringAsFixed(2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +78,7 @@ class ProductInfoScreen extends StatelessWidget {
                         ),
                         AppText(
                           data:
-                              "${controller.singleProduct.value?.data?.basePrice ?? 0}\$",
+                              "${ProductInfoScreen._formatMoney(controller.displayTotalPrice)}\$",
                           fontSize: 24.sp,
                           fontWeight: FontWeight.w700,
                         ),
@@ -108,57 +121,116 @@ class ProductInfoScreen extends StatelessWidget {
 
                         if (customization == null) return const SizedBox();
 
-                        switch (customization.type) {
+                        final customizationKey =
+                            customization.id ?? 'customization_$index';
+                        final type =
+                            (customization.type ?? '').toLowerCase().trim();
+
+                        switch (type) {
                           case "single":
+                            final options = customization.options ?? [];
+                            final labels = options
+                                .map((e) => e.label ?? '')
+                                .toList();
+                            final optionIds = options
+                                .map((e) => e.id ?? '')
+                                .toList();
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CategoryGridSelector(
                                   title: "Select ${customization.name}",
-                                  items: List<String>.from(
-                                    customization.options
-                                            ?.map((e) => e.label ?? '')
-                                            .toList() ??
-                                        [],
-                                  ),
-                                  selectedItem: controller.itemCategory,
-                                  onTap: controller.selectItemCategory,
+                                  items: labels,
+                                  itemIds: optionIds,
+                                  selectedItemId: controller
+                                      .singleSelectedOptionIdFor(
+                                        customizationKey,
+                                      ),
+                                  onTap: (optionId) =>
+                                      controller.selectSingleOption(
+                                        customizationKey,
+                                        optionId,
+                                      ),
                                 ),
                                 SizedBox(height: 12.h),
                               ],
                             );
 
-                          // case "multi":
-                          //   return Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       MultiCategoryGridSelector(
-                          //         title: customization.title ?? '',
-                          //         items: List<String>.from(
-                          //           customization.items ?? [],
-                          //         ),
-                          //         selectedItems: controller.selectedCategories,
-                          //         onChanged: (list) {
-                          //           controller.selectedCategories.value = list;
-                          //         },
-                          //       ),
-                          //       SizedBox(height: 12.h),
-                          //     ],
-                          //   );
-
-                          case "quantity":
+                          case "multi":
+                            final options = customization.options ?? [];
+                            final labels = options
+                                .map((e) => e.label ?? '')
+                                .toList();
+                            final optionIds = options
+                                .map((e) => e.id ?? '')
+                                .toList();
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                QuantitySelector(
+                                MultiCategoryGridSelector(
                                   title: "Select ${customization.name}",
-                                  message: "Number of Syrup Pumps",
-                                  quantity: controller.syrupPumps,
-                                  max: 10,
-                                  onChanged: (value) {
-                                    controller.syrupPumps.value = value;
+                                  items: labels,
+                                  itemIds: optionIds,
+                                  selectedItemIds: controller
+                                      .multiSelectedOptionIdsFor(
+                                        customizationKey,
+                                      ),
+                                  onChanged: (ids) {
+                                    AppLogger.info(
+                                      "Selected multi optionIds ($customizationKey): $ids",
+                                    );
                                   },
                                 ),
+                                SizedBox(height: 12.h),
+                              ],
+                            );
+
+                          case "quantity":
+                            final qOpts = customization.options ?? [];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppText(
+                                  data: customization.name ?? 'Quantity',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                SizedBox(height: 8.h),
+                                ...qOpts.expand((opt) {
+                                  final oid = opt.id?.trim() ?? '';
+                                  if (oid.isEmpty) {
+                                    return <Widget>[];
+                                  }
+                                  final price = opt.price;
+                                  final priceSuffix = price != null
+                                      ? '  +\$${price % 1 == 0 ? price.toInt().toString() : price.toStringAsFixed(2)}'
+                                      : '';
+                                  return [
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 8.h),
+                                      child: QuantitySelector(
+                                        showTitle: false,
+                                        title: '',
+                                        message:
+                                            '${opt.label ?? ''}$priceSuffix',
+                                        quantity:
+                                            controller.quantityForOption(
+                                              customizationKey,
+                                              oid,
+                                            ),
+                                        max: 10,
+                                        onChanged: (value) {
+                                          controller
+                                              .quantityForOption(
+                                                customizationKey,
+                                                oid,
+                                              )
+                                              .value = value;
+                                        },
+                                      ),
+                                    ),
+                                  ];
+                                }),
                                 SizedBox(height: 12.h),
                               ],
                             );
@@ -207,22 +279,25 @@ class ProductInfoScreen extends StatelessWidget {
                 spacing: 16.w,
                 children: [
                   Expanded(
-                    child: Container(
-                      height: 50.h,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 14.h,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.r),
-                        border: Border.all(color: AppColors.yellow),
-                      ),
-                      child: Center(
-                        child: AppText(
-                          data: "Add To Cart",
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.black,
+                    child: InkWell(
+                      onTap: () => controller.addToCartFromSelections(),
+                      child: Container(
+                        height: 50.h,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 14.h,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(color: AppColors.yellow),
+                        ),
+                        child: Center(
+                          child: AppText(
+                            data: "Add To Cart",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.black,
+                          ),
                         ),
                       ),
                     ),
