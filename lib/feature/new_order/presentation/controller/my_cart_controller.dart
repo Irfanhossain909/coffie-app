@@ -1,6 +1,5 @@
 import 'package:coffie/core/component/app_webview/stripe_web_view_page.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
 import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
@@ -28,6 +27,8 @@ class MyCartController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPaymentProcessing = false.obs;
   String paymentMethod = "";
+
+  List<Item> get cartListItem => cartItem.value?.data?.items ?? const [];
 
   /// init state here
   @override
@@ -192,7 +193,7 @@ class MyCartController extends GetxController {
     try {
       final response = await _newOrderRepository.deleteCart();
       if (response) {
-        AppSnackBar.success("Cart deleted successfully");
+        AppSnackBar.success("Cart Cleared");
         cartItem.value = null;
         cartSummary.value = null;
         cartItem.refresh();

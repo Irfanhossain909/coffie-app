@@ -26,49 +26,63 @@ class MyCartScreen extends StatelessWidget {
           appBar: CustomAppbar(
             text: "My Cart",
             action: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.remove_shopping_cart_outlined,
-                  color: AppColors.red.withValues(alpha: 0.6),
-                ),
-              ),
+              Obx(() {
+                final isEmpty = controller.cartListItem.isEmpty;
+                if (isEmpty) return const SizedBox.shrink();
+                return IconButton(
+                  onPressed: () {
+                    controller.deleteCart();
+                  },
+                  icon: Icon(
+                    Icons.remove_shopping_cart_outlined,
+                    color: AppColors.red.withValues(alpha: 0.6),
+                  ),
+                );
+              }),
             ],
           ),
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: SingleChildScrollView(
-              child: Column(
-                spacing: 18.h,
-                children: [
-                  Obx(() {
-                    return ListView.builder(
+          body: Obx(() {
+            final isEmpty = controller.cartListItem.isEmpty;
+            if (isEmpty) {
+              return Center(
+                child: AppText(
+                  data: "Cart is empty",
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              );
+            }
+
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: 18.h,
+                  children: [
+                    ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:
-                          controller.cartItem.value?.data?.items?.length ?? 0,
+                      itemCount: controller.cartListItem.length,
                       itemBuilder: (context, index) {
-                        final item =
-                            controller.cartItem.value?.data?.items?[index];
+                        final item = controller.cartListItem[index];
                         return ProductCardWithCounter(
-                          id: item?.product?.id ?? "",
-                          name: item?.productName ?? "",
+                          id: item.product?.id ?? "",
+                          name: item.productName ?? "",
                           description: "Default Customization",
-                          readyTime:
-                              "Ready in ${item?.product?.readyTime} mins",
-                          price: item?.unitFinalPrice ?? 0,
+                          readyTime: "Ready in ${item.product?.readyTime} mins",
+                          price: item.unitFinalPrice ?? 0,
                           imageUrl:
-                              "${AppApiEndPoint.domain}${item?.product?.image}",
-                          initialQuantity: item?.quantity ?? 0,
+                              "${AppApiEndPoint.domain}${item.product?.image}",
+                          initialQuantity: item.quantity ?? 0,
                           onIncrement: (id, qty) {
                             controller.updateItemQuantity(
-                              itemId: item?.id ?? "",
+                              itemId: item.id ?? "",
                               quantity: qty,
                             );
                           },
                           onDecrement: (id, qty) {
                             controller.updateItemQuantity(
-                              itemId: item?.id ?? "",
+                              itemId: item.id ?? "",
                               quantity: qty,
                             );
                           },
@@ -77,10 +91,8 @@ class MyCartScreen extends StatelessWidget {
                           },
                         );
                       },
-                    );
-                  }),
-                  Obx(() {
-                    return SupportBaristaWidget(
+                    ),
+                    SupportBaristaWidget(
                       defaultValues: [5, 10, 15, 20],
                       totalAmount:
                           controller.cartSummary.value?.data?.totalPrice ?? 0,
@@ -88,34 +100,28 @@ class MyCartScreen extends StatelessWidget {
                       /// optional
                       initialAmount:
                           controller.cartSummary.value?.data?.tipAmount
-                              ?.toDouble() ??
-                          0.0,
+                                  ?.toDouble() ??
+                              0.0,
                       onApply: (percent, amount) {
                         controller.updateTipAndPoints(tipAmount: amount);
                       },
-                    );
-                  }),
-
-                  Obx(() {
-                    return RewardPointWidget(
-                      minimumPoint:
-                          controller
+                    ),
+                    RewardPointWidget(
+                      minimumPoint: controller
                               .cartSummary
                               .value
                               ?.data
                               ?.minimumLoyaltyPointsNeededToUse
                               ?.toInt() ??
                           0,
-                      pointGiven:
-                          (controller
-                                      .cartSummary
-                                      .value
-                                      ?.data
-                                      ?.redeemLoyaltyPoints ??
-                                  0)
-                              .toInt(),
-                      points:
-                          controller
+                      pointGiven: (controller
+                                  .cartSummary
+                                  .value
+                                  ?.data
+                                  ?.redeemLoyaltyPoints ??
+                              0)
+                          .toInt(),
+                      points: controller
                               .rewardController
                               .rewardPointModel
                               .value
@@ -127,26 +133,20 @@ class MyCartScreen extends StatelessWidget {
                           redeemLoyaltyPoints: value,
                         );
                       },
-                    );
-                  }),
-                  Obx(() {
-                    return SummaryCard(
+                    ),
+                    SummaryCard(
                       cartSummary:
                           controller.cartSummary.value ?? CartSummaryModel(),
-                    );
-                  }),
-                  Obx(() {
-                    return PaymentCard(
-                      walletAmount:
-                          controller
+                    ),
+                    PaymentCard(
+                      walletAmount: controller
                               .walletController
                               .walletBalanceModel
                               .value
                               ?.data
                               ?.balance ??
                           0,
-                      giftCardAmount:
-                          controller
+                      giftCardAmount: controller
                               .giftCardController
                               .giftCardBalanceModel
                               .value
@@ -154,8 +154,7 @@ class MyCartScreen extends StatelessWidget {
                               ?.totalBalance
                               ?.toDouble() ??
                           0,
-                      totalPrice:
-                          controller
+                      totalPrice: controller
                               .cartSummary
                               .value
                               ?.data
@@ -165,21 +164,23 @@ class MyCartScreen extends StatelessWidget {
                         // wallet / gift_card / stripe
                         controller.paymentMethod = value;
                       },
-                    );
-                  }),
-                ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          bottomNavigationBar: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-              child: Obx(() {
-                return AppButton(
+            );
+          }),
+          bottomNavigationBar: Obx(() {
+            final isEmpty = controller.cartListItem.isEmpty;
+            if (isEmpty) return const SizedBox.shrink();
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                child: AppButton(
                   isLoading: controller.isPaymentProcessing.value,
                   onTap: () {
                     controller.placeOrder(
-                      paymentMethod: controller.paymentMethod ?? "",
+                      paymentMethod: controller.paymentMethod,
                       tipAmount: controller.cartSummary.value?.data?.tipAmount,
                       loyaltyPointsToUse: controller
                           .cartSummary
@@ -190,10 +191,10 @@ class MyCartScreen extends StatelessWidget {
                     );
                   },
                   title: "Place Order",
-                );
-              }),
-            ),
-          ),
+                ),
+              ),
+            );
+          }),
         );
       },
     );

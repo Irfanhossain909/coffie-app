@@ -197,53 +197,56 @@ class OrderCard extends StatelessWidget {
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                 ),
-                AppText(
-                  data: r"May 15, 2023 $4.50",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AppText(
+                      data: r"May 15, 2023 $4.50",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    AppText(
+                      data: data.orderStatus ?? "",
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.black,
+                    ),
+                  ],
                 ),
-                AppText(
-                  data: "\$${data.orderTotal} ",
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AppText(
+                      data: "\$${data.orderTotal} ",
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    InkWell(
+                      onTap: onTap,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 6.h,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.yellow),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: AppText(
+                          data: "View Details",
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
+
           // Spacer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            spacing: 4.h,
-            children: [
-              Icon(Icons.favorite_border, size: 22.sp, color: AppColors.yellow),
-              AppText(
-                data: data.orderStatus ?? "",
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-                color: AppColors.black,
-              ),
-              SizedBox(height: 18.h),
-              InkWell(
-                onTap: onTap,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 6.h,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.yellow),
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
-                  child: AppText(
-                    data: "View Details",
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ],
       ),
     );
