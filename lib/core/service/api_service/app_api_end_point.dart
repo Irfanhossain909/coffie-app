@@ -40,6 +40,8 @@ class AppApiEndPoint {
   final String orderSummary = "/carts/addons-summary";
   final String updatetipAndPoints = "/carts/addons";
   final String storeCategories = "/categories";
+  final String placeOrder = "/orders";
+  final String deleteCart = "/carts/clear";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
   static String singleProduct(var productId) => "/products/$productId";
   

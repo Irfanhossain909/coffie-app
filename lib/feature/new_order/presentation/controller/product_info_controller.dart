@@ -25,6 +25,7 @@ class ProductInfoController extends GetxController {
   RxList<SelectedCustomization> addToCartitemList =
       <SelectedCustomization>[].obs;
   RxBool isLoading = false.obs;
+  RxBool isAddToCartLoading = false.obs;
   String? productId;
 
   /// init state here
@@ -145,18 +146,17 @@ class ProductInfoController extends GetxController {
           }
           if (optionId.isNotEmpty) {
             out.add(
-              SelectedCustomization(
-                customizationId: cid,
-                optionId: optionId,
-              ),
+              SelectedCustomization(customizationId: cid, optionId: optionId),
             );
           }
           break;
 
         case 'multi':
           final raw = multiSelectedOptionIdsFor(uiKey).toList();
-          final optionIds =
-              raw.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+          final optionIds = raw
+              .map((e) => e.trim())
+              .where((e) => e.isNotEmpty)
+              .toList();
           if (required && optionIds.isEmpty) {
             AppSnackBar.error(
               "Please select at least one for ${c.name ?? 'this option'}.",
@@ -165,10 +165,7 @@ class ProductInfoController extends GetxController {
           }
           if (optionIds.isNotEmpty) {
             out.add(
-              SelectedCustomization(
-                customizationId: cid,
-                optionIds: optionIds,
-              ),
+              SelectedCustomization(customizationId: cid, optionIds: optionIds),
             );
           }
           break;
@@ -248,8 +245,11 @@ class ProductInfoController extends GetxController {
     await addToCart(addToCart: payload);
   }
 
-  Future<void> addToCart({required List<SelectedCustomization> addToCart}) async {
+  Future<void> addToCart({
+    required List<SelectedCustomization> addToCart,
+  }) async {
     try {
+      isAddToCartLoading.value = true;
       final response = await _newOrderRepository.addToCart(
         product: singleProduct.value?.data?.id ?? '',
         quantity: 1,
@@ -264,6 +264,8 @@ class ProductInfoController extends GetxController {
     } catch (e) {
       AppLogger.error("Error in addToCart: $e");
       AppSnackBar.error("Failed to add product to cart");
+    } finally {
+      isAddToCartLoading.value = false;
     }
   }
 

@@ -1,19 +1,17 @@
 import 'package:coffie/core/component/app_button/app_button.dart';
-import 'package:coffie/core/component/app_input/app_input_widget_two.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
-import 'package:coffie/core/const/app_assets.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/model/cart_summary_model.dart';
 import 'package:coffie/feature/new_order/presentation/controller/my_cart_controller.dart';
+import 'package:coffie/feature/new_order/presentation/widget/payment_card.dart';
 import 'package:coffie/feature/new_order/presentation/widget/product_cart_with_counter.dart.dart';
 import 'package:coffie/feature/new_order/presentation/widget/reward_point_input.dart';
 import 'package:coffie/feature/new_order/presentation/widget/support_baristas_widget.dart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class MyCartScreen extends StatelessWidget {
@@ -25,7 +23,18 @@ class MyCartScreen extends StatelessWidget {
       init: MyCartController(),
       builder: (controller) {
         return Scaffold(
-          appBar: CustomAppbar(text: "My Cart"),
+          appBar: CustomAppbar(
+            text: "My Cart",
+            action: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.remove_shopping_cart_outlined,
+                  color: AppColors.red.withValues(alpha: 0.6),
+                ),
+              ),
+            ],
+          ),
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: SingleChildScrollView(
@@ -89,6 +98,14 @@ class MyCartScreen extends StatelessWidget {
 
                   Obx(() {
                     return RewardPointWidget(
+                      minimumPoint:
+                          controller
+                              .cartSummary
+                              .value
+                              ?.data
+                              ?.minimumLoyaltyPointsNeededToUse
+                              ?.toInt() ??
+                          0,
                       pointGiven:
                           (controller
                                       .cartSummary
@@ -118,7 +135,38 @@ class MyCartScreen extends StatelessWidget {
                           controller.cartSummary.value ?? CartSummaryModel(),
                     );
                   }),
-                  PaymentCard(),
+                  Obx(() {
+                    return PaymentCard(
+                      walletAmount:
+                          controller
+                              .walletController
+                              .walletBalanceModel
+                              .value
+                              ?.data
+                              ?.balance ??
+                          0,
+                      giftCardAmount:
+                          controller
+                              .giftCardController
+                              .giftCardBalanceModel
+                              .value
+                              ?.data
+                              ?.totalBalance
+                              ?.toDouble() ??
+                          0,
+                      totalPrice:
+                          controller
+                              .cartSummary
+                              .value
+                              ?.data
+                              ?.totalPayableAmount ??
+                          0,
+                      onSelected: (value) {
+                        // wallet / gift_card / stripe
+                        controller.paymentMethod = value;
+                      },
+                    );
+                  }),
                 ],
               ),
             ),
@@ -126,79 +174,28 @@ class MyCartScreen extends StatelessWidget {
           bottomNavigationBar: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-              child: AppButton(title: "Place Order"),
+              child: Obx(() {
+                return AppButton(
+                  isLoading: controller.isPaymentProcessing.value,
+                  onTap: () {
+                    controller.placeOrder(
+                      paymentMethod: controller.paymentMethod ?? "",
+                      tipAmount: controller.cartSummary.value?.data?.tipAmount,
+                      loyaltyPointsToUse: controller
+                          .cartSummary
+                          .value
+                          ?.data
+                          ?.redeemLoyaltyPoints
+                          ?.toDouble(),
+                    );
+                  },
+                  title: "Place Order",
+                );
+              }),
             ),
           ),
         );
       },
-    );
-  }
-}
-
-class PaymentCard extends StatelessWidget {
-  const PaymentCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.yellow),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 12.h,
-        children: [
-          AppText(
-            data: "Select Payment Method",
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
-          _buildPaymentItem(
-            icon: AppAssets.wallet,
-            title: "COFFECITO Wallet Balance",
-            value: "-\$25.00",
-          ),
-          _buildPaymentItem(
-            icon: AppAssets.giftBox,
-            title: "Digital Gift Card",
-            value: "-\$10.00",
-          ),
-          _buildPaymentItem(
-            proceShow: false,
-            icon: AppAssets.stripe,
-            title: "Continue With Stripe",
-            value: "-\$10.00",
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPaymentItem({
-    required String icon,
-    required String title,
-    required String value,
-    bool proceShow = true,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.yellow),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(icon, width: 20.w, height: 20.h),
-          SizedBox(width: 8.w),
-          AppText(data: title, fontSize: 14.sp, fontWeight: FontWeight.w400),
-          Spacer(),
-          if (proceShow)
-            AppText(data: value, fontSize: 14.sp, fontWeight: FontWeight.w400),
-        ],
-      ),
     );
   }
 }

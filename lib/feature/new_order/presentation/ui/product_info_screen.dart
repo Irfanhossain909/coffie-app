@@ -123,8 +123,9 @@ class ProductInfoScreen extends StatelessWidget {
 
                         final customizationKey =
                             customization.id ?? 'customization_$index';
-                        final type =
-                            (customization.type ?? '').toLowerCase().trim();
+                        final type = (customization.type ?? '')
+                            .toLowerCase()
+                            .trim();
 
                         switch (type) {
                           case "single":
@@ -213,19 +214,19 @@ class ProductInfoScreen extends StatelessWidget {
                                         title: '',
                                         message:
                                             '${opt.label ?? ''}$priceSuffix',
-                                        quantity:
-                                            controller.quantityForOption(
-                                              customizationKey,
-                                              oid,
-                                            ),
+                                        quantity: controller.quantityForOption(
+                                          customizationKey,
+                                          oid,
+                                        ),
                                         max: 10,
                                         onChanged: (value) {
                                           controller
-                                              .quantityForOption(
-                                                customizationKey,
-                                                oid,
-                                              )
-                                              .value = value;
+                                                  .quantityForOption(
+                                                    customizationKey,
+                                                    oid,
+                                                  )
+                                                  .value =
+                                              value;
                                         },
                                       ),
                                     ),
@@ -281,25 +282,33 @@ class ProductInfoScreen extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () => controller.addToCartFromSelections(),
-                      child: Container(
-                        height: 50.h,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 14.h,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.r),
-                          border: Border.all(color: AppColors.yellow),
-                        ),
-                        child: Center(
-                          child: AppText(
-                            data: "Add To Cart",
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.black,
+                      child: Obx(() {
+                        return Container(
+                          height: 50.h,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 14.h,
                           ),
-                        ),
-                      ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(color: AppColors.yellow),
+                          ),
+                          child: controller.isAddToCartLoading.value
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.yellow,
+                                  ),
+                                )
+                              : Center(
+                                  child: AppText(
+                                    data: "Add To Cart",
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                        );
+                      }),
                     ),
                   ),
                   Expanded(

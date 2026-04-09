@@ -1,9 +1,16 @@
+import 'package:coffie/core/component/app_webview/stripe_web_view_page.dart';
+import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
+import 'package:coffie/feature/gift_card/presentation/controller/gift_card_controller.dart';
+import 'package:coffie/feature/gift_card/presentation/widget/app_success_dialog.dart';
 import 'package:coffie/feature/new_order/domain/model/cart_item_model.dart';
 import 'package:coffie/feature/new_order/domain/model/cart_summary_model.dart';
 import 'package:coffie/feature/new_order/domain/repository/new_order_repository.dart';
 import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
+import 'package:coffie/feature/wallet/presentation/controller/my_wallet_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyCartController extends GetxController {
@@ -11,12 +18,16 @@ class MyCartController extends GetxController {
   final NewOrderRepository _newOrderRepository = NewOrderRepository.instance;
 
   //controller here
-  RewardController rewardController = Get.find<RewardController>();
+  final RewardController rewardController = Get.find<RewardController>();
+  final GiftCardController giftCardController = Get.find<GiftCardController>();
+  final MyWalletController walletController = Get.find<MyWalletController>();
 
   /// Observable variables
   Rxn<CartItemModel> cartItem = Rxn<CartItemModel>();
   Rxn<CartSummaryModel> cartSummary = Rxn<CartSummaryModel>();
   RxBool isLoading = false.obs;
+  RxBool isPaymentProcessing = false.obs;
+  String paymentMethod = "";
 
   /// init state here
   @override
@@ -36,6 +47,82 @@ class MyCartController extends GetxController {
       AppLogger.error("Error in getCart: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  /// place order here
+  Future<void> placeOrder({
+    required String paymentMethod,
+    double? tipAmount,
+    double? loyaltyPointsToUse,
+  }) async {
+    try {
+      isPaymentProcessing.value = true;
+      if (paymentMethod.isEmpty) {
+        AppSnackBar.error("Please select a payment method");
+        return;
+      }
+      final response = await _newOrderRepository.placeOrder(
+        paymentMethod: paymentMethod,
+        tipAmount: tipAmount?.toInt(),
+        loyaltyPointsToUse: loyaltyPointsToUse,
+      );
+
+      if (response == true) {
+        AppSnackBar.success("Order placed successfully");
+        Get.back();
+      } else if (response is String) {
+        openStripePayment(
+          context: Get.context!,
+          paymentUrl: response,
+          successUrl: "/payment/success",
+          cancelUrl: "/payment/cancel",
+        );
+      }
+    } catch (e) {
+      AppLogger.error("Error in placeOrder: $e");
+      AppSnackBar.error("Failed to process payment");
+    } finally {
+      isPaymentProcessing.value = false;
+    }
+  }
+
+  Future<void> openStripePayment({
+    BuildContext? context,
+    required String paymentUrl,
+    required String successUrl,
+    required String cancelUrl,
+  }) async {
+    if (context == null) return;
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StripeWebViewPage(
+          paymentUrl: paymentUrl,
+          successEndpoint: successUrl,
+          cancelEndpoint: cancelUrl,
+        ),
+      ),
+    );
+
+    if (result != null && context.mounted) {
+      if (result['status'] == 'success') {
+        AppSuccessDialog.show(
+          context: context,
+          icon: Icon(
+            Icons.check_circle_rounded,
+            color: AppColors.green,
+            size: 64,
+          ),
+          title: "Thanks for your order",
+          message:
+              "You have just completed your payment. The seller will reach out to you as soon as possible.",
+          buttonTitle: "View My Wallet",
+          onButtonPressed: () => Get.close(1),
+        );
+      } else {
+        AppLogger.info("Payment Cancelled");
+      }
     }
   }
 
@@ -97,6 +184,25 @@ class MyCartController extends GetxController {
       }
     } catch (e) {
       AppLogger.error("Error in updateTipAndPoints: $e");
+    }
+  }
+
+  /// delete cart here
+  Future<void> deleteCart() async {
+    try {
+      final response = await _newOrderRepository.deleteCart();
+      if (response) {
+        AppSnackBar.success("Cart deleted successfully");
+        cartItem.value = null;
+        cartSummary.value = null;
+        cartItem.refresh();
+        cartSummary.refresh();
+        Get.back();
+      } else {
+        AppSnackBar.error("Failed to delete cart");
+      }
+    } catch (e) {
+      AppLogger.error("Error in deleteCart: $e");
     }
   }
 }

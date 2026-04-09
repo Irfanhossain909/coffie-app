@@ -33,6 +33,7 @@ class Data {
     double? redeemLoyaltyPoints;
     double? loyaltyPointDiscount;
     double? totalPayableAmount;
+    double? minimumLoyaltyPointsNeededToUse;
     String? id;
     double? totalPrice;
 
@@ -41,6 +42,7 @@ class Data {
         this.redeemLoyaltyPoints,
         this.loyaltyPointDiscount,
         this.totalPayableAmount,
+        this.minimumLoyaltyPointsNeededToUse,
         this.id,
         this.totalPrice,
     });
@@ -54,6 +56,7 @@ class Data {
         redeemLoyaltyPoints: json["redeemLoyaltyPoints"]?.toDouble(),
         loyaltyPointDiscount: json["loyaltyPointDiscount"]?.toDouble(),
         totalPayableAmount: json["totalPayableAmount"]?.toDouble(),
+        minimumLoyaltyPointsNeededToUse: json["minimumLoyaltyPointsNeededToUse"]?.toDouble(),
         id: json["_id"],
         totalPrice: json["totalPrice"]?.toDouble(),
     );
@@ -63,6 +66,7 @@ class Data {
         "redeemLoyaltyPoints": redeemLoyaltyPoints,
         "loyaltyPointDiscount": loyaltyPointDiscount,
         "totalPayableAmount": totalPayableAmount,
+        "minimumLoyaltyPointsNeededToUse": minimumLoyaltyPointsNeededToUse,
         "_id": id,
         "totalPrice": totalPrice,
     };

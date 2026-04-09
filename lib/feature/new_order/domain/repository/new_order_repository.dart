@@ -194,7 +194,7 @@ class NewOrderRepository {
       if (tipAmount != null && tipAmount > 0) {
         body["tipAmount"] = tipAmount;
       }
-      if (redeemLoyaltyPoints != null && redeemLoyaltyPoints > 0) {
+      if (redeemLoyaltyPoints != null) {
         body["redeemLoyaltyPoints"] = redeemLoyaltyPoints;
       }
       final response = await apiServices.apiPatchServices(
@@ -209,6 +209,58 @@ class NewOrderRepository {
       AppLogger.error("Error in updateTipAndPoints: $e");
     }
 
+    return false;
+  }
+
+  Future<dynamic> placeOrder({
+    required String paymentMethod,
+    int? tipAmount,
+    double? loyaltyPointsToUse,
+  }) async {
+    try {
+      Map<String, dynamic> body = {};
+      body["paymentMethod"] = paymentMethod;
+      if (tipAmount != null && tipAmount > 0) {
+        body["tipAmount"] = tipAmount;
+      }
+      if (loyaltyPointsToUse != null && loyaltyPointsToUse > 0) {
+        body["loyaltyPointsToUse"] = loyaltyPointsToUse;
+      }
+      final response = await apiServices.apiPostServices(
+        url: AppApiEndPoint.instance.placeOrder,
+        body: body,
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        if (response["data"]?["paymentResult"]?["checkoutUrl"] != null) {
+          AppLogger.api(
+            response["data"]?["paymentResult"]?["checkoutUrl"],
+            title: "Place Order Response",
+          );
+          return response["data"]?["paymentResult"]?["checkoutUrl"];
+        } else {
+          return true;
+        }
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in placeOrder: $e");
+    }
+
+    return false;
+  }
+
+  Future<bool> deleteCart() async {
+    try {
+      final response = await apiServices.apiDeleteServices(
+        url: AppApiEndPoint.instance.deleteCart,
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in deleteCart: $e");
+    }
     return false;
   }
 }
