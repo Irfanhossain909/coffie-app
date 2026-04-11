@@ -32,6 +32,8 @@ class AppApiEndPoint {
 
   // Notification
   final String notification = "/notifications";
+  static String singleNotification(var notificationId) =>
+      "/notifications/$notificationId/mark-as-read";
 
   /// Store Orders
   final String stores = "/stores";
@@ -44,14 +46,12 @@ class AppApiEndPoint {
   final String deleteCart = "/carts/clear";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
   static String singleProduct(var productId) => "/products/$productId";
-  
 
   // Gift card
   final String giftCardBalance = "/giftCards";
   final String giftCardsTransactions = "/giftCards";
   final String giftCardsRedeem = "/giftCardTransactions/redeem";
   final String giftCardsAdd = "/giftCards/add";
-  
 
   // Reward
   final String rewardPoints = "/users/loyalty-points";

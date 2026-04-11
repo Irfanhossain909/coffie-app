@@ -20,6 +20,7 @@ import 'package:coffie/feature/new_order/presentation/ui/pickup_location_screen.
 import 'package:coffie/feature/new_order/presentation/ui/product_info_screen.dart';
 import 'package:coffie/feature/new_order/presentation/ui/shop_details_screnn.dart';
 import 'package:coffie/feature/new_order/presentation/ui/shop_order_information_screen.dart';
+import 'package:coffie/feature/notification/presentation/ui/geust_notification_screen.dart';
 import 'package:coffie/feature/notification/presentation/ui/notification_screen.dart';
 import 'package:coffie/feature/onboarding/on_boarding_screen.dart';
 import 'package:coffie/feature/order/presentation/ui/order_screen.dart';
@@ -244,6 +245,9 @@ List<GetPage> appRootRoutesFile = <GetPage>[
     binding: AppBinding(),
     page: () => GuestProfileScreen(),
   ),
-
+  GetPage(
+    name: AppRoutes.instance.geustNotificationScreen,
+    page: () => const GeustNotificationScreen(),
+  ),
   
 ];

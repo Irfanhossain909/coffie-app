@@ -39,17 +39,28 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> markAllAsRead() async {
-    try {
-      final result = await notificationRepository.markAllAsRead();
-      if (result) {
-        notifications.value = notifications
-            .where((notification) => notification.isRead == true)
-            .toList();
+  void markAllAsRead() async {
+    final success = await NotificationRepository.instance.markAllAsRead();
+
+    if (success) {
+      for (var item in notifications) {
+        item.isRead = true;
       }
       notifications.refresh();
-    } catch (e) {
-      AppLogger.error(e.toString());
+    }
+  }
+
+  void singleReadNotification(String id) async {
+    final success = await NotificationRepository.instance
+        .singleReadNotification(id);
+
+    if (success) {
+      int index = notifications.indexWhere((e) => e.id == id);
+
+      if (index != -1) {
+        notifications[index].isRead = true;
+        notifications.refresh(); // IMPORTANT
+      }
     }
   }
 }

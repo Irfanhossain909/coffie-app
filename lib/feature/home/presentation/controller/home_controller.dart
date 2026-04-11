@@ -5,13 +5,18 @@ import 'package:coffie/feature/home/domain/model/slider_model.dart';
 import 'package:coffie/feature/home/domain/repository/home_repository.dart';
 import 'package:coffie/feature/navigation/presentation/controller/navigation_screen_controller.dart';
 import 'package:coffie/feature/profile/domain/repository/profile_repository.dart';
+import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
+import 'package:coffie/feature/wallet/domain/model/wallet_balance_model.dart';
+import 'package:coffie/feature/wallet/domain/repository/wallet_repository.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   /// repository here
   final HomeRepository _homeRepository = HomeRepository.instance;
+  final WalletRepository walletRepository = WalletRepository.instance;
   NavigationScreenController navigationScreenController =
       Get.find<NavigationScreenController>();
+  RewardController? rewardController;
 
   //GetStorageServices
   GetStorageServices getStorageServices = GetStorageServices.instance;
@@ -47,6 +52,7 @@ class HomeController extends GetxController {
   RxBool isSliderLoading = false.obs;
 
   /// home slider here
+  Rxn<WalletBalanceModel> walletBalanceModel = Rxn<WalletBalanceModel>();
   RxList<SliderDataModel> homeSliderList = <SliderDataModel>[].obs;
   Rxn<LastOrderModel> lastOrder = Rxn<LastOrderModel>();
 
@@ -57,8 +63,24 @@ class HomeController extends GetxController {
     if (!isGuest) {
       loadUserName();
       getLastOrder();
+      getWalletBalance();
+      if (Get.isRegistered<RewardController>()) {
+        rewardController = Get.find<RewardController>();
+      }
     }
     getHomeSlider();
+  }
+
+  /// get wallet balance function here
+  Future<void> getWalletBalance() async {
+    try {
+      final result = await walletRepository.getWalletBalance();
+      if (result != null) {
+        walletBalanceModel.value = result;
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
   }
 
   /// get home slider here

@@ -1,8 +1,15 @@
+import 'package:coffie/core/component/app_button/app_button.dart';
+import 'package:coffie/core/component/app_text/app_text.dart';
+import 'package:coffie/core/const/app_color.dart';
+import 'package:coffie/core/route/app_routes.dart';
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/core/utils/app_snackbar.dart';
 import 'package:coffie/feature/new_order/domain/entity/add_to_cart_entity.dart';
 import 'package:coffie/feature/new_order/domain/model/single_product_model.dart';
 import 'package:coffie/feature/new_order/domain/repository/new_order_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ProductInfoController extends GetxController {
@@ -27,6 +34,8 @@ class ProductInfoController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isAddToCartLoading = false.obs;
   String? productId;
+  GetStorageServices getStorageServices = GetStorageServices.instance;
+  bool get isGuest => getStorageServices.getIsGuest();
 
   /// init state here
   @override
@@ -230,6 +239,11 @@ class ProductInfoController extends GetxController {
   }
 
   Future<void> addToCartFromSelections() async {
+    if (isGuest) {
+      showGuestLoginRequiredDialog();
+      return;
+    }
+
     final product = singleProduct.value?.data?.id;
     if (product == null || product.isEmpty) {
       AppSnackBar.error("Product is not loaded.");
@@ -245,7 +259,105 @@ class ProductInfoController extends GetxController {
     await addToCart(addToCart: payload);
   }
 
-  Future<void> addToCart({
+  /// Adds current selections to cart, then opens the cart screen on success.
+  Future<void> orderNow() async {
+    if (isGuest) {
+      showGuestLoginRequiredDialog();
+      return;
+    }
+
+    final product = singleProduct.value?.data?.id;
+    if (product == null || product.isEmpty) {
+      AppSnackBar.error("Product is not loaded.");
+      return;
+    }
+
+    final payload = buildSelectedCustomizationsPayload();
+    if (payload == null) {
+      return;
+    }
+
+    addToCartitemList.assignAll(payload);
+    final added = await addToCart(addToCart: payload);
+    if (added) {
+      Get.toNamed(AppRoutes.instance.myCartScreen);
+    }
+  }
+
+  void showGuestLoginRequiredDialog() {
+    Get.dialog<void>(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AppText(
+                data: 'Log in to continue',
+                fontSize: 24.sp,
+                fontWeight: FontWeight.w700,
+                textAlign: TextAlign.center,
+                color: AppColors.black,
+              ),
+              const SizedBox(height: 12),
+              AppText(
+                data: 'To order on Coffie, you need to log in first.',
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.black,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: AppColors.yellow),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      onPressed: () {
+                        Get.back<void>();
+                        Get.toNamed(AppRoutes.instance.registerScreen);
+                      },
+                      child: AppText(
+                        data: 'Sign up',
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppButton(
+                      height: 40.h,
+                      title: 'Log in',
+                      titleSize: 16.sp,
+                      titleColor: AppColors.backgrounColor,
+                      onTap: () {
+                        Get.back<void>();
+                        Get.toNamed(AppRoutes.instance.loginScreen);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+  Future<bool> addToCart({
     required List<SelectedCustomization> addToCart,
   }) async {
     try {
@@ -258,12 +370,15 @@ class ProductInfoController extends GetxController {
       if (response) {
         resetCustomizationSelectionsAfterAddToCart();
         AppSnackBar.success("Product added to cart successfully");
+        return true;
       } else {
         AppSnackBar.error("Failed to add product to cart");
+        return false;
       }
     } catch (e) {
       AppLogger.error("Error in addToCart: $e");
       AppSnackBar.error("Failed to add product to cart");
+      return false;
     } finally {
       isAddToCartLoading.value = false;
     }

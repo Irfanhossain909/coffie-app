@@ -61,4 +61,5 @@ class AppRoutes {
   final String geustProfileScreen = "/geust-profile-screen";
   final String successFullScreen = "/success-full-screen";
   final String walletAddScreen = "/wallet-add-screen";
+  final String geustNotificationScreen = "/geust-notification-screen";
 }

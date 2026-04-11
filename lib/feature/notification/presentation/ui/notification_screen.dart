@@ -42,7 +42,12 @@ class NotificationScreen extends StatelessWidget {
               itemCount: controller.notifications.length,
               itemBuilder: (context, index) {
                 final notification = controller.notifications[index];
-                return NotificationCard(notification: notification);
+                return NotificationCard(
+                  notification: notification,
+                  onTap: () {
+                    controller.singleReadNotification(notification.id ?? "");
+                  },
+                );
               },
             );
           }),
@@ -54,67 +59,71 @@ class NotificationScreen extends StatelessWidget {
 
 class NotificationCard extends StatelessWidget {
   final NotificationDataModel notification;
-  const NotificationCard({super.key, required this.notification});
+  final VoidCallback? onTap;
+  const NotificationCard({super.key, required this.notification, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.yellow),
-        borderRadius: BorderRadius.circular(10.r),
-        color: notification.isRead == true
-            ? AppColors.backgrounColor
-            : AppColors.offWhite,
-      ),
-      child: Row(
-        spacing: 12.w,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(4.r),
-            decoration: BoxDecoration(
-              color: AppColors.offWhite,
-              shape: BoxShape.circle,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColors.yellow),
+          borderRadius: BorderRadius.circular(10.r),
+          color: notification.isRead == true
+              ? AppColors.backgrounColor
+              : AppColors.offWhite,
+        ),
+        child: Row(
+          spacing: 12.w,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(4.r),
+              decoration: BoxDecoration(
+                color: AppColors.offWhite,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.notification_important,
+                color: AppColors.lightBlue.withValues(alpha: 0.5),
+                size: 16.w,
+              ),
             ),
-            child: Icon(
-              Icons.notification_important,
-              color: AppColors.lightBlue.withValues(alpha: 0.5),
-              size: 16.w,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4.h,
+                children: [
+                  AppText(
+                    data: notification.title ?? "",
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.black,
+                  ),
+                  AppText(
+                    data: notification.message ?? "",
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    color: AppColors.black.withValues(alpha: 0.5),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 4.h,
-              children: [
-                AppText(
-                  data: notification.title ?? "",
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.black,
-                ),
-                AppText(
-                  data: notification.message ?? "",
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  color: AppColors.black.withValues(alpha: 0.5),
-                ),
-              ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: AppText(
+                data: formatTimeAgo(notification.createdAt),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: AppText(
-              data: formatTimeAgo(notification.createdAt),
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

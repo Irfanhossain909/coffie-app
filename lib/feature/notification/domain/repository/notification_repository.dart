@@ -45,4 +45,19 @@ class NotificationRepository {
 
     return false;
   }
+
+  Future<bool> singleReadNotification(String notificationId) async {
+    try {
+      final response = await apiServices.apiPatchServices(
+        url: AppApiEndPoint.singleNotification(notificationId),
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+
+    return false;
+  }
 }

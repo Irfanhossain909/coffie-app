@@ -3,7 +3,6 @@ import 'package:coffie/core/component/app_image/app_image_circular.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
-import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/presentation/controller/product_info_controller.dart';
@@ -312,12 +311,13 @@ class ProductInfoScreen extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: AppButton(
-                      title: "Order Now",
-                      onTap: () {
-                        Get.toNamed(AppRoutes.instance.myCartScreen);
-                      },
-                    ),
+                    child: Obx(() {
+                      return AppButton(
+                        title: "Order Now",
+                        isLoading: controller.isAddToCartLoading.value,
+                        onTap: () => controller.orderNow(),
+                      );
+                    }),
                   ),
                 ],
               ),
@@ -328,3 +328,8 @@ class ProductInfoScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+

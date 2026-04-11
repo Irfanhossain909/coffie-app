@@ -85,7 +85,12 @@ class HomeScreen extends StatelessWidget {
             actionsPadding: EdgeInsets.only(right: 16.w),
             actions: [
               if (!controller.navigationScreenController.isGuest)
-                WalletContainer(amount: 320.50),
+                Obx(() {
+                  return WalletContainer(
+                    amount:
+                        controller.walletBalanceModel.value?.data?.balance ?? 0,
+                  );
+                }),
               SizedBox(width: 8.w),
               if (!controller.navigationScreenController.isGuest)
                 InkWell(
@@ -98,7 +103,11 @@ class HomeScreen extends StatelessWidget {
 
               SizedBox(width: 8.w),
               InkWell(
-                onTap: () => Get.toNamed(AppRoutes.instance.notificationScreen),
+                onTap: () => Get.toNamed(
+                  controller.navigationScreenController.isGuest
+                      ? AppRoutes.instance.geustNotificationScreen
+                      : AppRoutes.instance.notificationScreen,
+                ),
                 child: Icon(
                   Icons.notifications_none_outlined,
                   color: AppColors.blue,
@@ -157,38 +166,78 @@ class HomeScreen extends StatelessWidget {
                     }),
                   ],
                   SizedBox(height: 12.h),
-                  Container(
-                    padding: EdgeInsets.only(top: 16.h, left: 16.w),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.yellow),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AppText(
-                          data: "Your Rewards",
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
+                  if (!controller.navigationScreenController.isGuest)
+                    Obx(() {
+                      return Container(
+                        padding: EdgeInsets.only(top: 16.h, left: 16.w),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.yellow),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
-                        AppText(
-                          data: "Total Points Available: 0p",
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.deepBlue,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AppText(
+                              data: "Your Rewards",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            AppText(
+                              data:
+                                  "Total Points Available: ${controller.rewardController?.rewardPointModel.value?.data?.loyaltyPoints ?? 0}p",
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.deepBlue,
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: SvgPicture.asset(
+                                AppAssets.rewardPoint,
+                                width: 180.w,
+                                height: 120.h,
+                              ),
+                            ),
+                          ],
                         ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: SvgPicture.asset(
-                            AppAssets.rewardPoint,
-                            width: 180.w,
-                            height: 120.h,
+                      );
+                    }),
+
+                  if (controller.navigationScreenController.isGuest) ...[
+                    Container(
+                      padding: EdgeInsets.only(top: 16.h, left: 16.w),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.yellow),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppText(
+                            data: "Your Rewards",
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
                           ),
-                        ),
-                      ],
+                          AppText(
+                            data:
+                                "Total Points Available: 0p",
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deepBlue,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: SvgPicture.asset(
+                              AppAssets.rewardPoint,
+                              width: 180.w,
+                              height: 120.h,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
