@@ -71,6 +71,36 @@ class PickupLocationWithGetShopController extends GetxController {
     }
   }
 
+  Future<void> addFavorite(String id) async {
+    try {
+      final response = await _newOrderRepository.addFavorite(
+        id: id,
+        type: "store",
+      );
+      if (response) {
+        stores.firstWhere((element) => element.id == id).isFavorite = true;
+        stores.refresh();
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+
+  Future<void> removeFavorite(String id) async {
+    try {
+      final response = await _newOrderRepository.removeFavorite(
+        id: id,
+        type: "store",
+      );
+      if (response) {
+        stores.firstWhere((element) => element.id == id).isFavorite = false;
+        stores.refresh();
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+
   // =============================== LOCATION DATA START ===============================
 
   var selectedPlaceId = ''.obs;
@@ -183,9 +213,4 @@ class PickupLocationWithGetShopController extends GetxController {
   }
 
   ////////////////////////// LOCATION DATA END ////////////////////////////////////////
-
-  // =============================== LOCATION DATA END ===============================
-
-  //===============================//
-
 }

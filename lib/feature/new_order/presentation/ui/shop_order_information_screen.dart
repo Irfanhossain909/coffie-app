@@ -116,6 +116,14 @@ class ShopOrderInformationScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final product = controller.storeProducts[index];
                         return ProductCard(
+                          isFavoriteTap: () {
+                            if (product.isFavorite ?? false) {
+                              controller.removeFavorite(product.id ?? "");
+                            } else {
+                              controller.addFavorite(product.id ?? "");
+                            }
+                          },
+                          isFavorite: product.isFavorite ?? false,
                           image: "${AppApiEndPoint.domain}${product.image}",
                           name: product.name ?? "",
                           readyTime: product.readyTime ?? 0,

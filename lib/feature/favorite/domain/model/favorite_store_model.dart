@@ -34,6 +34,7 @@ class FavorireStoreModel {
 
 class FavorireStoreDataModel {
     String? id;
+    bool? isFavorite;
     String? user;
     Store? store;
     DateTime? createdAt;
@@ -43,6 +44,7 @@ class FavorireStoreDataModel {
     FavorireStoreDataModel({
         this.id,
         this.user,
+        this.isFavorite,
         this.store,
         this.createdAt,
         this.updatedAt,
@@ -56,6 +58,7 @@ class FavorireStoreDataModel {
     factory FavorireStoreDataModel.fromJson(Map<String, dynamic> json) => FavorireStoreDataModel(
         id: json["_id"],
         user: json["user"],
+        isFavorite: json["isFavorite"] ?? false,
         store: json["store"] == null ? null : Store.fromJson(json["store"]),
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
@@ -65,6 +68,7 @@ class FavorireStoreDataModel {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "user": user,
+        "isFavorite": isFavorite,
         "store": store?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),

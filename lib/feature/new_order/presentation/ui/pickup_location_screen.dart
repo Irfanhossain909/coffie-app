@@ -1,4 +1,3 @@
-
 import 'package:coffie/core/component/app_location_field/places_suggation.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
@@ -125,7 +124,6 @@ class PickupLocationScreen extends StatelessWidget {
                       child: HomeMapPreview(
                         isReload: controller.isSearchLoading.value,
                         merchantList: controller.storeLocationList,
-                        
                       ),
                     ),
                   );
@@ -151,7 +149,13 @@ class PickupLocationScreen extends StatelessWidget {
                             );
                           },
 
-                          isFavorite: () {},
+                          isFavorite: () async {
+                            if (store.isFavorite ?? false) {
+                              await controller.removeFavorite(store.id ?? "");
+                            } else {
+                              await controller.addFavorite(store.id ?? "");
+                            }
+                          },
                           favoriteCardEntity: FavoriteCardEntity(
                             image: "${AppApiEndPoint.domain}${store.image}",
                             name: store.name ?? "",

@@ -46,6 +46,8 @@ class AppApiEndPoint {
   final String deleteCart = "/carts/clear";
   static String storeProductById(var storeId) => "/stores/$storeId/products";
   static String singleProduct(var productId) => "/products/$productId";
+  final String favorite = "/favorites/";
+  
 
   // Gift card
   final String giftCardBalance = "/giftCards";

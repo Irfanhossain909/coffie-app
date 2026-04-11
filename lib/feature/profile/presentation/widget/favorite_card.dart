@@ -156,6 +156,11 @@ class FavoriteCrad extends StatelessWidget {
           top: 0,
           right: 0,
           child: IconButton(
+            hoverColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            padding: EdgeInsets.zero,
             onPressed: isFavorite,
             icon: Icon(
               favoriteCardEntity.isFavorite == true

@@ -263,4 +263,39 @@ class NewOrderRepository {
     }
     return false;
   }
+
+  Future<bool> addFavorite({required String id, required String type}) async {
+    try {
+      final response = await apiServices.apiPostServices(
+        url: AppApiEndPoint.instance.favorite,
+        body: {type: id},
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in addFavorite: $e");
+    }
+    return false;
+  }
+
+  Future<bool> removeFavorite({
+    required String id,
+    required String type,
+  }) async {
+    try {
+      final response = await apiServices.apiDeleteServices(
+        url: AppApiEndPoint.instance.favorite,
+        body: {type: id},
+      );
+      if (response != null && response is Map<String, dynamic>) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      AppLogger.error("Error in removeFavorite: $e");
+    }
+    return false;
+  }
 }

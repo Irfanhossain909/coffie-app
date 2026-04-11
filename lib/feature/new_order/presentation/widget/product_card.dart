@@ -11,7 +11,8 @@ class ProductCard extends StatelessWidget {
   final String price;
   final List<String> tags; // 🔥 dynamic list
   final VoidCallback? onTap;
-
+  final bool isFavorite;
+  final VoidCallback? isFavoriteTap;
   const ProductCard({
     super.key,
     required this.image,
@@ -20,6 +21,8 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.tags,
     this.onTap,
+    this.isFavorite = false,
+    this.isFavoriteTap,
   });
 
   @override
@@ -116,10 +119,19 @@ class ProductCard extends StatelessWidget {
               // mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.favorite_border_rounded,
-                  size: 24.w,
-                  color: AppColors.yellow,
+                InkWell(
+                  hoverColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onTap: isFavoriteTap,
+                  child: Icon(
+                    isFavorite == true
+                        ? Icons.favorite
+                        : Icons.favorite_border_rounded,
+                    size: 24.w,
+                    color: AppColors.yellow,
+                  ),
                 ),
 
                 SizedBox(height: 20.h),

@@ -38,6 +38,38 @@ class ShopOrderInformationController extends GetxController {
     getStoreProductById();
   }
 
+  Future<void> addFavorite(String id) async {
+    try {
+      final response = await _newOrderRepository.addFavorite(
+        id: id,
+        type: "product",
+      );
+      if (response) {
+        storeProducts.firstWhere((element) => element.id == id).isFavorite =
+            true;
+        storeProducts.refresh();
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+
+  Future<void> removeFavorite(String id) async {
+    try {
+      final response = await _newOrderRepository.removeFavorite(
+        id: id,
+        type: "product",
+      );
+      if (response) {
+        storeProducts.firstWhere((element) => element.id == id).isFavorite =
+            false;
+        storeProducts.refresh();
+      }
+    } catch (e) {
+      AppLogger.error(e.toString());
+    }
+  }
+
   Future<void> getLastOrder() async {
     try {
       isLastOrderLoading.value = true;

@@ -2,16 +2,17 @@ import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
+import 'package:coffie/feature/favorite/domain/model/favorite_store_model.dart';
+import 'package:coffie/feature/new_order/domain/model/store_model.dart'
+    as store_model;
 import 'package:coffie/feature/new_order/presentation/widget/product_card.dart';
 import 'package:coffie/feature/profile/domain/entity/favorite_card_entity.dart';
 import 'package:coffie/feature/favorite/presentation/controller/favorate_controller.dart';
 import 'package:coffie/feature/profile/presentation/widget/favorite_card.dart';
-import 'package:coffie/feature/profile/presentation/widget/favorite_item.dart';
 import 'package:coffie/feature/reward/presentation/widget/loyelty_card_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 
 class FavorateScreen extends StatelessWidget {
   const FavorateScreen({super.key});
@@ -90,28 +91,40 @@ class FavorateScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             itemCount: controller.favoriteStoreList.length,
                             itemBuilder: (context, index) {
-                              final favoriteCardEntity =
-                                  favoriteCardEntityList[index];
+                              final favoriteStore =
+                                  controller.favoriteStoreList[index];
+                              final storeId = favoriteStore.store?.id ?? "";
+                              final storeForNav = _storeDataModelFromFavorite(
+                                favoriteStore,
+                              );
                               return FavoriteCrad(
                                 orderNow: () => Get.toNamed(
                                   AppRoutes.instance.shopOrderInformationScreen,
-                                  arguments: favoriteCardEntity,
+                                  arguments: storeForNav,
                                 ),
                                 viewHours: () {
                                   Get.toNamed(
                                     AppRoutes.instance.shopDetailsScreen,
-                                    arguments: favoriteCardEntity,
+                                    arguments: storeForNav,
                                   );
                                 },
 
-                                isFavorite: () {},
+                                isFavorite: () {
+                                  if (!controller.isGuest) {
+                                    if (favoriteStore.isFavorite ?? false) {
+                                      controller.removeFavorite(storeId);
+                                    } else {
+                                      controller.addStoreFavorite(storeId);
+                                    }
+                                  }
+                                },
                                 favoriteCardEntity: FavoriteCardEntity(
                                   image:
-                                      "${AppApiEndPoint.domain}${favoriteCardEntity.image}",
-                                  name: favoriteCardEntity.name ?? "",
-                                  address: favoriteCardEntity.address ?? "",
-                                  status: favoriteCardEntity.status,
-                                  isFavorite: favoriteCardEntity.isFavorite,
+                                      "${AppApiEndPoint.domain}${favoriteStore.store?.image}",
+                                  name: favoriteStore.store?.name ?? "",
+                                  address: favoriteStore.store?.address ?? "",
+                                  status: false,
+                                  isFavorite: favoriteStore.isFavorite,
                                 ),
                               );
                             },
@@ -129,7 +142,7 @@ class FavorateScreen extends StatelessWidget {
                           );
                         }
 
-                        if (controller.favoriteStoreList.isEmpty) {
+                        if (controller.favoriteProductList.isEmpty) {
                           return Center(
                             child: AppText(
                               data: "No favorite product found",
@@ -146,19 +159,32 @@ class FavorateScreen extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             itemCount: controller.favoriteProductList.length,
                             itemBuilder: (context, index) {
-                              final product =
-                                  controller.favoriteProductList[index];
+                              final row = controller.favoriteProductList[index];
+                              final product = row.product;
+                              final productId = product?.id ?? "";
                               return ProductCard(
+                                isFavorite: row.isFavorite ?? false,
+                                isFavoriteTap: () {
+                                  if (controller.isGuest || productId.isEmpty) {
+                                    return;
+                                  }
+                                  if (row.isFavorite ?? false) {
+                                    controller.removeProductFavorite(productId);
+                                  } else {
+                                    controller.addProductFavorite(productId);
+                                  }
+                                },
                                 image:
-                                    "${AppApiEndPoint.domain}${product.product?.image}",
-                                name: product.product?.name ?? "",
-                                readyTime: product.product?.readyTime ?? 0,
-                                price: "\$${product.product?.basePrice}",
+                                    "${AppApiEndPoint.domain}${product?.image}",
+                                name: product?.name ?? "",
+                                readyTime: product?.readyTime ?? 0,
+                                price: "\$${product?.basePrice}",
 
-                                tags: product.product?.dietaryLabels ?? [],
+                                tags: product?.dietaryLabels ?? [],
                                 onTap: () {
                                   Get.toNamed(
                                     AppRoutes.instance.productInfoScreen,
+                                    arguments: productId,
                                   );
                                 },
                               );
@@ -176,4 +202,21 @@ class FavorateScreen extends StatelessWidget {
       },
     );
   }
+}
+
+/// Maps favorite API row to [store_model.StoreDataModel] for screens that expect it (e.g. shop order flow).
+store_model.StoreDataModel _storeDataModelFromFavorite(
+  FavorireStoreDataModel f,
+) {
+  final s = f.store;
+  return store_model.StoreDataModel(
+    id: s?.id,
+    name: s?.name,
+    image: s?.image,
+    address: s?.address,
+    hours: (s?.hours ?? [])
+        .map((h) => store_model.Hour(day: h.day, open: h.open, close: h.close))
+        .toList(),
+    isFavorite: f.isFavorite ?? true,
+  );
 }
