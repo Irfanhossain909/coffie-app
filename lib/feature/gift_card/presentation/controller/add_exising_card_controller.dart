@@ -26,9 +26,7 @@ class AddExisingCardController extends GetxController {
       );
       if (response) {
         giftCardNumberController.clear();
-        await giftCardController.getGiftCardTransactions(
-          giftCardEndPoint: "available",
-        );
+        await giftCardController.reloadGiftCardTab(tabIndex: 0);
         AppSuccessDialog.show(
           context: Get.context!,
           icon: Icon(

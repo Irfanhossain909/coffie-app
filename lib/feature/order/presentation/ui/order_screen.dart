@@ -17,8 +17,109 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OrderController>(
-      init: OrderController(),
       builder: (controller) {
+        Widget buildOrderTab({
+          required int tabIndex,
+          required String detailsScreenName,
+        }) {
+          return Obx(() {
+            final list = controller.orderTabLists[tabIndex];
+            if (!controller.orderTabFirstResponseDone[tabIndex].value &&
+                controller.currentIndex.value != tabIndex) {
+              return const SizedBox.shrink();
+            }
+            final isInitialLoading =
+                controller.orderTabInitialLoading[tabIndex].value &&
+                    list.isEmpty;
+
+            if (isInitialLoading) {
+              return ListView.builder(
+                padding: EdgeInsets.all(16.r),
+                itemCount: 6,
+                itemBuilder: (_, __) => const LoyaltyCardShimmer(),
+              );
+            }
+
+            if (list.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.reloadOrderList(tabIndex: tabIndex);
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 140.h),
+                    Center(
+                      child: AppText(
+                        data: "No data found",
+                        fontSize: 16.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.reloadOrderList(tabIndex: tabIndex);
+              },
+              child: ListView.builder(
+                controller: controller.orderScrollControllers[tabIndex],
+                padding: EdgeInsets.all(16.r),
+                itemCount: list.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= list.length) {
+                    if (controller.orderTabLoadingMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (!controller.orderTabHasMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: AppText(
+                            data: "End",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox(height: 16.h);
+                  }
+
+                  final data = list[index];
+                  return OrderCard(
+                    data: data,
+                    onTap: () {
+                      Get.toNamed(
+                        AppRoutes.instance.rewardDetailsScreen,
+                        arguments: {
+                          "screen_name": detailsScreenName,
+                          "order_id": data.id,
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          });
+        }
+
         return Scaffold(
           appBar: CustomAppbar(showLeading: false, text: "My Order"),
           body: Column(
@@ -54,85 +155,14 @@ class OrderScreen extends StatelessWidget {
                 child: TabBarView(
                   controller: controller.tabController,
                   children: [
-                    // Add Money
-                    Obx(() {
-                      if (controller.isLoading.value) {
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: 6,
-                          itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                        );
-                      }
-
-                      if (controller.orderList.isEmpty) {
-                        return Center(
-                          child: AppText(
-                            data: "No rewards yet",
-                            fontSize: 16.sp,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-
-                      return ListView.builder(
-                        padding: EdgeInsets.all(16.r),
-                        itemCount: controller.orderList.length,
-                        itemBuilder: (context, index) {
-                          final data = controller.orderList[index];
-                          return OrderCard(
-                            data: data,
-                            onTap: () {
-                              Get.toNamed(
-                                AppRoutes.instance.rewardDetailsScreen,
-                                arguments: {
-                                  "screen_name": "Reward Details",
-                                  "order_id": data.id,
-                                },
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }),
-                    // Spend
-                    Obx(() {
-                      if (controller.isLoading.value) {
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: 6,
-                          itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                        );
-                      }
-
-                      if (controller.orderList.isEmpty) {
-                        return Center(
-                          child: AppText(
-                            data: "No rewards yet",
-                            fontSize: 16.sp,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-                      return ListView.builder(
-                        padding: EdgeInsets.all(16.r),
-                        itemCount: controller.orderList.length,
-                        itemBuilder: (context, index) {
-                          final data = controller.orderList[index];
-                          return OrderCard(
-                            data: data,
-                            onTap: () {
-                              Get.toNamed(
-                                AppRoutes.instance.rewardDetailsScreen,
-                                arguments: {
-                                  "screen_name": "My Order",
-                                  "order_id": data.id,
-                                },
-                              );
-                            },
-                          );
-                        },
-                      );
-                    }),
+                    buildOrderTab(
+                      tabIndex: 0,
+                      detailsScreenName: "Reward Details",
+                    ),
+                    buildOrderTab(
+                      tabIndex: 1,
+                      detailsScreenName: "My Order",
+                    ),
                   ],
                 ),
               ),

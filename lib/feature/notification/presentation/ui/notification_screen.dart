@@ -14,7 +14,6 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NotificationController>(
-      init: NotificationController(),
       builder: (controller) {
         return Scaffold(
           appBar: CustomAppbar(
@@ -33,24 +32,95 @@ class NotificationScreen extends StatelessWidget {
               ),
             ],
           ),
-          body: Obx(() {
-            if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            return ListView.builder(
-              padding: EdgeInsets.all(16.h),
-              itemCount: controller.notifications.length,
-              itemBuilder: (context, index) {
-                final notification = controller.notifications[index];
-                return NotificationCard(
-                  notification: notification,
-                  onTap: () {
-                    controller.singleReadNotification(notification.id ?? "");
-                  },
+          body: RefreshIndicator(
+            onRefresh: () async {
+              await controller.reloadNotifications();
+            },
+            child: Obx(() {
+              final isInitialLoading = controller.initialLoading.value &&
+                  controller.notifications.isEmpty;
+
+              if (isInitialLoading) {
+                return ListView(
+                  padding: EdgeInsets.all(16.h),
+                  children: List.generate(
+                    6,
+                    (int i) => Container(
+                      margin: EdgeInsets.only(bottom: 12.h),
+                      height: 72.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                    ),
+                  ),
                 );
-              },
-            );
-          }),
+              }
+
+              if (controller.notifications.isEmpty) {
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 140.h),
+                    Center(
+                      child: AppText(
+                        data: "No data found",
+                        fontSize: 16.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return ListView.builder(
+                controller: controller.notificationScrollController,
+                padding: EdgeInsets.all(16.h),
+                itemCount: controller.notifications.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index >= controller.notifications.length) {
+                    if (controller.loadingMore.value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (!controller.hasMore.value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: AppText(
+                            data: "End",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox(height: 16.h);
+                  }
+
+                  final NotificationDataModel notification =
+                      controller.notifications[index];
+                  return NotificationCard(
+                    notification: notification,
+                    onTap: () {
+                      controller.singleReadNotification(notification.id ?? "");
+                    },
+                  );
+                },
+              );
+            }),
+          ),
         );
       },
     );

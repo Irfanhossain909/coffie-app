@@ -29,12 +29,15 @@ class GiftCardRepository {
   }
 
   Future<List<GiftCardDataModel>> getGiftCardTransactions({
+    int? page,
+    int? limit,
     required String giftCardEndPoint,
   }) async {
     List<GiftCardDataModel> giftCardTransactions = <GiftCardDataModel>[];
     try {
       final response = await apiServices.apiGetServices(
         "${AppApiEndPoint.instance.giftCardsTransactions}/$giftCardEndPoint",
+        queryParameters: {"page": page, "limit": limit},
       );
       if (response != null) {
         if (response["data"] != null && response["data"] is List) {
@@ -49,11 +52,15 @@ class GiftCardRepository {
     return giftCardTransactions;
   }
 
-  Future<List<GiftCardRedemDataModel>> getGiftCardRedeem() async {
+  Future<List<GiftCardRedemDataModel>> getGiftCardRedeem({
+    int? page,
+    int? limit,
+  }) async {
     List<GiftCardRedemDataModel> giftCardRedeem = <GiftCardRedemDataModel>[];
     try {
       final response = await apiServices.apiGetServices(
         AppApiEndPoint.instance.giftCardsRedeem,
+        queryParameters: {"page": page, "limit": limit},
       );
       if (response != null) {
         if (response["data"] != null && response["data"] is List) {

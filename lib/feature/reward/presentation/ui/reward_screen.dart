@@ -5,6 +5,7 @@ import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
 import 'package:coffie/core/utils/formet_date.dart';
+import 'package:coffie/feature/reward/domain/model/reward_card_model.dart';
 import 'package:coffie/feature/reward/presentation/controller/reward_controller.dart';
 import 'package:coffie/feature/reward/presentation/widget/loyelty_card_shimmer.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,112 @@ class RewardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RewardController>(
-      init: RewardController(),
       builder: (controller) {
+        Widget buildRewardHistoryTab({required int tabIndex}) {
+          return Obx(() {
+            final list = controller.rewardTabLists[tabIndex];
+            if (!controller.rewardTabFirstResponseDone[tabIndex].value &&
+                controller.currentIndex.value != tabIndex) {
+              return const SizedBox.shrink();
+            }
+            final isInitialLoading =
+                controller.rewardTabInitialLoading[tabIndex].value &&
+                    list.isEmpty;
+
+            if (isInitialLoading) {
+              return ListView.builder(
+                padding: EdgeInsets.all(16.r),
+                itemCount: 6,
+                itemBuilder: (_, __) => const LoyaltyCardShimmer(),
+              );
+            }
+
+            if (list.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.reloadRewardHistoryTab(tabIndex: tabIndex);
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 140.h),
+                    Center(
+                      child: AppText(
+                        data: "No data found",
+                        fontSize: 16.sp,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.reloadRewardHistoryTab(tabIndex: tabIndex);
+              },
+              child: ListView.builder(
+                controller: controller.rewardScrollControllers[tabIndex],
+                padding: EdgeInsets.all(16.r),
+                itemCount: list.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= list.length) {
+                    if (controller.rewardTabLoadingMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (!controller.rewardTabHasMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: AppText(
+                            data: "End",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox(height: 16.h);
+                  }
+
+                  final Datum data = list[index];
+                  return LoyaltyCard(
+                    type: data.type == "earn" ? "plus" : "minus",
+                    name: data.relatedOrderId?.store?.name,
+                    address: data.relatedOrderId?.store?.address,
+                    date: formatDate(data.relatedOrderId?.createdAt),
+                    point: data.pointsChange?.toString() ?? "0",
+                    image:
+                        "${AppApiEndPoint.domain}${data.relatedOrderId?.store?.image}",
+                    onTap: () {
+                      Get.toNamed(
+                        AppRoutes.instance.rewardDetailsScreen,
+                        arguments: {
+                          "screen_name": "Reward Details",
+                          "order_id": data.relatedOrderId?.id,
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          });
+        }
+
         return Scaffold(
           appBar: CustomAppbar(
             showLeading: false,
@@ -101,193 +206,9 @@ class RewardScreen extends StatelessWidget {
                 child: TabBarView(
                   controller: controller.tabController,
                   children: [
-                    // All
-                    Obx(() {
-                      if (controller.isLoadingHistory.value) {
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: 6,
-                          itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                        );
-                      }
-
-                      if (controller.rewardHistoryModel.value?.data?.isEmpty ??
-                          true) {
-                        return Center(
-                          child: AppText(
-                            data: "No rewards yet",
-                            fontSize: 16.sp,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          await controller.getRewardHistory();
-                        },
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount:
-                              controller
-                                  .rewardHistoryModel
-                                  .value
-                                  ?.data
-                                  ?.length ??
-                              0,
-                          itemBuilder: (context, index) {
-                            final data = controller
-                                .rewardHistoryModel
-                                .value
-                                ?.data?[index];
-
-                            return LoyaltyCard(
-                              type: data?.type == "earn" ? "plus" : "minus",
-                              name: data?.relatedOrderId?.store?.name,
-                              address: data?.relatedOrderId?.store?.address,
-                              date: formatDate(data?.relatedOrderId?.createdAt),
-                              point: data?.pointsChange.toString(),
-                              image:
-                                  "${AppApiEndPoint.domain}${data?.relatedOrderId?.store?.image}",
-                              onTap: () {
-                                Get.toNamed(
-                                   AppRoutes.instance.rewardDetailsScreen,
-                                  arguments: {
-                                    "screen_name": "Reward Details",
-                                    "order_id": data?.relatedOrderId?.id,
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    }),
-
-                    // Add Money
-                    Obx(() {
-                      if (controller.isLoadingHistory.value) {
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: 6,
-                          itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                        );
-                      }
-
-                      if (controller.rewardHistoryModel.value?.data?.isEmpty ??
-                          true) {
-                        return Center(
-                          child: AppText(
-                            data: "No rewards yet",
-                            fontSize: 16.sp,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          await controller.getRewardHistory();
-                        },
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount:
-                              controller
-                                  .rewardHistoryModel
-                                  .value
-                                  ?.data
-                                  ?.length ??
-                              0,
-                          itemBuilder: (context, index) {
-                            final data = controller
-                                .rewardHistoryModel
-                                .value
-                                ?.data?[index];
-
-                            return LoyaltyCard(
-                              type: data?.type == "earn" ? "plus" : "minus",
-                              name: data?.relatedOrderId?.store?.name,
-                              address: data?.relatedOrderId?.store?.address,
-                              date: formatDate(data?.relatedOrderId?.createdAt),
-                              point: data?.pointsChange.toString(),
-                              image:
-                                  "${AppApiEndPoint.domain}${data?.relatedOrderId?.store?.image}",
-                              onTap: () {
-                                Get.toNamed(
-                                   AppRoutes.instance.rewardDetailsScreen,
-                                  arguments: {
-                                    "screen_name": "Reward Details",
-                                    "order_id": data?.relatedOrderId?.id,
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    }),
-                    // Spend
-                    Obx(() {
-                      if (controller.isLoadingHistory.value) {
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: 6,
-                          itemBuilder: (_, __) => const LoyaltyCardShimmer(),
-                        );
-                      }
-
-                      if (controller.rewardHistoryModel.value?.data?.isEmpty ??
-                          true) {
-                        return Center(
-                          child: AppText(
-                            data: "No rewards yet",
-                            fontSize: 16.sp,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          await controller.getRewardHistory();
-                        },
-                        child: ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount:
-                              controller
-                                  .rewardHistoryModel
-                                  .value
-                                  ?.data
-                                  ?.length ??
-                              0,
-                          itemBuilder: (context, index) {
-                            final data = controller
-                                .rewardHistoryModel
-                                .value
-                                ?.data?[index];
-
-                            return LoyaltyCard(
-                              type: data?.type == "earn" ? "plus" : "minus",
-                              name: data?.relatedOrderId?.store?.name,
-                              address: data?.relatedOrderId?.store?.address,
-                              date: formatDate(data?.relatedOrderId?.createdAt),
-                              point: data?.pointsChange.toString(),
-                              image:
-                                  "${AppApiEndPoint.domain}${data?.relatedOrderId?.store?.image}",
-                              onTap: () {
-                                Get.toNamed(
-                                   AppRoutes.instance.rewardDetailsScreen,
-                                  arguments: {
-                                    "screen_name": "Reward Details",
-                                    "order_id": data?.relatedOrderId?.id,
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      );
-                    }),
+                    buildRewardHistoryTab(tabIndex: 0),
+                    buildRewardHistoryTab(tabIndex: 1),
+                    buildRewardHistoryTab(tabIndex: 2),
                   ],
                 ),
               ),

@@ -20,10 +20,16 @@ class MyWalletScreen extends StatelessWidget {
     return GetBuilder<MyWalletController>(
       // init: MyWalletController(),
       builder: (controller) {
-        Widget buildWalletHistoryTab({required String? type}) {
+        Widget buildWalletHistoryTab({required int tabIndex}) {
           return Obx(() {
-            final isInitialLoading = controller.isLoadingWalletCardList.value &&
-                controller.walletCardList.isEmpty;
+            final list = controller.walletTabLists[tabIndex];
+            if (!controller.walletTabFirstResponseDone[tabIndex].value &&
+                controller.currentIndex.value != tabIndex) {
+              return const SizedBox.shrink();
+            }
+            final isInitialLoading =
+                controller.walletTabInitialLoading[tabIndex].value &&
+                    list.isEmpty;
 
             if (isInitialLoading) {
               return ListView.builder(
@@ -33,10 +39,10 @@ class MyWalletScreen extends StatelessWidget {
               );
             }
 
-            if (controller.walletCardList.isEmpty) {
+            if (list.isEmpty) {
               return RefreshIndicator(
                 onRefresh: () async {
-                  await controller.reloadWalletCardList(type: type);
+                  await controller.reloadWalletCardList(tabIndex: tabIndex);
                 },
                 child: ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -56,15 +62,15 @@ class MyWalletScreen extends StatelessWidget {
 
             return RefreshIndicator(
               onRefresh: () async {
-                await controller.reloadWalletCardList(type: type);
+                await controller.reloadWalletCardList(tabIndex: tabIndex);
               },
               child: ListView.builder(
-                controller: controller.scrollController,
+                controller: controller.walletScrollControllers[tabIndex],
                 padding: EdgeInsets.all(6.r),
-                itemCount: controller.walletCardList.length + 1,
+                itemCount: list.length + 1,
                 itemBuilder: (context, index) {
-                  if (index >= controller.walletCardList.length) {
-                    if (controller.isLoadingMoreWalletCardList.value) {
+                  if (index >= list.length) {
+                    if (controller.walletTabLoadingMore[tabIndex].value) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: const Center(
@@ -77,7 +83,7 @@ class MyWalletScreen extends StatelessWidget {
                       );
                     }
 
-                    if (!controller.hasMoreWalletCardList.value) {
+                    if (!controller.walletTabHasMore[tabIndex].value) {
                       return Padding(
                         padding: EdgeInsets.symmetric(vertical: 16.h),
                         child: Center(
@@ -94,7 +100,7 @@ class MyWalletScreen extends StatelessWidget {
                     return SizedBox(height: 16.h);
                   }
 
-                  final data = controller.walletCardList[index];
+                  final data = list[index];
                   return WalletCard(
                     type: data.type,
                     name: data.title,
@@ -198,12 +204,9 @@ class MyWalletScreen extends StatelessWidget {
                   child: TabBarView(
                     controller: controller.tabController,
                     children: [
-                      // All
-                      buildWalletHistoryTab(type: null),
-                      // Add Money
-                      buildWalletHistoryTab(type: "deposit"),
-                      // Spend
-                      buildWalletHistoryTab(type: "spend"),
+                      buildWalletHistoryTab(tabIndex: 0),
+                      buildWalletHistoryTab(tabIndex: 1),
+                      buildWalletHistoryTab(tabIndex: 2),
                     ],
                   ),
                 ),

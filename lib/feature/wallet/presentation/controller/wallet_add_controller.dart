@@ -49,7 +49,7 @@ class WalletAddController extends GetxController {
             (myWalletController.walletBalanceModel.value?.data?.balance ?? 0) +
             int.parse(amountController.text);
         myWalletController.walletBalanceModel.refresh();
-        await myWalletController.getWalletCardList();
+        await myWalletController.refreshActiveTabWalletList();
         amountController.clear();
         openStripePayment(
           context: Get.context!,

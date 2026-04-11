@@ -19,8 +19,201 @@ class GiftCardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GiftCardController>(
-      init: GiftCardController(),
       builder: (controller) {
+        Widget buildGiftHistoryTab({required int tabIndex}) {
+          if (tabIndex == 2) {
+            return Obx(() {
+              final list = controller.giftRedeemList;
+              if (!controller.giftTabFirstResponseDone[2].value &&
+                  controller.currentIndex.value != 2) {
+                return const SizedBox.shrink();
+              }
+              final isInitialLoading =
+                  controller.giftTabInitialLoading[2].value && list.isEmpty;
+
+              if (isInitialLoading) {
+                return ListView(
+                  padding: EdgeInsets.all(16.r),
+                  children: const [GiftCardShimmer()],
+                );
+              }
+
+              if (list.isEmpty) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await controller.reloadGiftCardTab(tabIndex: 2);
+                  },
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(height: 140.h),
+                      Center(
+                        child: AppText(
+                          data: "No data found",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.reloadGiftCardTab(tabIndex: 2);
+                },
+                child: ListView.builder(
+                  controller: controller.giftScrollControllers[2],
+                  padding: EdgeInsets.all(16.r),
+                  itemCount: list.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index >= list.length) {
+                      if (controller.giftTabLoadingMore[2].value) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: const Center(
+                            child: SizedBox(
+                              height: 22,
+                              width: 22,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
+                          ),
+                        );
+                      }
+
+                      if (!controller.giftTabHasMore[2].value) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          child: Center(
+                            child: AppText(
+                              data: "End",
+                              fontSize: 14.sp,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        );
+                      }
+
+                      return SizedBox(height: 16.h);
+                    }
+
+                    final giftCard = list[index];
+                    return GiftCard(
+                      lastColumType: "Redeemed",
+                      remainingBalance: giftCard.balanceAfter ?? 0,
+                      giftCardDataModel: GiftCardDataModel(
+                        receiverName: giftCard.giftCard?.receiverName ?? "",
+                        receiverEmail: giftCard.giftCard?.receiverEmail ?? "",
+                        amount: giftCard.giftCard?.amount ?? 0,
+                        createdAt:
+                            giftCard.giftCard?.createdAt ?? DateTime.now(),
+                        status: giftCard.giftCard?.status ?? "",
+                        id: giftCard.giftCard?.id ?? "",
+                        cardNumber: giftCard.giftCard?.cardNumber ?? "",
+                        currentBalance:
+                            giftCard.giftCard?.currentBalance ?? 0,
+                      ),
+                    );
+                  },
+                ),
+              );
+            });
+          }
+
+          final String lastColumType =
+              tabIndex == 0 ? "Available" : "Sent";
+
+          return Obx(() {
+            final list = controller.giftTransactionTabLists[tabIndex];
+            if (!controller.giftTabFirstResponseDone[tabIndex].value &&
+                controller.currentIndex.value != tabIndex) {
+              return const SizedBox.shrink();
+            }
+            final isInitialLoading =
+                controller.giftTabInitialLoading[tabIndex].value &&
+                    list.isEmpty;
+
+            if (isInitialLoading) {
+              return ListView(
+                padding: EdgeInsets.all(16.r),
+                children: const [GiftCardShimmer()],
+              );
+            }
+
+            if (list.isEmpty) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.reloadGiftCardTab(tabIndex: tabIndex);
+                },
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(height: 140.h),
+                    Center(
+                      child: AppText(
+                        data: "No data found",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.reloadGiftCardTab(tabIndex: tabIndex);
+              },
+              child: ListView.builder(
+                controller: controller.giftScrollControllers[tabIndex],
+                padding: EdgeInsets.all(16.r),
+                itemCount: list.length + 1,
+                itemBuilder: (context, index) {
+                  if (index >= list.length) {
+                    if (controller.giftTabLoadingMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: const Center(
+                          child: SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (!controller.giftTabHasMore[tabIndex].value) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h),
+                        child: Center(
+                          child: AppText(
+                            data: "End",
+                            fontSize: 14.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return SizedBox(height: 16.h);
+                  }
+
+                  final giftCard = list[index];
+                  return GiftCard(
+                    lastColumType: lastColumType,
+                    giftCardDataModel: giftCard,
+                  );
+                },
+              ),
+            );
+          });
+        }
+
         return Scaffold(
           appBar: CustomAppbar(showLeading: false, text: "My Gift Card"),
           body: Column(
@@ -129,117 +322,9 @@ class GiftCardScreen extends StatelessWidget {
                 child: TabBarView(
                   controller: controller.tabController,
                   children: [
-                    // All
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        controller.getGiftCardTransactions(
-                          giftCardEndPoint: "available",
-                        );
-                      },
-                      child: Obx(() {
-                        if (controller.isLoadingGiftCardTransactions.value) {
-                          return GiftCardShimmer();
-                        }
-                        if (controller.giftCardTransactions.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: controller.giftCardTransactions.length,
-                          itemBuilder: (context, index) {
-                            final giftCard =
-                                controller.giftCardTransactions[index];
-                            return GiftCard(giftCardDataModel: giftCard);
-                          },
-                        );
-                      }),
-                    ),
-                    // Add Money
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        controller.getGiftCardTransactions(
-                          giftCardEndPoint: "sent",
-                        );
-                      },
-                      child: Obx(() {
-                        if (controller.isLoadingGiftCardTransactions.value) {
-                          return GiftCardShimmer();
-                        }
-                        if (controller.giftCardTransactions.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: controller.giftCardTransactions.length,
-                          itemBuilder: (context, index) {
-                            final giftCard =
-                                controller.giftCardTransactions[index];
-                            return GiftCard(
-                              lastColumType: "Sent",
-                              giftCardDataModel: giftCard,
-                            );
-                          },
-                        );
-                      }),
-                    ),
-                    // Spend
-                    RefreshIndicator(
-                      onRefresh: () async {
-                        controller.getGiftCardRedeem();
-                      },
-                      child: Obx(() {
-                        if (controller.isLoadingGiftCardTransactions.value) {
-                          return GiftCardShimmer();
-                        }
-                        if (controller.giftCardTransactions.isEmpty) {
-                          return Center(
-                            child: AppText(
-                              data: "No data found",
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          padding: EdgeInsets.all(16.r),
-                          itemCount: controller.giftCardRedeem.length,
-                          itemBuilder: (context, index) {
-                            final giftCard = controller.giftCardRedeem[index];
-                            return GiftCard(
-                              lastColumType: "Redeemed",
-                              remainingBalance: giftCard.balanceAfter ?? 0,
-                              giftCardDataModel: GiftCardDataModel(
-                                receiverName:
-                                    giftCard.giftCard?.receiverName ?? "",
-                                receiverEmail:
-                                    giftCard.giftCard?.receiverEmail ?? "",
-                                amount: giftCard.giftCard?.amount ?? 0,
-                                createdAt:
-                                    giftCard.giftCard?.createdAt ??
-                                    DateTime.now(),
-                                status: giftCard.giftCard?.status ?? "",
-                                id: giftCard.giftCard?.id ?? "",
-                                cardNumber: giftCard.giftCard?.cardNumber ?? "",
-                                currentBalance:
-                                    giftCard.giftCard?.currentBalance ?? 0,
-                              ),
-                            );
-                          },
-                        );
-                      }),
-                    ),
+                    buildGiftHistoryTab(tabIndex: 0),
+                    buildGiftHistoryTab(tabIndex: 1),
+                    buildGiftHistoryTab(tabIndex: 2),
                   ],
                 ),
               ),

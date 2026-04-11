@@ -1,41 +1,127 @@
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/notification/domain/model/notification_model.dart';
 import 'package:coffie/feature/notification/domain/repository/notification_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
+/// Single-list pagination aligned with wallet history: [notificationListPageLimit]
+/// per request, scroll near bottom loads next page, dedupe by [NotificationDataModel.id].
 class NotificationController extends GetxController {
-  // repository here
   final NotificationRepository notificationRepository =
       NotificationRepository.instance;
 
-  // model here
   RxList<NotificationDataModel> notifications = <NotificationDataModel>[].obs;
 
-  // controller here
-  RxBool isLoading = false.obs;
-  int page = 1;
-  int limit = 10;
+  late final ScrollController notificationScrollController;
+
+  static const int notificationListPageLimit = 9;
+
+  int _page = 1;
+  final RxBool hasMore = true.obs;
+
+  final RxBool notificationFirstResponseDone = false.obs;
+  final RxBool initialLoading = false.obs;
+  final RxBool loadingMore = false.obs;
 
   @override
   void onInit() {
     super.onInit();
-    getNotifications();
+    notificationScrollController = ScrollController();
+    notificationScrollController.addListener(_onNotificationScroll);
+    loadNotifications(reset: true);
   }
 
-  Future<void> getNotifications() async {
+  void _onNotificationScroll() {
+    if (!notificationScrollController.hasClients) return;
+
+    if (notificationScrollController.position.maxScrollExtent <= 0) return;
+
+    if (notificationScrollController.position.userScrollDirection !=
+        ScrollDirection.reverse) {
+      return;
+    }
+
+    final isNearBottom =
+        notificationScrollController.position.extentAfter < 120;
+    if (!isNearBottom) return;
+
+    loadNotifications(loadMore: true);
+  }
+
+  @override
+  void onClose() {
+    notificationScrollController.dispose();
+    super.onClose();
+  }
+
+  Future<void> reloadNotifications() async {
+    await loadNotifications(reset: true);
+  }
+
+  void _resetPagination() {
+    _page = 1;
+    hasMore.value = true;
+    notifications.clear();
+  }
+
+  Future<void> loadNotifications({
+    bool reset = false,
+    bool loadMore = false,
+  }) async {
+    bool apiIssued = false;
     try {
-      isLoading.value = true;
+      if (reset) {
+        _resetPagination();
+      }
+
+      if (!hasMore.value) return;
+
+      if (loadMore) {
+        if (loadingMore.value || initialLoading.value) return;
+        loadingMore.value = true;
+      } else {
+        if (initialLoading.value) return;
+        initialLoading.value = true;
+      }
+
+      apiIssued = true;
+      final int page = _page;
       final result = await notificationRepository.getNotifications(
         page: page,
-        limit: limit,
+        limit: notificationListPageLimit,
       );
-      if (result.isNotEmpty) {
-        notifications.value = result;
+
+      if (result.isEmpty) {
+        hasMore.value = false;
+        return;
+      }
+
+      if (page == 1) {
+        notifications.assignAll(result);
+      } else {
+        final Set<String?> seen =
+            notifications.map((NotificationDataModel e) => e.id).toSet();
+        for (final NotificationDataModel item in result) {
+          if (item.id != null && seen.contains(item.id)) continue;
+          if (item.id != null) seen.add(item.id);
+          notifications.add(item);
+        }
+      }
+
+      if (result.length < notificationListPageLimit) {
+        hasMore.value = false;
+      } else {
+        _page++;
       }
     } catch (e) {
       AppLogger.error(e.toString());
     } finally {
-      isLoading.value = false;
+      if (apiIssued) {
+        notificationFirstResponseDone.value = true;
+      }
+      initialLoading.value = false;
+      loadingMore.value = false;
     }
   }
 
@@ -59,7 +145,7 @@ class NotificationController extends GetxController {
 
       if (index != -1) {
         notifications[index].isRead = true;
-        notifications.refresh(); // IMPORTANT
+        notifications.refresh();
       }
     }
   }
