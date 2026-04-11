@@ -138,6 +138,7 @@ class PickupLocationScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final store = controller.stores[index];
                         return FavoriteCrad(
+                          isFavoriteVisible: controller.isGuest ? false : true,
                           orderNow: () => Get.toNamed(
                             AppRoutes.instance.shopOrderInformationScreen,
                             arguments: store,

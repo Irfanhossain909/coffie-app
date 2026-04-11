@@ -1,3 +1,4 @@
+import 'package:coffie/core/service/api_service/get_storage_services.dart';
 import 'package:coffie/core/service/location_service/location_service.dart';
 import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/new_order/domain/model/store_model.dart';
@@ -10,6 +11,8 @@ class PickupLocationWithGetShopController extends GetxController {
   final NewOrderRepository _newOrderRepository = NewOrderRepository.instance;
   LocationService getLocation = LocationService.instance;
   TextEditingController searchController = TextEditingController();
+  GetStorageServices getStorageServices = GetStorageServices.instance;
+  bool get isGuest => getStorageServices.getIsGuest();
 
   /// Observable variables
   RxBool isLoading = false.obs;

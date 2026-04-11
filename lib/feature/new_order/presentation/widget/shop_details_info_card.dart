@@ -114,9 +114,16 @@ class ShowDetailsInfoCard extends StatelessWidget {
           top: 0,
           right: 0,
           child: IconButton(
+            hoverColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            padding: EdgeInsets.zero,
             onPressed: () {},
             icon: Icon(
-              Icons.favorite_border,
+              store?.isFavorite == true
+                  ? Icons.favorite
+                  : Icons.favorite_border,
               color: AppColors.yellow,
               size: 22.w,
             ),

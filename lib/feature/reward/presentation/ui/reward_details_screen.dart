@@ -96,11 +96,11 @@ class RewardDetailsScreen extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   spacing: 8.h,
                                   children: [
-                                    Icon(
-                                      Icons.favorite_border,
-                                      size: 22.w,
-                                      color: AppColors.yellow,
-                                    ),
+                                    // Icon(
+                                    //   Icons.favorite_border,
+                                    //   size: 22.w,
+                                    //   color: AppColors.yellow,
+                                    // ),
                                     AppText(
                                       data:
                                           "${controller.rewardCardDetailsModel.value?.data?.pointsEarned ?? 0}p",
@@ -193,11 +193,17 @@ class RewardDetailsScreen extends StatelessWidget {
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w400,
                                 ),
-                                AppText(
-                                  data:
-                                      "${controller.rewardCardDetailsModel.value?.data?.store?.address} • ${controller.rewardCardDetailsModel.value?.data?.store?.distanceKm ?? 0} km",
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w400,
+                                SizedBox(
+                                  width: 250.w,
+                                  child: AppText(
+                                    data:
+                                        "${controller.rewardCardDetailsModel.value?.data?.store?.address} • ${controller.rewardCardDetailsModel.value?.data?.store?.distanceKm ?? 0} km",
+                                    fontSize: 12.sp,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.end,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ],
                             ),

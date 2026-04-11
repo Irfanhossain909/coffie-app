@@ -1,10 +1,8 @@
-import 'package:coffie/core/component/app_image/app_image_circular.dart';
 import 'package:coffie/core/component/app_text/app_text.dart';
 import 'package:coffie/core/component/appbar/custom_appbar.dart';
 import 'package:coffie/core/const/app_color.dart';
 import 'package:coffie/core/route/app_routes.dart';
 import 'package:coffie/core/service/api_service/app_api_end_point.dart';
-import 'package:coffie/core/utils/app_logger.dart';
 import 'package:coffie/feature/gift_card/presentation/widget/category_selector.dart';
 import 'package:coffie/feature/home/presentation/widget/gloss_shimmer.dart';
 import 'package:coffie/feature/home/presentation/widget/last_order_card.dart';
@@ -116,6 +114,7 @@ class ShopOrderInformationScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final product = controller.storeProducts[index];
                         return ProductCard(
+                          isFavoriteVisible: controller.isGuest ? false : true,
                           isFavoriteTap: () {
                             if (product.isFavorite ?? false) {
                               controller.removeFavorite(product.id ?? "");

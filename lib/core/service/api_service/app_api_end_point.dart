@@ -81,7 +81,7 @@ class AppApiEndPoint {
 
 // Move this function outside the class
 String _getDomain() {
-  String liveServer = "http://10.10.7.58:4001";
+  String liveServer = "http://92.205.234.176:4001";
   String localServer = "http://10.10.7.58:4001";
   try {
     if (kDebugMode) {
@@ -96,7 +96,7 @@ String _getDomain() {
 }
 
 String getSocketUrl() {
-  String liveSocket = "http://10.10.7.58:4001";
+  String liveSocket = "http://92.205.234.176:4001";
   String localSocket = "http://10.10.7.58:4001";
   try {
     if (kDebugMode) {

@@ -36,14 +36,22 @@ class ProductInfoScreen extends StatelessWidget {
           appBar: CustomAppbar(
             text: "Product Information",
             action: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.favorite_border_rounded,
-                  size: 24.w,
-                  color: AppColors.yellow,
-                ),
-              ),
+              Obx(() {
+                return IconButton(
+                  hoverColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  onPressed: () {},
+                  icon: Icon(
+                    controller.singleProduct.value?.data?.isFavorite == true
+                        ? Icons.favorite
+                        : Icons.favorite_border_rounded,
+                    size: 24.w,
+                    color: AppColors.yellow,
+                  ),
+                );
+              }),
             ],
           ),
           body: Padding(
@@ -328,8 +336,3 @@ class ProductInfoScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-

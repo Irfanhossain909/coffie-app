@@ -10,6 +10,7 @@ class FavoriteCrad extends StatelessWidget {
   final VoidCallback? isFavorite;
   final VoidCallback? orderNow;
   final VoidCallback? viewHours;
+  final bool isFavoriteVisible;
 
   const FavoriteCrad({
     super.key,
@@ -17,6 +18,7 @@ class FavoriteCrad extends StatelessWidget {
     this.isFavorite,
     this.orderNow,
     this.viewHours,
+    this.isFavoriteVisible = true,
   });
 
   @override
@@ -152,25 +154,26 @@ class FavoriteCrad extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: IconButton(
-            hoverColor: Colors.transparent,
-            focusColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            padding: EdgeInsets.zero,
-            onPressed: isFavorite,
-            icon: Icon(
-              favoriteCardEntity.isFavorite == true
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: AppColors.yellow,
-              size: 22.w,
+        if (isFavoriteVisible)
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              hoverColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              padding: EdgeInsets.zero,
+              onPressed: isFavorite,
+              icon: Icon(
+                favoriteCardEntity.isFavorite == true
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: AppColors.yellow,
+                size: 22.w,
+              ),
             ),
           ),
-        ),
       ],
     );
   }
