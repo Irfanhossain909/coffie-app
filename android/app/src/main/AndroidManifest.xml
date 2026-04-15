@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    // camera permission
+    <uses-permission android:name="android.permission.CAMERA" />
     <!-- Required permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -9,6 +11,10 @@
         android:label="coffie"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBUyT48kL-jc1Km4panyEAUZ15VJS6dm3E"/>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
@@ -28,10 +34,7 @@
               android:resource="@style/NormalTheme"
               />
             
-            <!-- Google Maps API Key -->
-            <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyBUyT48kL-jc1Km4panyEAUZ15VJS6dm3E"/>
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

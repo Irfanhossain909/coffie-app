@@ -113,7 +113,7 @@ class PickupLocationScreen extends StatelessWidget {
                   ),
                 ),
 
-                Obx(() {
+               Obx(() {
                   if (controller.storeLocationList.isEmpty) {
                     return const SizedBox.shrink();
                   }
@@ -128,7 +128,6 @@ class PickupLocationScreen extends StatelessWidget {
                     ),
                   );
                 }),
-
                 Obx(() {
                   return Expanded(
                     child: ListView.builder(

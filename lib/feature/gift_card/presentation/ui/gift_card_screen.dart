@@ -106,14 +106,14 @@ class GiftCardScreen extends StatelessWidget {
                       giftCardDataModel: GiftCardDataModel(
                         receiverName: giftCard.giftCard?.receiverName ?? "",
                         receiverEmail: giftCard.giftCard?.receiverEmail ?? "",
-                        amount: giftCard.giftCard?.amount ?? 0,
+                        amount: giftCard.giftCard?.amount?.toDouble() ?? 0.0,
                         createdAt:
                             giftCard.giftCard?.createdAt ?? DateTime.now(),
                         status: giftCard.giftCard?.status ?? "",
                         id: giftCard.giftCard?.id ?? "",
                         cardNumber: giftCard.giftCard?.cardNumber ?? "",
                         currentBalance:
-                            giftCard.giftCard?.currentBalance ?? 0,
+                            giftCard.giftCard?.currentBalance?.toDouble() ?? 0.0,
                       ),
                     );
                   },
@@ -122,8 +122,7 @@ class GiftCardScreen extends StatelessWidget {
             });
           }
 
-          final String lastColumType =
-              tabIndex == 0 ? "Available" : "Sent";
+          final String lastColumType = tabIndex == 0 ? "Available" : "Sent";
 
           return Obx(() {
             final list = controller.giftTransactionTabLists[tabIndex];
@@ -133,7 +132,7 @@ class GiftCardScreen extends StatelessWidget {
             }
             final isInitialLoading =
                 controller.giftTabInitialLoading[tabIndex].value &&
-                    list.isEmpty;
+                list.isEmpty;
 
             if (isInitialLoading) {
               return ListView(

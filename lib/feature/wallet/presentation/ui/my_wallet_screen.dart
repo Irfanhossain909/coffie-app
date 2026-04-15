@@ -29,7 +29,7 @@ class MyWalletScreen extends StatelessWidget {
             }
             final isInitialLoading =
                 controller.walletTabInitialLoading[tabIndex].value &&
-                    list.isEmpty;
+                list.isEmpty;
 
             if (isInitialLoading) {
               return ListView.builder(
@@ -268,10 +268,15 @@ class WalletCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(
-                  data: name ?? "Americano",
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
+                SizedBox(
+                  width: 145.w,
+                  child: AppText(
+                    data: name ?? "Americano",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 AppText(
                   data: date ?? "May 15, 2026 • 9:41 AM",

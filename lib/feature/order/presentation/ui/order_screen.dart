@@ -30,7 +30,7 @@ class OrderScreen extends StatelessWidget {
             }
             final isInitialLoading =
                 controller.orderTabInitialLoading[tabIndex].value &&
-                    list.isEmpty;
+                list.isEmpty;
 
             if (isInitialLoading) {
               return ListView.builder(
@@ -159,10 +159,7 @@ class OrderScreen extends StatelessWidget {
                       tabIndex: 0,
                       detailsScreenName: "Reward Details",
                     ),
-                    buildOrderTab(
-                      tabIndex: 1,
-                      detailsScreenName: "My Order",
-                    ),
+                    buildOrderTab(tabIndex: 1, detailsScreenName: "My Order"),
                   ],
                 ),
               ),
@@ -210,7 +207,7 @@ class OrderCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 4.h,
+              spacing: 2.h,
               children: [
                 AppText(
                   data: "Order #${data.orderId} . ${data.totalItems} items",
@@ -223,25 +220,20 @@ class OrderCard extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
                 AppText(
-                  data: "New Work | 2.6 km",
+                  data: data.orderStatus ?? "",
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.black,
+                ),
+                AppText(
+                  data: "Pickup Time: Ready in ${data.readyTime} mins",
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w400,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppText(
-                      data: r"May 15, 2023 $4.50",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    AppText(
-                      data: data.orderStatus ?? "",
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.black,
-                    ),
-                  ],
+                AppText(
+                  data: joinWithLessThan(data.productNames),
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -281,4 +273,10 @@ class OrderCard extends StatelessWidget {
       ),
     );
   }
+}
+
+
+String joinWithLessThan(List<String>? items) {
+  if (items == null || items.isEmpty) return "";
+  return items.join(', ');
 }

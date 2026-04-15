@@ -12,6 +12,7 @@ class PickupLocationWithGetShopController extends GetxController {
   LocationService getLocation = LocationService.instance;
   TextEditingController searchController = TextEditingController();
   GetStorageServices getStorageServices = GetStorageServices.instance;
+
   bool get isGuest => getStorageServices.getIsGuest();
 
   /// Observable variables

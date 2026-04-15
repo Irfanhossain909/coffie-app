@@ -129,7 +129,7 @@ class _HomeMapPreviewState extends State<HomeMapPreview> {
               markers: _markers,
 
               /// interactions
-              zoomControlsEnabled: true,
+              zoomControlsEnabled: false,
               myLocationButtonEnabled: false,
               compassEnabled: true,
 
@@ -193,7 +193,6 @@ class _HomeMapPreviewState extends State<HomeMapPreview> {
               ),
             ),
           ),
-          
         ],
       ),
     );
@@ -207,125 +206,3 @@ class _HomeMapPreviewState extends State<HomeMapPreview> {
     super.dispose();
   }
 }
-
-// import 'dart:async';
-// import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-// class HomeMapPreview extends StatefulWidget {
-//   final List<List<double>> merchantList; // [lat, long]
-
-//   const HomeMapPreview({super.key, required this.merchantList});
-
-//   @override
-//   State<HomeMapPreview> createState() => _HomeMapPreviewState();
-// }
-
-// class _HomeMapPreviewState extends State<HomeMapPreview> {
-//   final Completer<GoogleMapController> _controller =
-//       Completer<GoogleMapController>();
-
-//   Set<Marker> _markers = {};
-//   CameraPosition? _initialPosition;
-//   bool _isLoading = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _initializeMap();
-//   }
-
-//   @override
-//   void didUpdateWidget(covariant HomeMapPreview oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-//     if (widget.merchantList != oldWidget.merchantList) {
-//       _initializeMap();
-//     }
-//   }
-
-//   Future<void> _initializeMap() async {
-//     try {
-//       if (widget.merchantList.isEmpty) {
-//         _initialPosition = const CameraPosition(
-//           target: LatLng(23.8103, 90.4125), // Dhaka fallback
-//           zoom: 16,
-//         );
-//       } else {
-//         final firstLoc = widget.merchantList.first;
-
-//         _initialPosition = CameraPosition(
-//           target: LatLng(firstLoc[0], firstLoc[1]),
-//           zoom: 16,
-//         );
-
-//         Set<Marker> tempMarkers = {};
-
-//         for (int i = 0; i < widget.merchantList.length; i++) {
-//           final loc = widget.merchantList[i];
-
-//           tempMarkers.add(
-//             Marker(
-//               markerId: MarkerId(i.toString()),
-//               position: LatLng(loc[0], loc[1]),
-//               infoWindow: InfoWindow(title: 'Merchant ${i + 1}'),
-//               icon: BitmapDescriptor.defaultMarkerWithHue(
-//                 BitmapDescriptor.hueRed,
-//               ),
-//             ),
-//           );
-//         }
-
-//         _markers = tempMarkers;
-//       }
-
-//       if (mounted) {
-//         setState(() => _isLoading = false);
-//       }
-//     } catch (e) {
-//       if (mounted) {
-//         setState(() => _isLoading = false);
-//       }
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     if (_isLoading || _initialPosition == null) {
-//       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-//     }
-
-//     return SizedBox(
-//       height: 250, // খুব important (parent scroll issue avoid)
-//       width: double.infinity,
-//       child: GoogleMap(
-//         mapType: MapType.normal,
-//         initialCameraPosition: _initialPosition!,
-//         markers: _markers,
-
-//         /// ✅ FULL INTERACTION ENABLED
-//         liteModeEnabled: false,
-//         scrollGesturesEnabled: true,
-//         zoomGesturesEnabled: true,
-//         tiltGesturesEnabled: true,
-//         rotateGesturesEnabled: true,
-
-//         /// optional controls
-//         zoomControlsEnabled: false,
-//         myLocationButtonEnabled: false,
-//         compassEnabled: true,
-
-//         onMapCreated: (GoogleMapController controller) {
-//           if (!_controller.isCompleted) {
-//             _controller.complete(controller);
-//           }
-//         },
-//       ),
-//     );
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller.future.then((controller) => controller.dispose());
-//     super.dispose();
-//   }
-// }
